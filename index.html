@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DKV Studio Tracker — Pantauan Tugas Siswa</title>
+    <style>
+        :root {
+            --bg-main: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-soft: #eef2ff;
+            --emerald: #10b981;
+            --emerald-dark: #059669;
+            --emerald-soft: #ecfdf5;
+            --amber: #f59e0b;
+            --amber-soft: #fffbeb;
+            --rose: #ef4444;
+            --rose-soft: #fef2f2;
+            --purple: #7c3aed;
+            --brand-grad: linear-gradient(135deg, #4f46e5, #9333ea, #ec4899);
+            --banner-bg: #1e1b4b;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.15);
+        }
+
+        /* Theme Presets */
+        body[data-theme="emerald"] {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --primary-soft: #ecfdf5;
+            --brand-grad: linear-gradient(135deg, #059669, #0d9488, #0284c7);
+            --banner-bg: #064e3b;
+        }
+        body[data-theme="rose"] {
+            --primary: #e11d48;
+            --primary-hover: #be123c;
+            --primary-soft: #fff1f2;
+            --brand-grad: linear-gradient(135deg, #e11d48, #db2777, #9333ea);
+            --banner-bg: #4c0519;
+        }
+        body[data-theme="amber"] {
+            --primary: #d97706;
+            --primary-hover: #b45309;
+            --primary-soft: #fffbeb;
+            --brand-grad: linear-gradient(135deg, #d97706, #ea580c, #dc2626);
+            --banner-bg: #451a03;
+        }
+        body[data-theme="slate"] {
+            --primary: #1e293b;
+            --primary-hover: #0f172a;
+            --primary-soft: #f1f5f9;
+            --brand-grad: linear-gradient(135deg, #1e293b, #334155, #475569);
+            --banner-bg: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            padding: 14px 16px;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .brand-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--brand-grad);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+        }
+
+        .board-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .board-title {
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        .board-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--emerald);
+            display: inline-block;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 9px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.78rem;
+            font-weight: 700;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-dark {
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        .btn-dark:hover {
+            background: #1e293b;
+        }
+
+        .btn-emerald {
+            background: var(--emerald-dark);
+            color: #ffffff;
+        }
+
+        .btn-emerald:hover {
+            background: #047857;
+        }
+
+        .btn-rose {
+            background: #e11d48;
+            color: #ffffff;
+        }
+
+        .btn-rose:hover {
+            background: #be123c;
+        }
+
+        .btn-danger {
+            background: var(--rose);
+            color: #ffffff;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            color: #334155;
+            border-color: #cbd5e1;
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+        }
+
+        .btn-icon-only {
+            padding: 6px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .btn-icon-only:hover {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+            }
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        /* Teacher Input Panel */
+        .input-panel {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .input-panel-header {
+            background: var(--primary-soft);
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .panel-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        .badge-lock {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .input-panel-header {
+            background: linear-gradient(90deg, #eef2ff, #f3e8ff, #fce7f3);
+            padding: 12px 18px;
+            border-bottom: 1px solid #e0e7ff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .panel-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #1e1b4b;
+        }
+
+        .badge-lock {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .input-form-grid {
+            padding: 18px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 768px) {
+            .input-form-grid {
+                grid-template-columns: 1.2fr 1.6fr 1.2fr auto;
+                align-items: end;
+            }
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .req {
+            color: var(--rose);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            background: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        /* Search & Filters */
+        .toolbar-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+            max-width: 420px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            padding-left: 36px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .filter-btn {
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid var(--border-color);
+            background: #ffffff;
+            color: #475569;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .filter-btn.active {
+            background: #0f172a;
+            color: #ffffff;
+            border-color: #0f172a;
+        }
+
+        /* Table Container */
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+        thead th {
+            background: #f8fafc;
+            border-bottom: 2px solid var(--border-color);
+            padding: 12px 14px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #475569;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+
+        thead th.stage-col {
+            background: var(--primary-soft);
+            text-align: center;
+            min-width: 115px;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+        }
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .theme-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 4px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            background: #ffffff;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .theme-swatch.active {
+            border-color: var(--primary);
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .swatch-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.4);
+        }
+
+        .workspace-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .workspace-select {
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-main);
+            background: #f8fafc;
+            max-width: 210px;
+        }
+
+        .stage-title {
+            font-size: 0.78rem;
+            color: #1e293b;
+            font-weight: 700;
+            text-transform: none;
+            margin-top: 2px;
+        }
+
+        tbody td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody tr.row-done {
+            background: #f0fdf4;
+        }
+
+        /* Sticky Student Name Column for Mobile Readability */
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            background: #ffffff;
+            min-width: 165px;
+            box-shadow: 3px 0 6px -2px rgba(0, 0, 0, 0.06);
+        }
+
+        thead th.sticky-col {
+            background: #f8fafc;
+            z-index: 15;
+        }
+
+        tbody tr.row-done td.sticky-col {
+            background: #f0fdf4;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.85rem;
+        }
+
+        .badge-acc {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Checklist Buttons */
+        .check-cell {
+            text-align: center;
+            border-left: 1px solid #f1f5f9;
+            border-right: 1px solid #f1f5f9;
+        }
+
+        .stage-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #94a3b8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .stage-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+
+        .stage-btn.checked {
+            background: var(--emerald);
+            border-color: var(--emerald);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
+        }
+
+        .stage-badge-readonly {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #cbd5e1;
+        }
+
+        .stage-badge-readonly.checked {
+            background: #d1fae5;
+            border-color: #6ee7b7;
+            color: #047857;
+        }
+
+        /* Progress Bar */
+        .progress-wrap {
+            min-width: 120px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.done {
+            background: var(--emerald);
+        }
+
+        /* Teacher Note Cell */
+        .note-input {
+            width: 100%;
+            min-width: 190px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            font-size: 0.78rem;
+            color: var(--text-main);
+        }
+
+        .note-input:focus {
+            outline: none;
+            background: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .note-readonly-box {
+            min-width: 180px;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+        }
+
+        /* Modals */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 460px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .modal-footer {
+            padding: 14px 20px;
+            background: #f8fafc;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .preset-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .preset-chip {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .preset-chip:hover {
+            background: var(--primary-soft);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .stage-editor-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .stage-num-badge {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-alert {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast {
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: var(--shadow-md);
+            animation: slideUp 0.25s ease;
+        }
+
+        .toast.success { background: var(--emerald-dark); }
+        .toast.error { background: var(--rose); }
+        .toast.info { background: #0f172a; }
+
+        @keyframes slideUp {
+            from { transform: translateY(12px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hidden { display: none !important; }
+
+        .app-footer {
+            text-align: center;
+            padding: 20px 16px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Print / Export PDF Styles */
+        @media print {
+            body {
+                background: #ffffff !important;
+                background-image: none !important;
+                color: #000000 !important;
+            }
+            .app-header,
+            .input-panel,
+            .toolbar-row,
+            .no-print,
+            .app-footer,
+            .toast-container,
+            .modal-backdrop {
+                display: none !important;
+            }
+            .main-container {
+                padding: 0 !important;
+                max-width: 100% !important;
+                gap: 12px !important;
+            }
+            .print-header-only {
+                display: block !important;
+                margin-bottom: 12px;
+                border-bottom: 2px solid #0f172a;
+                padding-bottom: 8px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 8px !important;
+            }
+            .stat-card {
+                box-shadow: none !important;
+                border: 1px solid #cbd5e1 !important;
+                padding: 10px !important;
+            }
+            .table-card {
+                box-shadow: none !important;
+                border: 1px solid #94a3b8 !important;
+                overflow: visible !important;
+            }
+            .table-responsive {
+                overflow: visible !important;
+            }
+            .sticky-col {
+                position: static !important;
+                box-shadow: none !important;
+            }
+            table {
+                font-size: 0.75rem !important;
+            }
+            thead th, tbody td {
+                padding: 8px 6px !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            .note-input {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                min-width: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="brand-group">
+                <div class="brand-logo">
+                    <!-- Pen Tool SVG -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                </div>
+                <div>
+                    <div class="board-title-row">
+                        <h1 id="boardTitleDisplay" class="board-title">XII DKV 1 — Proyek Desain Poster</h1>
+                        <button id="editBoardInfoBtn" onclick="openBoardSettingsModal()" class="btn-icon-only" title="Edit Judul, Tahapan & Tema">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        </button>
+                    </div>
+                    <div class="board-subtitle" style="flex-wrap:wrap; margin-top:4px;">
+                        <div class="workspace-bar">
+                            <span class="status-dot"></span>
+                            <select id="workspaceSelect" onchange="switchWorkspace(this.value)" class="workspace-select" title="Pilih Ruang / Kelas Guru"></select>
+                            <button onclick="createNewWorkspace()" class="btn-icon-only" style="font-size:0.72rem; font-weight:700; color:var(--primary); padding:3px 7px; background:var(--primary-soft);" title="Buat Ruang / Kelas Baru">+ Ruang Baru</button>
+                        </div>
+                        <span>•</span>
+                        <strong id="studentCountBadge" style="color:#334155;">0 Siswa</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button id="btnManageStages" onclick="openBoardSettingsModal()" class="btn btn-outline">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    <span>Tahapan & Tema</span>
+                </button>
+
+                <button onclick="exportToImage()" class="btn btn-emerald">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                    <span>Ekspor Gambar</span>
+                </button>
+
+                <button onclick="exportToPDF()" class="btn btn-rose">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <span>Ekspor PDF</span>
+                </button>
+
+                <button onclick="openShareModal()" class="btn btn-dark">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+                    <span>Rekap Teks</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+
+        <!-- Header Khusus saat Cetak / PDF -->
+        <div class="print-header-only hidden">
+            <h2 id="printTitleDisplay" style="font-size:1.25rem; font-weight:800;">XII DKV 1 — Proyek Desain Poster</h2>
+            <p id="printDateDisplay" style="font-size:0.8rem; color:#475569; margin-top:2px;"></p>
+        </div>
+
+        <!-- Ringkasan Statistik -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Total Siswa</span>
+                    <span style="color:#4f46e5;">●</span>
+                </div>
+                <div id="statTotalStudents" class="stat-value" style="color:#0f172a;">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Selesai (100% ACC)</span>
+                    <span style="color:#10b981;">●</span>
+                </div>
+                <div id="statCompleted" class="stat-value" style="color:#059669;">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Sedang Proses</span>
+                    <span style="color:#f59e0b;">●</span>
+                </div>
+                <div id="statInProgress" class="stat-value" style="color:#d97706;">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Rata-rata Kelas</span>
+                    <span style="color:#7c3aed;">●</span>
+                </div>
+                <div id="statAvgProgress" class="stat-value" style="color:#7c3aed;">0%</div>
+            </div>
+        </section>
+
+        <!-- Panel Input Guru -->
+        <section id="teacherInputPanel" class="input-panel">
+            <div class="input-panel-header">
+                <div class="panel-title-wrap">
+                    <span>➕ Input Tugas Siswa Baru</span>
+                </div>
+                <span class="badge-lock">Panel Input Guru</span>
+            </div>
+
+            <form id="addTaskForm" onsubmit="handleAddTask(event)" class="input-form-grid">
+                <div class="form-group">
+                    <label>Nama Lengkap Siswa <span class="req">*</span></label>
+                    <input type="text" id="inputStudentName" class="form-control" required placeholder="Contoh: Budi Santoso">
+                </div>
+                <div class="form-group">
+                    <label>Judul / Nama Tugas DKV <span class="req">*</span></label>
+                    <input type="text" id="inputTaskTitle" class="form-control" required placeholder="Contoh: Poster Kampanye Lingkungan A3">
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi / Keterangan Tugas (Opsional)</label>
+                    <input type="text" id="inputTaskDesc" class="form-control" placeholder="Contoh: Ukuran A3, CMYK 300dpi, tema Go Green">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary" style="width:100%; padding:10px 18px;">
+                        <span>+ Tambahkan</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Pencarian & Filter -->
+        <section class="toolbar-row">
+            <div class="search-box">
+                <span class="search-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </span>
+                <input type="text" id="searchInput" oninput="renderTaskTable()" class="form-control" placeholder="Cari nama siswa, tugas, atau deskripsi...">
+            </div>
+
+            <div class="filter-group">
+                <button onclick="setFilterStatus('all')" id="filter-all" class="filter-btn active">Semua</button>
+                <button onclick="setFilterStatus('progress')" id="filter-progress" class="filter-btn">Belum Selesai</button>
+                <button onclick="setFilterStatus('done')" id="filter-done" class="filter-btn">Tuntas (ACC)</button>
+            </div>
+        </section>
+
+        <!-- Tabel Progres Tugas -->
+        <section class="table-card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr id="tableHeaderRow"></tr>
+                    </thead>
+                    <tbody id="taskTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        DKV Studio Tracker • Penyimpanan Lokal Mandiri untuk Guru SMK DKV
+    </footer>
+
+    <!-- MODAL 1: PENGATURAN TAHAPAN, JUDUL & TEMA -->
+    <div id="settingsModal" class="modal-backdrop">
+        <div class="modal-card" style="max-width:520px;">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">⚙️ Edit Judul, Tahapan & Tema</h3>
+                    <p style="font-size:0.72rem; color:#64748b;">Tersimpan otomatis di ruang lokal perangkat Anda</p>
+                </div>
+                <button onclick="closeModal('settingsModal')" class="btn-icon-only">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Judul Utama Papan / Kelas</label>
+                    <input type="text" id="settingBoardTitle" class="form-control" placeholder="XII DKV 1 — Proyek Poster">
+                </div>
+
+                <div class="form-group">
+                    <label>Pilih Tema Warna Tampilan:</label>
+                    <div class="theme-grid" id="themeSelectorGrid">
+                        <button type="button" onclick="selectTempTheme('indigo')" data-theme-btn="indigo" class="theme-swatch active">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#4f46e5,#9333ea);"></span>
+                            <span>Indigo</span>
+                        </button>
+                        <button type="button" onclick="selectTempTheme('emerald')" data-theme-btn="emerald" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#059669,#0284c7);"></span>
+                            <span>Emerald</span>
+                        </button>
+                        <button type="button" onclick="selectTempTheme('rose')" data-theme-btn="rose" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#e11d48,#9333ea);"></span>
+                            <span>Magenta</span>
+                        </button>
+                        <button type="button" onclick="selectTempTheme('amber')" data-theme-btn="amber" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#d97706,#dc2626);"></span>
+                            <span>Sunset</span>
+                        </button>
+                        <button type="button" onclick="selectTempTheme('slate')" data-theme-btn="slate" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#1e293b,#475569);"></span>
+                            <span>Monokrom</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Template Cepat Tahapan DKV:</label>
+                    <div class="preset-group">
+                        <button type="button" onclick="applyPresetStages(['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Revisi', '5. Final ACC'])" class="preset-chip">Desain Grafis (5 Tahap)</button>
+                        <button type="button" onclick="applyPresetStages(['1. Konsep & Moodboard', '2. Pemotretan', '3. Editing/Color', '4. Cetak & ACC'])" class="preset-chip">Fotografi (4 Tahap)</button>
+                        <button type="button" onclick="applyPresetStages(['1. Naskah & Storyboard', '2. Produksi/Syuting', '3. Editing & Audio', '4. Rendering Final'])" class="preset-chip">Videografi (4 Tahap)</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <label style="margin:0;">Daftar Tahapan (<span id="stageCountLabel">5</span> Tahap)</label>
+                        <button type="button" onclick="addStageField()" class="btn btn-outline" style="padding:5px 10px; font-size:0.72rem;">+ Tambah Tahap</button>
+                    </div>
+                    <div id="customStagesList"></div>
+                </div>
+
+                <div style="border-top:1px solid #e2e8f0; padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.72rem; color:#64748b;">Hapus ruang kelas aktif ini dari penyimpanan lokal:</span>
+                    <button type="button" onclick="deleteCurrentWorkspace()" class="btn btn-outline" style="color:#e11d48; border-color:#fecdd3; padding:5px 10px; font-size:0.72rem;">Hapus Ruang Ini</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('settingsModal')" class="btn btn-outline">Batal</button>
+                <button onclick="saveBoardSettings()" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT DATA SISWA (NAMA, TUGAS, DESKRIPSI) -->
+    <div id="editStudentModal" class="modal-backdrop">
+        <div class="modal-card" style="max-width:460px;">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">✏️ Edit Data Tugas Siswa</h3>
+                    <p style="font-size:0.72rem; color:#64748b;">Perbarui nama siswa, judul tugas, atau deskripsi keterangan</p>
+                </div>
+                <button onclick="closeModal('editStudentModal')" class="btn-icon-only">✕</button>
+            </div>
+    <!-- MODAL 2: REKAP TEKS WHATSAPP -->
+    <div id="shareModal" class="modal-backdrop">
+        <div class="modal-card" style="max-width:440px;">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">📋 Rekap Progres Kelas</h3>
+                    <p style="font-size:0.72rem; color:#64748b;">Salin ringkasan progres untuk dibagikan ke grup WhatsApp kelas</p>
+                </div>
+                <button onclick="closeModal('shareModal')" class="btn-icon-only">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-alert">
+                    Format teks berisi daftar nama siswa, judul tugas, deskripsi, jumlah tahapan selesai, serta persentase progres masing-masing siswa.
+                </div>
+                <button onclick="copyWhatsAppSummary()" class="btn btn-emerald" style="width:100%; padding:12px;">
+                    <span>📋 Salin Rekap Teks untuk WhatsApp</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('shareModal')" class="btn btn-outline">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: PRATINJAU HASIL EKSPOR GAMBAR (Fallback untuk WebView Acode) -->
+    <div id="imagePreviewModal" class="modal-backdrop">
+        <div class="modal-card" style="max-width:640px;">
+            <div class="modal-header">
+                <div>
+                    <h3 class="modal-title">🖼️ Hasil Ekspor Gambar (PNG)</h3>
+                    <p style="font-size:0.72rem; color:#64748b;">Tekan & tahan gambar jika unduhan otomatis diblokir oleh aplikasi</p>
+                </div>
+                <button onclick="closeModal('imagePreviewModal')" class="btn-icon-only">✕</button>
+            </div>
+            <div class="modal-body" style="align-items:center; background:#f1f5f9;">
+                <img id="exportedImagePreview" alt="Hasil Ekspor Tabel DKV" style="max-width:100%; height:auto; border-radius:10px; border:1px solid #cbd5e1; box-shadow:var(--shadow-md);">
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('imagePreviewModal')" class="btn btn-outline">Tutup</button>
+                <a id="downloadImageAnchor" download="rekap-tugas-dkv.png" class="btn btn-emerald">⬇️ Unduh Gambar PNG</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: KONFIRMASI HAPUS -->
+    <div id="deleteConfirmModal" class="modal-backdrop">
+        <div class="modal-card" style="max-width:380px;">
+            <div class="modal-header">
+                <h3 class="modal-title" style="color:#e11d48;">🗑️ Hapus Data Siswa?</h3>
+                <button onclick="closeModal('deleteConfirmModal')" class="btn-icon-only">✕</button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteStudentNameText" style="font-size:0.82rem; color:#475569;"></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('deleteConfirmModal')" class="btn btn-outline">Batal</button>
+                <button id="confirmDeleteBtn" class="btn btn-danger">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+        const WORKSPACE_INDEX_KEY = 'dkv_studio_workspaces_v4';
+        const STORAGE_PREFIX = 'dkv_studio_room_v4_';
+
+        let workspaces = [];
+        let activeWorkspaceId = '';
+        let filterStatus = 'all';
+        let boardConfig = {
+            title: 'XII DKV 1 — Proyek Desain Poster & Branding',
+            theme: 'indigo',
+            stages: [
+                '1. Sketsa Konsep',
+                '2. Digitalisasi',
+                '3. Pewarnaan',
+                '4. Revisi Guru',
+                '5. Final ACC'
+            ]
+        };
+        let tasksList = [];
+        let tempStages = [];
+        let tempTheme = 'indigo';
+
+        const THEME_BANNER_COLORS = {
+            indigo: '#1e1b4b',
+            emerald: '#064e3b',
+            rose: '#4c0519',
+            amber: '#451a03',
+            slate: '#0f172a'
+        };
+
+        const THEME_PRIMARY_COLORS = {
+            indigo: '#4f46e5',
+            emerald: '#059669',
+            rose: '#e11d48',
+            amber: '#d97706',
+            slate: '#1e293b'
+        };
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function saveToStorage() {
+            try {
+                // Sinkronkan nama ruang di daftar workspace
+                const wsObj = workspaces.find(w => w.id === activeWorkspaceId);
+                if (wsObj) {
+                    wsObj.name = boardConfig.title;
+                }
+                localStorage.setItem(WORKSPACE_INDEX_KEY, JSON.stringify({
+                    activeId: activeWorkspaceId,
+                    list: workspaces
+                }));
+                localStorage.setItem(`${STORAGE_PREFIX}${activeWorkspaceId}`, JSON.stringify({
+                    boardConfig: boardConfig,
+                    tasksList: tasksList
+                }));
+                renderWorkspaceSelector();
+            } catch (err) {
+                console.error('Storage save error:', err);
+            }
+        }
+
+        function loadWorkspaceData(wsId) {
+            activeWorkspaceId = wsId;
+            try {
+                const savedRaw = localStorage.getItem(`${STORAGE_PREFIX}${wsId}`);
+                if (savedRaw) {
+                    const parsed = JSON.parse(savedRaw);
+                    boardConfig = {
+                        title: parsed.boardConfig?.title || 'Ruang Tugas DKV',
+                        theme: parsed.boardConfig?.theme || 'indigo',
+                        stages: Array.isArray(parsed.boardConfig?.stages) && parsed.boardConfig.stages.length
+                            ? parsed.boardConfig.stages
+                            : ['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Final ACC']
+                    };
+                    tasksList = Array.isArray(parsed.tasksList) ? parsed.tasksList.map(t => ({
+                        ...t,
+                        taskDescription: t.taskDescription !== undefined ? t.taskDescription : (t.teacherNote || '')
+                    })) : [];
+                } else {
+                    const wsMeta = workspaces.find(w => w.id === wsId);
+                    boardConfig = {
+                        title: wsMeta ? wsMeta.name : 'XII DKV 1 — Proyek Desain Poster',
+                        theme: 'indigo',
+                        stages: [
+                            '1. Sketsa Konsep',
+                            '2. Digitalisasi',
+                            '3. Pewarnaan',
+                            '4. Revisi Guru',
+                            '5. Final ACC'
+                        ]
+                    };
+                    tasksList = [
+                        {
+                            id: 'siswa-1',
+                            studentName: 'Alya Putri Maharani',
+                            taskTitle: 'Poster Kampanye Bebas Sampah Plastik',
+                            taskDescription: 'Ukuran A3, teknik ilustrasi vektor flat design, palet warna hijau-biru.',
+                            completedStages: [true, true, true, false, false],
+                            createdAt: Date.now()
+                        },
+                        {
+                            id: 'siswa-2',
+                            studentName: 'Dimas Aditya Saputra',
+                            taskTitle: 'Re-Branding Kemasan Kopi Lokal',
+                            taskDescription: 'Standing pouch 250gr, fokus tipografi modern & logo maskot.',
+                            completedStages: [true, true, true, true, true],
+                            createdAt: Date.now() + 10
+                        }
+                    ];
+                    saveToStorage();
+                }
+            } catch (err) {
+                console.error('Storage read error:', err);
+            }
+
+            applyTheme(boardConfig.theme);
+            renderWorkspaceSelector();
+            updateBoardUI();
+            updateStats();
+            renderTaskTable();
+        }
+
+        function initApp() {
+            try {
+                const indexRaw = localStorage.getItem(WORKSPACE_INDEX_KEY);
+                if (indexRaw) {
+                    const parsedIndex = JSON.parse(indexRaw);
+                    workspaces = Array.isArray(parsedIndex.list) && parsedIndex.list.length ? parsedIndex.list : [];
+                    activeWorkspaceId = parsedIndex.activeId || (workspaces[0] && workspaces[0].id);
+                }
+            } catch (e) {}
+
+            if (!workspaces.length) {
+                const defaultId = 'ruang-dkv-1';
+                workspaces = [{ id: defaultId, name: 'XII DKV 1 — Proyek Desain Poster' }];
+                activeWorkspaceId = defaultId;
+            }
+
+            loadWorkspaceData(activeWorkspaceId);
+        }
+
+        function renderWorkspaceSelector() {
+            const select = document.getElementById('workspaceSelect');
+            if (!select) return;
+            select.innerHTML = workspaces.map(ws =>
+                `<option value="${escapeHtml(ws.id)}" ${ws.id === activeWorkspaceId ? 'selected' : ''}>${escapeHtml(ws.name)}</option>`
+            ).join('');
+        }
+
+        function switchWorkspace(wsId) {
+            if (!wsId || wsId === activeWorkspaceId) return;
+            saveToStorage();
+            loadWorkspaceData(wsId);
+            showToast('Berpindah ke ruang kelas terpilih.', 'info');
+        }
+
+        function createNewWorkspace() {
+            const newId = 'ruang-dkv-' + Date.now();
+            const roomNum = workspaces.length + 1;
+            const defaultName = `Kelas DKV #${roomNum} — Tugas Baru`;
+            workspaces.push({ id: newId, name: defaultName });
+            activeWorkspaceId = newId;
+            boardConfig = {
+                title: defaultName,
+                theme: 'indigo',
+                stages: ['1. Sketsa', '2. Digitalisasi', '3. Finishing', '4. Final ACC']
+            };
+            tasksList = [];
+            saveToStorage();
+            loadWorkspaceData(newId);
+            openBoardSettingsModal();
+            showToast('Ruang kelas baru dibuat! Silakan atur judul & tahapan.', 'success');
+        }
+
+        function deleteCurrentWorkspace() {
+            if (workspaces.length <= 1) {
+                showToast('Minimal harus tersisa 1 ruang kelas.', 'error');
+                return;
+            }
+            localStorage.removeItem(`${STORAGE_PREFIX}${activeWorkspaceId}`);
+            workspaces = workspaces.filter(w => w.id !== activeWorkspaceId);
+            activeWorkspaceId = workspaces[0].id;
+            saveToStorage();
+            closeModal('settingsModal');
+            loadWorkspaceData(activeWorkspaceId);
+            showToast('Ruang kelas berhasil dihapus.', 'info');
+        }
+
+        function applyTheme(themeName) {
+            const validTheme = THEME_PRIMARY_COLORS[themeName] ? themeName : 'indigo';
+            document.body.setAttribute('data-theme', validTheme);
+        }
+
+        function updateBoardUI() {
+            document.getElementById('boardTitleDisplay').textContent = boardConfig.title;
+            document.getElementById('printTitleDisplay').textContent = boardConfig.title;
+            document.getElementById('studentCountBadge').textContent = `${tasksList.length} Siswa`;
+        }
+
+        function updateStats() {
+            const total = tasksList.length;
+            const totalStages = boardConfig.stages.length;
+            let completedCount = 0;
+            let sumPercent = 0;
+
+            tasksList.forEach(task => {
+                const stagesArr = normalizeStagesArray(task.completedStages, totalStages);
+                const doneCount = stagesArr.filter(Boolean).length;
+                const pct = totalStages > 0 ? Math.round((doneCount / totalStages) * 100) : 0;
+                sumPercent += pct;
+                if (doneCount === totalStages && totalStages > 0) {
+                    completedCount++;
+                }
+            });
+
+            document.getElementById('studentCountBadge').textContent = `${total} Siswa`;
+            document.getElementById('statTotalStudents').textContent = total;
+            document.getElementById('statCompleted').textContent = completedCount;
+            document.getElementById('statInProgress').textContent = total - completedCount;
+            document.getElementById('statAvgProgress').textContent = total > 0 ? `${Math.round(sumPercent / total)}%` : '0%';
+        }
+
+        function normalizeStagesArray(arr, targetLen) {
+            const result = [];
+            for (let i = 0; i < targetLen; i++) {
+                result.push(Boolean(arr && arr[i]));
+            }
+            return result;
+        }
+
+        function renderTaskTable() {
+            const headerRow = document.getElementById('tableHeaderRow');
+            const tbody = document.getElementById('taskTableBody');
+            const stages = boardConfig.stages;
+            const searchQuery = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+
+            let headerHTML = `
+                <th style="width:45px; text-align:center;">No</th>
+                <th class="sticky-col">Nama Siswa</th>
+                <th style="min-width:190px;">Tugas Praktik DKV</th>
+                <th style="min-width:210px;">Deskripsi / Keterangan</th>
+            `;
+            stages.forEach((stageName, idx) => {
+                headerHTML += `
+                    <th class="stage-col">
+                        <div class="stage-num">TAHAP ${idx + 1}</div>
+                        <div class="stage-title">${escapeHtml(stageName)}</div>
+                    </th>
+                `;
+            });
+            headerHTML += `
+                <th style="min-width:130px; text-align:center;">Progres</th>
+                <th class="no-print" style="width:88px; text-align:center;">Aksi</th>
+            `;
+            headerRow.innerHTML = headerHTML;
+
+            const filteredTasks = tasksList.filter(task => {
+                const matchesSearch = task.studentName.toLowerCase().includes(searchQuery) ||
+                                      task.taskTitle.toLowerCase().includes(searchQuery) ||
+                                      (task.taskDescription || '').toLowerCase().includes(searchQuery);
+                if (!matchesSearch) return false;
+
+                const stagesArr = normalizeStagesArray(task.completedStages, stages.length);
+                const isAllDone = stagesArr.every(Boolean) && stages.length > 0;
+
+                if (filterStatus === 'done') return isAllDone;
+                if (filterStatus === 'progress') return !isAllDone;
+                return true;
+            });
+
+            if (filteredTasks.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="${stages.length + 6}" style="padding:40px 16px; text-align:center; color:#64748b;">
+                            Belum ada data tugas siswa yang sesuai.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredTasks.map((task, index) => {
+                const stagesArr = normalizeStagesArray(task.completedStages, stages.length);
+                const doneCount = stagesArr.filter(Boolean).length;
+                const percent = stages.length > 0 ? Math.round((doneCount / stages.length) * 100) : 0;
+                const isComplete = percent === 100;
+
+                let stagesCells = '';
+                stagesArr.forEach((checked, sIdx) => {
+                    stagesCells += `
+                        <td class="check-cell">
+                            <button onclick="toggleStage('${task.id}', ${sIdx})"
+                                class="stage-btn ${checked ? 'checked' : ''}"
+                                title="Klik untuk ubah status ${escapeHtml(stages[sIdx])}">
+                                ${checked ? '✓' : '—'}
+                            </button>
+                        </td>
+                    `;
+                });
+
+                const descText = task.taskDescription || '';
+                const descCell = `
+                    <td style="color:${descText ? '#475569' : '#94a3b8'}; font-size:0.8rem; line-height:1.4;">
+                        ${descText ? escapeHtml(descText) : '<em>- Belum ada deskripsi -</em>'}
+                    </td>
+                `;
+
+                return `
+                    <tr class="${isComplete ? 'row-done' : ''}">
+                        <td style="text-align:center; font-weight:700; color:#94a3b8; font-size:0.78rem;">${index + 1}</td>
+                        <td class="sticky-col">
+                            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:6px;">
+                                <div>
+                                    <div class="student-name">${escapeHtml(task.studentName)}</div>
+                                    ${isComplete ? '<span class="badge-acc">✓ TUNTAS / ACC</span>' : ''}
+                                </div>
+                                <button onclick="openEditStudentModal('${task.id}')" class="btn-icon-only no-print" style="padding:4px; flex-shrink:0;" title="Edit Nama, Tugas & Deskripsi">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                                </button>
+                            </div>
+                        </td>
+                        <td style="font-weight:600; color:#1e293b;">${escapeHtml(task.taskTitle)}</td>
+                        ${descCell}
+                        ${stagesCells}
+                        <td>
+                            <div class="progress-wrap">
+                                <div class="progress-labels">
+                                    <span style="color:${isComplete ? '#059669' : 'var(--primary)'};">${percent}%</span>
+                                    <span style="color:#94a3b8; font-weight:500;">${doneCount}/${stages.length}</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill ${isComplete ? 'done' : ''}" style="width:${percent}%;"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="no-print" style="text-align:center; white-space:nowrap;">
+                            <button onclick="openEditStudentModal('${task.id}')"
+                                class="btn-icon-only" style="color:var(--primary);" title="Edit Siswa & Tugas">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                            </button>
+                            <button onclick="confirmDeleteTask('${task.id}', '${escapeHtml(task.studentName)}')"
+                                class="btn-icon-only" style="color:#ef4444;" title="Hapus Siswa">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function handleAddTask(e) {
+            e.preventDefault();
+
+            const nameInput = document.getElementById('inputStudentName');
+            const titleInput = document.getElementById('inputTaskTitle');
+            const descInput = document.getElementById('inputTaskDesc');
+
+            const studentName = nameInput.value.trim();
+            const taskTitle = titleInput.value.trim();
+            const taskDescription = descInput.value.trim();
+
+            if (!studentName || !taskTitle) return;
+
+            tasksList.push({
+                id: 'siswa-' + Date.now(),
+                studentName: studentName,
+                taskTitle: taskTitle,
+                taskDescription: taskDescription,
+                completedStages: new Array(boardConfig.stages.length).fill(false),
+                createdAt: Date.now()
+            });
+
+            saveToStorage();
+            updateStats();
+            renderTaskTable();
+
+            nameInput.value = '';
+            titleInput.value = '';
+            descInput.value = '';
+            nameInput.focus();
+            showToast(`Tugas untuk ${studentName} berhasil ditambahkan!`, 'success');
+        }
+
+        function openEditStudentModal(taskId) {
+            const task = tasksList.find(t => t.id === taskId);
+            if (!task) return;
+
+            document.getElementById('editStudentId').value = task.id;
+            document.getElementById('editStudentName').value = task.studentName;
+            document.getElementById('editStudentTaskTitle').value = task.taskTitle;
+            document.getElementById('editStudentTaskDesc').value = task.taskDescription || '';
+            openModal('editStudentModal');
+        }
+
+        function saveStudentEdit(e) {
+            e.preventDefault();
+            const taskId = document.getElementById('editStudentId').value;
+            const task = tasksList.find(t => t.id === taskId);
+            if (!task) return;
+
+            const newName = document.getElementById('editStudentName').value.trim();
+            const newTitle = document.getElementById('editStudentTaskTitle').value.trim();
+            const newDesc = document.getElementById('editStudentTaskDesc').value.trim();
+
+            if (!newName || !newTitle) return;
+
+            task.studentName = newName;
+            task.taskTitle = newTitle;
+            task.taskDescription = newDesc;
+
+            saveToStorage();
+            renderTaskTable();
+            closeModal('editStudentModal');
+            showToast('Data siswa & deskripsi tugas diperbarui!', 'success');
+        }
+
+        function toggleStage(taskId, stageIndex) {
+            const task = tasksList.find(t => t.id === taskId);
+            if (!task) return;
+
+            const updatedStages = normalizeStagesArray(task.completedStages, boardConfig.stages.length);
+            updatedStages[stageIndex] = !updatedStages[stageIndex];
+            task.completedStages = updatedStages;
+
+            saveToStorage();
+            updateStats();
+            renderTaskTable();
+        }
+
+        function updateTeacherNote(taskId, newNote) {
+            const task = tasksList.find(t => t.id === taskId);
+            if (!task) return;
+
+            task.teacherNote = newNote.trim();
+            saveToStorage();
+            showToast('Catatan guru tersimpan.', 'success');
+        }
+
+        function confirmDeleteTask(taskId, studentName) {
+            document.getElementById('deleteStudentNameText').textContent = `Hapus data tugas milik "${studentName}"? Tindakan ini tidak bisa dibatalkan.`;
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            confirmBtn.onclick = () => {
+                tasksList = tasksList.filter(t => t.id !== taskId);
+                saveToStorage();
+                updateStats();
+                renderTaskTable();
+                closeModal('deleteConfirmModal');
+                showToast('Data siswa berhasil dihapus.', 'info');
+            };
+            openModal('deleteConfirmModal');
+        }
+
+        function openBoardSettingsModal() {
+            document.getElementById('settingBoardTitle').value = boardConfig.title;
+            tempStages = [...boardConfig.stages];
+            tempTheme = boardConfig.theme || 'indigo';
+            selectTempTheme(tempTheme);
+            renderCustomStagesEditor();
+            openModal('settingsModal');
+        }
+
+        function selectTempTheme(themeKey) {
+            tempTheme = themeKey;
+            document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-theme-btn') === themeKey);
+            });
+        }
+
+        function applyPresetStages(presetArray) {
+            tempStages = [...presetArray];
+            renderCustomStagesEditor();
+        }
+
+        function addStageField() {
+            if (tempStages.length >= 10) {
+                showToast('Maksimal 10 tahapan ceklist.', 'info');
+                return;
+            }
+            tempStages.push(`${tempStages.length + 1}. Tahap Baru`);
+            renderCustomStagesEditor();
+        }
+
+        function removeStageField(index) {
+            if (tempStages.length <= 1) {
+                showToast('Minimal harus ada 1 tahapan.', 'error');
+                return;
+            }
+            tempStages.splice(index, 1);
+            renderCustomStagesEditor();
+        }
+
+        function updateTempStageName(index, val) {
+            tempStages[index] = val;
+        }
+
+        function renderCustomStagesEditor() {
+            const container = document.getElementById('customStagesList');
+            document.getElementById('stageCountLabel').textContent = tempStages.length;
+
+            container.innerHTML = tempStages.map((stage, idx) => `
+                <div class="stage-editor-row">
+                    <span class="stage-num-badge">${idx + 1}</span>
+                    <input type="text" value="${escapeHtml(stage)}" oninput="updateTempStageName(${idx}, this.value)" class="form-control" style="padding:7px 10px; font-size:0.8rem;">
+                    <button type="button" onclick="removeStageField(${idx})" class="btn-icon-only" style="color:#ef4444;" title="Hapus Tahap">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function saveBoardSettings() {
+            boardConfig.title = document.getElementById('settingBoardTitle').value.trim() || boardConfig.title;
+            boardConfig.theme = tempTheme || 'indigo';
+            boardConfig.stages = tempStages.map((s, i) => s.trim() || `Tahap ${i + 1}`);
+
+            applyTheme(boardConfig.theme);
+            saveToStorage();
+            updateBoardUI();
+            updateStats();
+            renderTaskTable();
+            closeModal('settingsModal');
+            showToast('Judul, tema & tahapan berhasil disimpan!', 'success');
+        }
+
+        function openShareModal() {
+            openModal('shareModal');
+        }
+
+        function exportToPDF() {
+            const nowStr = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('printTitleDisplay').textContent = boardConfig.title;
+            document.getElementById('printDateDisplay').textContent = `Dicetak pada: ${nowStr} • Total Siswa: ${tasksList.length}`;
+            showToast('Menyiapkan dokumen PDF / Cetak...', 'info');
+            setTimeout(() => {
+                window.print();
+            }, 250);
+        }
+
+        function wrapCanvasText(ctx, text, maxWidth) {
+            const words = String(text || '').split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (let i = 0; i < words.length; i++) {
+                const testLine = currentLine ? currentLine + ' ' + words[i] : words[i];
+                if (ctx.measureText(testLine).width > maxWidth && currentLine) {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            if (currentLine) lines.push(currentLine);
+            return lines.length ? lines : [''];
+        }
+
+        function exportToImage() {
+            try {
+                const stages = boardConfig.stages;
+                const dpr = 2; // Resolusi tajam (Retina/HD)
+                const padding = 32;
+                const colNoW = 48;
+                const colNameW = 185;
+                const colTaskW = 210;
+                const colDescW = 230;
+                const colStageW = 115;
+                const colProgW = 110;
+
+                const tableWidth = colNoW + colNameW + colTaskW + colDescW + (stages.length * colStageW) + colProgW;
+                const canvasWidth = tableWidth + (padding * 2);
+
+                const headerHeight = 115;
+                const tableHeadHeight = 56;
+                const rowHeight = 66;
+                const footerHeight = 42;
+                const rowsCount = Math.max(tasksList.length, 1);
+                const canvasHeight = padding + headerHeight + tableHeadHeight + (rowsCount * rowHeight) + footerHeight + padding;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = canvasWidth * dpr;
+                canvas.height = canvasHeight * dpr;
+                const ctx = canvas.getContext('2d');
+                ctx.scale(dpr, dpr);
+
+                // Background
+                ctx.fillStyle = '#f8fafc';
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                // Top Banner Card (sesuai tema aktif)
+                const activeTheme = boardConfig.theme || 'indigo';
+                const bannerBg = THEME_BANNER_COLORS[activeTheme] || '#1e1b4b';
+                const accentColor = THEME_PRIMARY_COLORS[activeTheme] || '#4f46e5';
+
+                ctx.fillStyle = bannerBg;
+                ctx.beginPath();
+                ctx.roundRect(padding, padding, tableWidth, 92, 14);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText(boardConfig.title, padding + 24, padding + 38);
+
+                const dateLabel = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText(`Rekap Progres Tugas Praktik DKV • Tanggal: ${dateLabel} • Total: ${tasksList.length} Siswa`, padding + 24, padding + 66);
+
+                // Table Header
+                let curY = padding + headerHeight;
+                ctx.fillStyle = '#f1f5f9';
+                ctx.fillRect(padding, curY, tableWidth, tableHeadHeight);
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(padding, curY, tableWidth, tableHeadHeight);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.textBaseline = 'middle';
+
+                let curX = padding;
+                ctx.textAlign = 'center';
+                ctx.fillText('NO', curX + colNoW / 2, curY + tableHeadHeight / 2);
+                curX += colNoW;
+
+                ctx.textAlign = 'left';
+                ctx.fillText('NAMA SISWA', curX + 12, curY + tableHeadHeight / 2);
+                curX += colNameW;
+
+                ctx.fillText('TUGAS PRAKTIK DKV', curX + 12, curY + tableHeadHeight / 2);
+                curX += colTaskW;
+
+                ctx.fillText('DESKRIPSI / KETERANGAN', curX + 12, curY + tableHeadHeight / 2);
+                curX += colDescW;
+
+                stages.forEach((stName, idx) => {
+                    ctx.strokeStyle = '#cbd5e1';
+                    ctx.beginPath();
+                    ctx.moveTo(curX, curY);
+                    ctx.lineTo(curX, curY + tableHeadHeight);
+                    ctx.stroke();
+
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = accentColor;
+                    ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    ctx.fillText(`TAHAP ${idx + 1}`, curX + colStageW / 2, curY + 18);
+
+                    ctx.fillStyle = '#0f172a';
+                    ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    const shortStage = stName.length > 15 ? stName.slice(0, 14) + '…' : stName;
+                    ctx.fillText(shortStage, curX + colStageW / 2, curY + 37);
+
+                    curX += colStageW;
+                });
+
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText('PROGRES', curX + colProgW / 2, curY + tableHeadHeight / 2);
+
+                curY += tableHeadHeight;
+
+                // Table Rows
+                if (tasksList.length === 0) {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(padding, curY, tableWidth, rowHeight);
+                    ctx.strokeRect(padding, curY, tableWidth, rowHeight);
+                    ctx.fillStyle = '#64748b';
+                    ctx.textAlign = 'center';
+                    ctx.font = '13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    ctx.fillText('Belum ada data tugas siswa.', padding + tableWidth / 2, curY + rowHeight / 2);
+                    curY += rowHeight;
+                } else {
+                    tasksList.forEach((task, rIdx) => {
+                        const stagesArr = normalizeStagesArray(task.completedStages, stages.length);
+                        const doneCount = stagesArr.filter(Boolean).length;
+                        const pct = stages.length > 0 ? Math.round((doneCount / stages.length) * 100) : 0;
+                        const isDone = pct === 100;
+
+                        ctx.fillStyle = isDone ? '#f0fdf4' : (rIdx % 2 === 0 ? '#ffffff' : '#f8fafc');
+                        ctx.fillRect(padding, curY, tableWidth, rowHeight);
+                        ctx.strokeStyle = '#e2e8f0';
+                        ctx.strokeRect(padding, curY, tableWidth, rowHeight);
+
+                        let rx = padding;
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        ctx.fillText(String(rIdx + 1), rx + colNoW / 2, curY + rowHeight / 2);
+                        rx += colNoW;
+
+                        // Nama Siswa
+                        ctx.textAlign = 'left';
+                        ctx.fillStyle = '#0f172a';
+                        ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        const nameLines = wrapCanvasText(ctx, task.studentName, colNameW - 20);
+                        ctx.fillText(nameLines[0], rx + 12, curY + (isDone ? 22 : rowHeight / 2));
+                        if (isDone) {
+                            ctx.fillStyle = '#059669';
+                            ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                            ctx.fillText('✓ TUNTAS / ACC', rx + 12, curY + 42);
+                        }
+                        rx += colNameW;
+
+                        // Judul Tugas
+                        ctx.fillStyle = '#1e293b';
+                        ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        const taskLines = wrapCanvasText(ctx, task.taskTitle, colTaskW - 20);
+                        ctx.fillText(taskLines[0], rx + 12, curY + (taskLines[1] ? 23 : rowHeight / 2));
+                        if (taskLines[1]) {
+                            ctx.fillText(taskLines[1], rx + 12, curY + 41);
+                        }
+                        rx += colTaskW;
+
+                        // Deskripsi Tugas
+                        ctx.fillStyle = task.taskDescription ? '#475569' : '#94a3b8';
+                        ctx.font = task.taskDescription ? '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : 'italic 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        const descText = task.taskDescription || '- Tidak ada deskripsi -';
+                        const descLines = wrapCanvasText(ctx, descText, colDescW - 20);
+                        ctx.fillText(descLines[0], rx + 12, curY + (descLines[1] ? 23 : rowHeight / 2));
+                        if (descLines[1]) {
+                            ctx.fillText(descLines[1], rx + 12, curY + 41);
+                        }
+                        rx += colDescW;
+
+                        // Tahapan
+                        stagesArr.forEach(checked => {
+                            const boxSize = 26;
+                            const bx = rx + (colStageW - boxSize) / 2;
+                            const by = curY + (rowHeight - boxSize) / 2;
+
+                            ctx.fillStyle = checked ? '#10b981' : '#f1f5f9';
+                            ctx.beginPath();
+                            ctx.roundRect(bx, by, boxSize, boxSize, 6);
+                            ctx.fill();
+
+                            ctx.fillStyle = checked ? '#ffffff' : '#94a3b8';
+                            ctx.textAlign = 'center';
+                            ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                            ctx.fillText(checked ? '✓' : '—', rx + colStageW / 2, curY + rowHeight / 2);
+                            rx += colStageW;
+                        });
+
+                        // Progres
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = isDone ? '#059669' : accentColor;
+                        ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        ctx.fillText(`${pct}%`, rx + colProgW / 2, curY + 23);
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        ctx.fillText(`(${doneCount}/${stages.length})`, rx + colProgW / 2, curY + 41);
+
+                        curY += rowHeight;
+                    });
+                }
+
+                // Footer
+                ctx.fillStyle = '#64748b';
+                ctx.textAlign = 'right';
+                ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText('DKV Studio Tracker • Laporan Progres Praktik Siswa', padding + tableWidth, curY + 24);
+
+                const dataUrl = canvas.toDataURL('image/png');
+                const fileName = `Rekap-DKV-${boardConfig.title.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30)}.png`;
+
+                // Tampilkan modal pratinjau agar tetap bisa disimpan di Acode WebView + picu auto-download
+                const previewImg = document.getElementById('exportedImagePreview');
+                const downloadAnchor = document.getElementById('downloadImageAnchor');
+                previewImg.src = dataUrl;
+                downloadAnchor.href = dataUrl;
+                downloadAnchor.download = fileName;
+                openModal('imagePreviewModal');
+
+                try {
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } catch (e) {}
+
+                showToast('Gambar tabel berhasil dibuat!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Gagal mengekspor gambar.', 'error');
+            }
+        }
+
+        function copyWhatsAppSummary() {
+            const totalStages = boardConfig.stages.length;
+            let text = `*REKAP PROGRES TUGAS DKV*\n*${boardConfig.title}*\n\n`;
+
+            if (tasksList.length === 0) {
+                text += '_Belum ada data siswa._';
+            } else {
+                tasksList.forEach((task, idx) => {
+                    const stagesArr = normalizeStagesArray(task.completedStages, totalStages);
+                    const doneCount = stagesArr.filter(Boolean).length;
+                    const pct = totalStages > 0 ? Math.round((doneCount / totalStages) * 100) : 0;
+                    const statusIcon = pct === 100 ? '✅' : '⏳';
+
+                    text += `${idx + 1}. *${task.studentName}* ${statusIcon} (${pct}%)\n`;
+                    text += `   Tugas: ${task.taskTitle}\n`;
+                    if (task.taskDescription) {
+                        text += `   Deskripsi: _${task.taskDescription}_\n`;
+                    }
+                    text += `   Tahap: ${doneCount}/${totalStages} selesai\n\n`;
+                });
+            }
+
+            const tempArea = document.createElement('textarea');
+            tempArea.value = text.trim();
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Rekap teks siap tempel di WhatsApp!', 'success');
+            } catch (err) {
+                showToast('Gagal menyalin teks rekap.', 'error');
+            }
+            document.body.removeChild(tempArea);
+        }
+
+        function setFilterStatus(status) {
+            filterStatus = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`filter-${status}`);
+            if (activeBtn) activeBtn.classList.add('active');
+            renderTaskTable();
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
