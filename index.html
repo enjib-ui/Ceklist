@@ -43,7 +43,7 @@
             --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.15);
         }
 
-        /* Theme Presets */
+        /* Theme Presets - Full UI Surface & Palette Transformation */
         body[data-theme="emerald"] {
             --bg-main: #ecfdf5;
             --bg-card: #ffffff;
@@ -587,7 +587,7 @@
             background: rgba(16, 185, 129, 0.1);
         }
 
-        /* Sticky Student Name Column */
+        /* Sticky Student Name Column for Mobile Readability */
         .sticky-col {
             position: sticky;
             left: 0;
@@ -922,10 +922,9 @@
         }
 
         .auth-banner {
-            background: var(--bg-card);
-            color: var(--text-main);
-            border-bottom: 1px solid var(--border-color);
-            padding: 26px 20px 20px;
+            background: var(--brand-grad);
+            color: #ffffff;
+            padding: 24px 20px;
             text-align: center;
         }
 
@@ -963,16 +962,6 @@
             color: var(--primary);
             font-size: 0.72rem;
             font-weight: 700;
-        }
-
-        .student-view-banner {
-            background: var(--panel-grad);
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 16px;
-            text-align: center;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--panel-title-color);
         }
 
         /* Mobile & Small Screen Responsive Optimization */
@@ -1130,8 +1119,7 @@
             .no-print,
             .app-footer,
             .toast-container,
-            .modal-backdrop,
-            .student-view-banner {
+            .modal-backdrop {
                 display: none !important;
             }
             .main-container {
@@ -1173,25 +1161,41 @@
                 padding: 8px 6px !important;
                 border: 1px solid #cbd5e1 !important;
             }
+            .note-input {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                min-width: auto !important;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- LAYAR LOGIN / DAFTAR GURU -->
+    <!-- LAYAR LOGIN / DAFTAR GURU (Tampil saat pertama kali masuk) -->
     <div id="authScreen" class="auth-screen">
         <div class="auth-card">
-            <div class="auth-banner">
+            <div class="auth-banner" style="background: var(--bg-card); color: var(--text-main); border-bottom: 1px solid var(--border-color); padding: 26px 20px 20px;">
                 <div class="auth-logo-wrap">
+                    <!-- Logo Presisi Tahap.in Tanpa Background -->
                     <svg width="175" height="96" viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Tahap.in">
+                        <!-- Tangga 1 (Navy) -->
                         <path d="M98 106 H132 V78 H120 V95 H98 Z" fill="#0B2347"/>
+                        <!-- Tangga 2 (Teal) -->
                         <path d="M120 78 H158 V50 H146 V67 H120 Z" fill="#075E68"/>
+                        <!-- Bayangan lipatan Tangga 1-2 -->
                         <polygon points="120,78 132,78 132,89" fill="#061630"/>
+                        <!-- Tangga 3 (Hijau) -->
                         <path d="M146 50 H186 V22 H174 V39 H146 Z" fill="#0BA354"/>
+                        <!-- Bayangan lipatan Tangga 2-3 -->
                         <polygon points="146,50 158,50 158,61" fill="#054249"/>
+                        <!-- Tangga 4 & Lengan Ceklis Atas (Oranye/Amber) -->
                         <path d="M174 22 H224 L212 33 H186 V54 L174 42 Z" fill="#F39C12"/>
+                        <!-- Badan Ceklis Utama (Oranye/Amber) -->
                         <polygon points="186,33 212,56 266,8 212,72 186,46" fill="#F39C12"/>
+                        <!-- Sisi Bawah Ceklis (Hijau) -->
                         <polygon points="186,46 212,72 266,8 212,86 186,58" fill="#0BA354"/>
+                        <!-- Wordmark Tahap.in -->
                         <text x="180" y="156" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="800" font-size="52" letter-spacing="-1.5">
                             <tspan fill="#0B2347">Tahap</tspan><tspan fill="#0BA354">.in</tspan>
                         </text>
@@ -1200,176 +1204,191 @@
                 <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">Masuk untuk menyinkronkan ruang kelas & progres siswa ke Cloud</p>
             </div>
 
-            <div id="authLoadingState" style="padding:28px 20px; text-align:center; color:var(--text-muted); font-size:0.82rem; font-weight:600;">
-                Memeriksa sesi login & memulihkan halaman terakhir...
+            <div class="auth-tabs">
+                <button type="button" id="tabLoginBtn" onclick="switchAuthMode('login')" class="auth-tab-btn active">Masuk (Login)</button>
+                <button type="button" id="tabRegisterBtn" onclick="switchAuthMode('register')" class="auth-tab-btn">Daftar Akun Baru</button>
             </div>
 
-            <div id="authFormContainer" class="hidden">
-                <div class="auth-tabs">
-                    <button type="button" id="tabLoginBtn" onclick="switchAuthMode('login')" class="auth-tab-btn active">Masuk (Login)</button>
-                    <button type="button" id="tabRegisterBtn" onclick="switchAuthMode('register')" class="auth-tab-btn">Daftar Akun Baru</button>
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" style="padding:20px; display:flex; flex-direction:column; gap:13px;">
+                <div id="authErrorBox" class="hidden" style="background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:10px 12px; border-radius:10px; font-size:0.76rem; font-weight:600;"></div>
+
+                <div class="form-group">
+                    <label>Email Guru <span class="req">*</span></label>
+                    <input type="email" id="authEmailInput" class="form-control" required placeholder="nama.guru@smk.sch.id" autocomplete="email">
                 </div>
 
-                <form id="authForm" onsubmit="handleAuthSubmit(event)" style="padding:20px; display:flex; flex-direction:column; gap:13px;">
-                    <div id="authErrorBox" class="hidden" style="background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:10px 12px; border-radius:10px; font-size:0.76rem; font-weight:600;"></div>
+                <div class="form-group">
+                    <label>Kata Sandi <span class="req">*</span></label>
+                    <input type="password" id="authPasswordInput" class="form-control" required minlength="6" placeholder="Minimal 6 karakter" autocomplete="current-password">
+                </div>
 
-                    <div class="form-group">
-                        <label>Email Guru <span class="req">*</span></label>
-                        <input type="email" id="authEmailInput" class="form-control" required placeholder="nama.guru@smk.sch.id" autocomplete="email">
-                    </div>
+                <button type="submit" id="authSubmitBtn" class="btn btn-primary" style="width:100%; padding:11px; font-size:0.85rem; margin-top:4px;">
+                    Masuk ke Ruang Guru
+                </button>
 
-                    <div class="form-group">
-                        <label>Kata Sandi <span class="req">*</span></label>
-                        <input type="password" id="authPasswordInput" class="form-control" required minlength="6" placeholder="Minimal 6 karakter" autocomplete="current-password">
-                    </div>
-
-                    <button type="submit" id="authSubmitBtn" class="btn btn-primary" style="width:100%; padding:11px; font-size:0.85rem; margin-top:4px;">
-                        Masuk ke Ruang Guru
-                    </button>
-
-                    <div style="text-align:center; font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
-                        Sesi login tersimpan otomatis di perangkat ini • Data aman per akun
-                    </div>
-                </form>
-            </div>
+                <div style="text-align:center; font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                    Sesi login tersimpan otomatis di perangkat ini • Data aman per akun
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- BANNER KHUSUS MODE PANTAUAN SISWA -->
-    <div id="studentViewBanner" class="student-view-banner hidden">
-        👁️ Mode Pantauan Siswa (Hanya Lihat) — Progres terupdate otomatis secara real-time
-    </div>
-
-    <!-- HEADER UTAMA -->
-    <header id="appHeader" class="app-header">
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
         <div class="header-inner">
             <div class="brand-group">
                 <div class="brand-logo" title="Tahap.in">
-                    <svg width="98" height="44" viewBox="0 0 360 175" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tahap.in">
-                        <path d="M98 92 H132 V64 H120 V81 H98 Z" fill="#0B2347"/>
-                        <path d="M120 64 H158 V36 H146 V53 H120 Z" fill="#075E68"/>
-                        <polygon points="120,64 132,64 132,75" fill="#061630"/>
-                        <path d="M146 36 H186 V8 H174 V25 H146 Z" fill="#0BA354"/>
-                        <polygon points="146,36 158,36 158,47" fill="#054249"/>
-                        <path d="M174 8 H224 L212 19 H186 V40 L174 28 Z" fill="#F39C12"/>
-                        <polygon points="186,19 212,42 266,-4 212,58 186,32" fill="#F39C12"/>
-                        <polygon points="186,32 212,58 266,-4 212,72 186,44" fill="#0BA354"/>
-                        <text x="180" y="142" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="800" font-size="52" letter-spacing="-1.5">
-                            <tspan fill="#0B2347">Tahap</tspan><tspan fill="#0BA354">.in</tspan>
-                        </text>
+                    <!-- Logo Ikon Presisi Tahap.in Tanpa Background -->
+                    <svg width="54" height="40" viewBox="92 4 180 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tahap.in">
+                        <path d="M98 96 H132 V68 H120 V85 H98 Z" fill="#0B2347"/>
+                        <path d="M120 68 H158 V40 H146 V57 H120 Z" fill="#075E68"/>
+                        <polygon points="120,68 132,68 132,79" fill="#061630"/>
+                        <path d="M146 40 H186 V14 H174 V29 H146 Z" fill="#0BA354"/>
+                        <polygon points="146,40 158,40 158,51" fill="#054249"/>
+                        <path d="M174 14 H224 L212 25 H186 V44 L174 32 Z" fill="#F39C12"/>
+                        <polygon points="186,25 212,48 266,4 212,64 186,38" fill="#F39C12"/>
+                        <polygon points="186,38 212,64 266,4 212,78 186,50" fill="#0BA354"/>
                     </svg>
                 </div>
-
                 <div>
                     <div class="board-title-row">
-                        <h1 id="boardTitleDisplay" class="board-title">Tahap.in — Pantauan Tugas</h1>
-                        <button id="editTitleIconBtn" onclick="openBoardSettings()" class="btn-icon-only" title="Edit Judul, Tahapan & Tema">✏️</button>
+                        <span style="font-weight:900; font-size:0.88rem; letter-spacing:-0.02em; color:#0B2347;">Tahap<span style="color:#0BA354;">.in</span></span>
+                        <span style="color:var(--border-color);">|</span>
+                        <span id="boardClassBadge" class="badge-lock" style="font-size:0.72rem; padding:3px 10px;">KELAS</span>
+                        <h1 id="boardTitleDisplay" class="board-title">Proyek Desain DKV</h1>
+                        <button id="editBoardInfoBtn" onclick="openBoardSettingsModal()" class="btn-icon-only" title="Edit Kelas, Judul, Tahapan & Tema">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        </button>
                     </div>
-                    <div class="board-subtitle" style="flex-wrap:wrap; gap:8px;">
-                        <span><span class="status-dot"></span> <span id="boardSubtitleDisplay">Cloud Tersinkron</span></span>
-                        <span id="teacherUserPill" class="user-pill">👤 <span id="loggedInUserLabel">Guru</span></span>
+                    <div class="board-subtitle" style="flex-wrap:wrap; margin-top:4px;">
+                        <div class="workspace-bar">
+                            <span class="status-dot"></span>
+                            <select id="workspaceSelect" onchange="switchWorkspace(this.value)" class="workspace-select" title="Pilih Kelas / Ruang Tugas"></select>
+                            <button onclick="createNewWorkspace()" class="btn-icon-only" style="font-size:0.72rem; font-weight:700; color:var(--primary); padding:3px 7px; background:var(--primary-soft);" title="Tambah Kelas / Tugas Baru">+ Kelas / Tugas</button>
+                        </div>
+                        <span>•</span>
+                        <strong id="studentCountBadge" style="color:var(--text-main);">0 Siswa</strong>
+                        <span id="teacherUserDivider">•</span>
+                        <span id="teacherUserPill" class="user-pill">
+                            <span id="loggedInUserLabel">Guru</span>
+                            <button type="button" onclick="handleLogout()" style="border:none; background:transparent; color:#e11d48; font-weight:800; font-size:0.7rem; cursor:pointer; margin-left:4px;" title="Keluar Akun">Keluar</button>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <div id="teacherHeaderControls" style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
-                <div class="workspace-bar">
-                    <select id="workspaceSelector" onchange="switchWorkspace(this.value)" class="workspace-select" title="Pilih Kelas / Ruang Tugas"></select>
-                    <button onclick="openNewWorkspaceModal()" class="btn btn-outline" style="padding:6px 10px; font-size:0.72rem;" title="Tambah Kelas Baru">+ Kelas</button>
-                    <button onclick="handleLogout()" class="btn btn-outline" style="padding:6px 10px; font-size:0.72rem; color:var(--rose);" title="Keluar dari Akun">Keluar</button>
-                </div>
+            <div id="teacherHeaderActions" class="header-actions">
+                <button id="btnManageStages" onclick="openBoardSettingsModal()" class="btn btn-outline">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    <span>Tahapan & Tema</span>
+                </button>
 
-                <div class="header-actions">
-                    <button onclick="openBoardSettings()" class="btn btn-outline">⚙️ Tahapan & Tema</button>
-                    <button onclick="openShareModal()" class="btn btn-primary">🔗 Bagikan & Rekap</button>
-                    <button onclick="exportTableToPNG()" class="btn btn-emerald">🖼️ Ekspor Gambar</button>
-                    <button onclick="exportToPDF()" class="btn btn-dark">🖨️ Ekspor PDF</button>
-                </div>
+                <button onclick="exportToImage()" class="btn btn-emerald">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                    <span>Ekspor Gambar</span>
+                </button>
+
+                <button onclick="exportToPDF()" class="btn btn-rose">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <span>Ekspor PDF</span>
+                </button>
+
+                <button onclick="openShareModal()" class="btn btn-dark">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+                    <span>Bagikan & Rekap</span>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA -->
+    <!-- Main Content -->
     <main class="main-container">
-        <!-- Header Khusus Cetak PDF -->
+
+        <!-- Header Khusus saat Cetak / PDF -->
         <div class="print-header-only hidden">
-            <h2 id="printTitleText" style="font-size:1.2rem; font-weight:800;">Tahap.in — Rekap Progres Tugas</h2>
-            <p id="printSubtitleText" style="font-size:0.8rem; color:#475569;"></p>
+            <h2 id="printTitleDisplay" style="font-size:1.25rem; font-weight:800;">XII DKV 1 — Proyek Desain Poster</h2>
+            <p id="printDateDisplay" style="font-size:0.8rem; color:#475569; margin-top:2px;"></p>
         </div>
 
-        <!-- Kartu Statistik -->
-        <section class="stats-grid">
+        <!-- Ringkasan Statistik -->
+        <section id="statsSection" class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
-                    <span>TOTAL SISWA</span>
-                    <span>👥</span>
+                    <span>Total Siswa</span>
+                    <span style="color:#4f46e5;">●</span>
                 </div>
-                <div id="statTotal" class="stat-value">0</div>
+                <div id="statTotalStudents" class="stat-value" style="color:#0f172a;">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
-                    <span>SELESAI (100%)</span>
-                    <span>✅</span>
+                    <span>Selesai (100% ACC)</span>
+                    <span style="color:#10b981;">●</span>
                 </div>
-                <div id="statDone" class="stat-value" style="color:var(--emerald-dark);">0</div>
+                <div id="statCompleted" class="stat-value" style="color:#059669;">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
-                    <span>DALAM PROSES</span>
-                    <span>⏳</span>
+                    <span>Sedang Proses</span>
+                    <span style="color:#f59e0b;">●</span>
                 </div>
-                <div id="statInProgress" class="stat-value" style="color:var(--amber);">0</div>
+                <div id="statInProgress" class="stat-value" style="color:#d97706;">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
-                    <span>RATA-RATA PROGRES</span>
-                    <span>📊</span>
+                    <span>Rata-rata Kelas</span>
+                    <span style="color:#7c3aed;">●</span>
                 </div>
-                <div id="statAvg" class="stat-value" style="color:var(--primary);">0%</div>
+                <div id="statAvgProgress" class="stat-value" style="color:#7c3aed;">0%</div>
             </div>
         </section>
 
-        <!-- Panel Input Tugas Baru (Khusus Guru) -->
+        <!-- Panel Input Guru -->
         <section id="teacherInputPanel" class="input-panel">
             <div class="input-panel-header">
                 <div class="panel-title-wrap">
-                    <span>➕ Tambah Daftar Tugas Siswa</span>
+                    <span>➕ Input Tugas Siswa Baru</span>
                 </div>
-                <span class="badge-lock">Akses Guru</span>
+                <span class="badge-lock">Panel Input Guru</span>
             </div>
-            <form onsubmit="handleAddTask(event)" class="input-form-grid">
+
+            <form id="addTaskForm" onsubmit="handleAddTask(event)" class="input-form-grid">
                 <div class="form-group">
                     <label>Nama Lengkap Siswa <span class="req">*</span></label>
-                    <input type="text" id="inputStudentName" class="form-control" required placeholder="Contoh: Raka Pratama">
+                    <input type="text" id="inputStudentName" class="form-control" required placeholder="Contoh: Budi Santoso">
                 </div>
                 <div class="form-group">
-                    <label>Judul / Nama Tugas <span class="req">*</span></label>
-                    <input type="text" id="inputTaskTitle" class="form-control" required placeholder="Contoh: Desain Poster Event">
+                    <label>Judul / Nama Tugas DKV <span class="req">*</span></label>
+                    <input type="text" id="inputTaskTitle" class="form-control" required placeholder="Contoh: Poster Kampanye Lingkungan A3">
                 </div>
                 <div class="form-group">
-                    <label>Deskripsi / Keterangan Tugas</label>
-                    <input type="text" id="inputTaskDesc" class="form-control" placeholder="Contoh: Ukuran A3, CMYK 300dpi">
+                    <label>Deskripsi / Keterangan Tugas (Opsional)</label>
+                    <input type="text" id="inputTaskDesc" class="form-control" placeholder="Contoh: Ukuran A3, CMYK 300dpi, tema Go Green">
                 </div>
-                <button type="submit" class="btn btn-primary" style="height:40px; padding:0 18px;">
-                    + Tambah
-                </button>
+                <div>
+                    <button type="submit" class="btn btn-primary" style="width:100%; padding:10px 18px;">
+                        <span>+ Tambahkan</span>
+                    </button>
+                </div>
             </form>
         </section>
 
-        <!-- Toolbar Pencarian & Filter -->
+        <!-- Pencarian & Filter -->
         <section class="toolbar-row">
             <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" oninput="renderTaskTable()" class="form-control" placeholder="Cari nama siswa atau judul tugas...">
+                <span class="search-icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </span>
+                <input type="text" id="searchInput" oninput="renderTaskTable()" class="form-control" placeholder="Cari nama siswa, tugas, atau deskripsi...">
             </div>
+
             <div class="filter-group">
-                <button type="button" id="filterAllBtn" onclick="setFilterStatus('all')" class="filter-btn active">Semua</button>
-                <button type="button" id="filterProgressBtn" onclick="setFilterStatus('progress')" class="filter-btn">Proses</button>
-                <button type="button" id="filterDoneBtn" onclick="setFilterStatus('done')" class="filter-btn">Selesai</button>
+                <button onclick="setFilterStatus('all')" id="filter-all" class="filter-btn active">Semua</button>
+                <button onclick="setFilterStatus('progress')" id="filter-progress" class="filter-btn">Belum Selesai</button>
+                <button onclick="setFilterStatus('done')" id="filter-done" class="filter-btn">Tuntas (ACC)</button>
             </div>
         </section>
 
-        <!-- Tabel Ceklist Progres -->
+        <!-- Tabel Progres Tugas -->
         <section class="table-card">
             <div class="table-responsive">
                 <table>
@@ -1380,104 +1399,102 @@
                 </table>
             </div>
         </section>
+
     </main>
 
     <footer class="app-footer">
-        Tahap.in • Pantauan Progres Tahapan Tugas Siswa &copy; 2026
+        Tahap.in • Pantauan Progres Tugas Siswa SMK DKV
     </footer>
 
-    <!-- MODAL 1: PENGATURAN KELAS, JUDUL, TAHAPAN & TEMA -->
+    <!-- MODAL 1: PENGATURAN TAHAPAN, JUDUL & TEMA -->
     <div id="settingsModal" class="modal-backdrop">
-        <div class="modal-card" style="max-width:500px;">
+        <div class="modal-card" style="max-width:520px;">
             <div class="modal-header">
                 <div>
-                    <h3 id="settingsModalTitle" class="modal-title">⚙️ Pengaturan Kelas, Tahapan & Tema</h3>
-                    <p style="font-size:0.72rem; color:var(--text-muted);">Sesuaikan ruang kelas, nama tugas, tahapan ceklist & warna tampilan</p>
+                    <h3 id="settingsModalTitle" class="modal-title">⚙️ Buat Kelas, Judul, Tahapan & Tema</h3>
+                    <p id="settingsModalSubtitle" style="font-size:0.72rem; color:var(--text-muted);">Tersimpan otomatis di ruang lokal perangkat Anda</p>
                 </div>
-                <button id="closeSettingsBtn" onclick="closeModal('settingsModal')" class="btn-icon-only">✕</button>
+                <button id="closeSettingsXBtn" onclick="closeModal('settingsModal')" class="btn-icon-only">✕</button>
             </div>
             <div class="modal-body">
-                <!-- Input Kelas (Otomatis Input Pertama Kali atau Dropdown jika sudah ada) -->
+                <!-- Input Kelas Dinamis (Input teks saat pertama kali, Dropdown jika kelas sudah ada) -->
                 <div class="form-group">
-                    <label>Kelas / Rombel <span class="req">*</span></label>
-                    <div id="classInputModeWrap">
-                        <input type="text" id="settingClassNameInput" class="form-control" placeholder="Contoh: XI DKV 1">
+                    <label>Nama Kelas <span class="req">*</span></label>
+                    <div id="existingClassSelectContainer" class="hidden" style="margin-bottom:8px;">
+                        <select id="settingClassSelect" onchange="handleClassDropdownChange(this.value)" class="form-control"></select>
                     </div>
-                    <div id="classDropdownModeWrap" class="hidden" style="display:flex; flex-direction:column; gap:8px;">
-                        <select id="settingClassSelect" onchange="handleSettingClassSelectChange(this.value)" class="form-control"></select>
-                        <input type="text" id="settingNewClassInput" class="form-control hidden" placeholder="Ketik nama kelas baru, misal: XII DKV 2">
+                    <div id="newClassInputContainer">
+                        <input type="text" id="settingClassNameInput" class="form-control" placeholder="Contoh: XII DKV 1 atau XI DKV 2">
                     </div>
                 </div>
 
-                <!-- Judul Utama -->
                 <div class="form-group">
-                    <label>Judul Utama Papan Tugas <span class="req">*</span></label>
-                    <input type="text" id="settingBoardTitle" class="form-control" placeholder="Contoh: Proyek Desain Kemasan Produk">
+                    <label>Judul Utama Tugas / Proyek <span class="req">*</span></label>
+                    <input type="text" id="settingBoardTitle" class="form-control" placeholder="Contoh: Proyek Desain Poster & Branding">
                 </div>
 
-                <!-- Pilihan Tema UI -->
                 <div class="form-group">
-                    <label>Tema Tampilan UI</label>
-                    <div class="theme-grid" id="themeSwatches">
-                        <button type="button" class="theme-swatch active" data-theme-val="indigo" onclick="selectTheme('indigo')">
+                    <label>Pilih Tema Warna Tampilan:</label>
+                    <div class="theme-grid" id="themeSelectorGrid">
+                        <button type="button" onclick="selectTempTheme('indigo')" data-theme-btn="indigo" class="theme-swatch active">
                             <span class="swatch-circle" style="background:linear-gradient(135deg,#4f46e5,#9333ea);"></span>
-                            <span>Indigo</span>
+                            <span>Studio Indigo</span>
                         </button>
-                        <button type="button" class="theme-swatch" data-theme-val="emerald" onclick="selectTheme('emerald')">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#059669,#0d9488);"></span>
-                            <span>Emerald</span>
+                        <button type="button" onclick="selectTempTheme('emerald')" data-theme-btn="emerald" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#059669,#10b981);"></span>
+                            <span>Mint Hijau</span>
                         </button>
-                        <button type="button" class="theme-swatch" data-theme-val="rose" onclick="selectTheme('rose')">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#e11d48,#db2777);"></span>
-                            <span>Magenta</span>
+                        <button type="button" onclick="selectTempTheme('rose')" data-theme-btn="rose" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#e11d48,#f43f5e);"></span>
+                            <span>Sakura Pink</span>
                         </button>
-                        <button type="button" class="theme-swatch" data-theme-val="amber" onclick="selectTheme('amber')">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#d97706,#ea580c);"></span>
-                            <span>Sunset</span>
+                        <button type="button" onclick="selectTempTheme('amber')" data-theme-btn="amber" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#d97706,#f59e0b);"></span>
+                            <span>Krem Hangat</span>
                         </button>
-                        <button type="button" class="theme-swatch" data-theme-val="dark" onclick="selectTheme('dark')">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#0f172a,#334155);"></span>
-                            <span>Gelap</span>
+                        <button type="button" onclick="selectTempTheme('dark')" data-theme-btn="dark" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#0f172a,#312e81);"></span>
+                            <span>Mode Gelap</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Template Cepat Tahapan -->
                 <div class="form-group">
-                    <label>Template Cepat Tahapan DKV</label>
+                    <label>Template Cepat Tahapan DKV:</label>
                     <div class="preset-group">
-                        <button type="button" class="preset-chip" onclick="applyStagePreset(['Sketsa Kasar', 'Digitalisasi', 'Pewarnaan', 'Final ACC'])">🎨 Desain Grafis (4)</button>
-                        <button type="button" class="preset-chip" onclick="applyStagePreset(['Konsep & Moodboard', 'Pemotretan', 'Color Grading', 'Cetak / Export'])">📷 Fotografi (4)</button>
-                        <button type="button" class="preset-chip" onclick="applyStagePreset(['Naskah & Storyboard', 'Shooting', 'Rough Cut', 'Audio & VFX', 'Render Final'])">🎬 Videografi (5)</button>
+                        <button type="button" onclick="applyPresetStages(['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Revisi', '5. Final ACC'])" class="preset-chip">Desain Grafis (5 Tahap)</button>
+                        <button type="button" onclick="applyPresetStages(['1. Konsep & Moodboard', '2. Pemotretan', '3. Editing/Color', '4. Cetak & ACC'])" class="preset-chip">Fotografi (4 Tahap)</button>
+                        <button type="button" onclick="applyPresetStages(['1. Naskah & Storyboard', '2. Produksi/Syuting', '3. Editing & Audio', '4. Rendering Final'])" class="preset-chip">Videografi (4 Tahap)</button>
                     </div>
                 </div>
 
-                <!-- Editor Daftar Tahapan -->
                 <div class="form-group">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                        <label style="margin:0;">Daftar Tahapan Ceklist <span class="req">*</span></label>
-                        <button type="button" onclick="addStageField()" class="btn btn-outline" style="padding:4px 10px; font-size:0.72rem;">+ Tambah Tahap</button>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <label style="margin:0;">Daftar Tahapan (<span id="stageCountLabel">1</span> Tahap) <span class="req">*</span></label>
+                        <button type="button" onclick="addStageField()" class="btn btn-outline" style="padding:5px 10px; font-size:0.72rem;">+ Tambah Tahap</button>
                     </div>
-                    <div id="stageEditorList"></div>
+                    <div id="customStagesList"></div>
+                </div>
+
+                <div id="deleteWorkspaceRow" style="border-top:1px solid var(--border-color); padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.72rem; color:var(--text-muted);">Hapus kelas/ruang aktif ini dari penyimpanan lokal:</span>
+                    <button type="button" onclick="deleteCurrentWorkspace()" class="btn btn-outline" style="color:#e11d48; border-color:#fecdd3; padding:5px 10px; font-size:0.72rem;">Hapus Ruang Ini</button>
                 </div>
             </div>
-            <div class="modal-footer" style="justify-content:space-between;">
-                <button type="button" id="deleteWorkspaceBtn" onclick="deleteCurrentWorkspace()" class="btn btn-outline hidden" style="color:var(--rose); border-color:#fecdd3;">🗑️ Hapus Kelas</button>
-                <div style="display:flex; gap:8px; margin-left:auto;">
-                    <button type="button" id="cancelSettingsBtn" onclick="closeModal('settingsModal')" class="btn btn-outline">Batal</button>
-                    <button type="button" onclick="saveBoardSettings()" class="btn btn-primary">Simpan Pengaturan</button>
-                </div>
+            <div class="modal-footer">
+                <button id="cancelSettingsBtn" onclick="closeModal('settingsModal')" class="btn btn-outline">Batal</button>
+                <button onclick="saveBoardSettings()" class="btn btn-primary">Simpan & Mulai</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL EDIT DATA SISWA -->
+    <!-- MODAL EDIT DATA SISWA (NAMA, TUGAS, DESKRIPSI) -->
     <div id="editStudentModal" class="modal-backdrop">
         <div class="modal-card" style="max-width:460px;">
             <div class="modal-header">
                 <div>
                     <h3 class="modal-title">✏️ Edit Data Tugas Siswa</h3>
-                    <p style="font-size:0.72rem; color:var(--text-muted);">Perbarui nama siswa, judul tugas, atau deskripsi keterangan</p>
+                    <p style="font-size:0.72rem; color:#64748b;">Perbarui nama siswa, judul tugas, atau deskripsi keterangan</p>
                 </div>
                 <button onclick="closeModal('editStudentModal')" class="btn-icon-only">✕</button>
             </div>
@@ -1543,22 +1560,22 @@
         </div>
     </div>
 
-    <!-- MODAL 3: PRATINJAU HASIL EKSPOR GAMBAR -->
+    <!-- MODAL 3: PRATINJAU HASIL EKSPOR GAMBAR (Fallback untuk WebView Acode) -->
     <div id="imagePreviewModal" class="modal-backdrop">
         <div class="modal-card" style="max-width:640px;">
             <div class="modal-header">
                 <div>
                     <h3 class="modal-title">🖼️ Hasil Ekspor Gambar (PNG)</h3>
-                    <p style="font-size:0.72rem; color:var(--text-muted);">Tekan & tahan gambar jika unduhan otomatis diblokir oleh aplikasi</p>
+                    <p style="font-size:0.72rem; color:#64748b;">Tekan & tahan gambar jika unduhan otomatis diblokir oleh aplikasi</p>
                 </div>
                 <button onclick="closeModal('imagePreviewModal')" class="btn-icon-only">✕</button>
             </div>
             <div class="modal-body" style="align-items:center; background:#f1f5f9;">
-                <img id="exportedImagePreview" alt="Hasil Ekspor Tabel" style="max-width:100%; height:auto; border-radius:10px; border:1px solid #cbd5e1; box-shadow:var(--shadow-md);">
+                <img id="exportedImagePreview" alt="Hasil Ekspor Tabel DKV" style="max-width:100%; height:auto; border-radius:10px; border:1px solid #cbd5e1; box-shadow:var(--shadow-md);">
             </div>
             <div class="modal-footer">
                 <button onclick="closeModal('imagePreviewModal')" class="btn btn-outline">Tutup</button>
-                <a id="downloadImageAnchor" download="rekap-tugas-tahapin.png" class="btn btn-emerald">⬇️ Unduh Gambar PNG</a>
+                <a id="downloadImageAnchor" download="rekap-tugas-dkv.png" class="btn btn-emerald">⬇️ Unduh Gambar PNG</a>
             </div>
         </div>
     </div>
@@ -1571,7 +1588,7 @@
                 <button onclick="closeModal('deleteConfirmModal')" class="btn-icon-only">✕</button>
             </div>
             <div class="modal-body">
-                <p id="deleteStudentNameText" style="font-size:0.82rem; color:var(--text-muted);"></p>
+                <p id="deleteStudentNameText" style="font-size:0.82rem; color:#475569;"></p>
             </div>
             <div class="modal-footer">
                 <button onclick="closeModal('deleteConfirmModal')" class="btn btn-outline">Batal</button>
@@ -1589,7 +1606,6 @@
             getAuth,
             setPersistence,
             browserLocalPersistence,
-            inMemoryPersistence,
             onAuthStateChanged,
             signInWithEmailAndPassword,
             createUserWithEmailAndPassword,
@@ -1600,7 +1616,6 @@
             getFirestore,
             collection,
             doc,
-            getDoc,
             setDoc,
             deleteDoc,
             onSnapshot
@@ -1624,21 +1639,12 @@
         const sharedBoardId = urlParams.get('share');
         const isStudentShareMode = Boolean(sharedBoardId);
 
-        function getInitialWorkspaceIdFromHash() {
-            const hash = window.location.hash || '';
-            if (hash.startsWith('#ws=')) {
-                return decodeURIComponent(hash.slice(4));
-            }
-            return '';
-        }
-
         let currentUser = null;
         let unsubscribeWorkspaces = null;
         let authMode = 'login';
 
         let workspaces = [];
-        let activeWorkspaceId = getInitialWorkspaceIdFromHash();
-        let savedPreferredWorkspaceId = activeWorkspaceId;
+        let activeWorkspaceId = '';
         let filterStatus = 'all';
         let isInitialSetup = false;
         let boardConfig = {
@@ -1653,76 +1659,39 @@
         let tempStages = [];
         let tempTheme = 'indigo';
 
+        const THEME_BANNER_COLORS = {
+            indigo: '#1e1b4b',
+            emerald: '#064e3b',
+            rose: '#4c0519',
+            amber: '#451a03',
+            dark: '#0f172a'
+        };
+
         const THEME_PRIMARY_COLORS = {
             indigo: '#4f46e5',
             emerald: '#059669',
             rose: '#e11d48',
             amber: '#d97706',
-            dark: '#1e293b'
+            dark: '#6366f1'
         };
-
-        function escapeHTML(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
-            if (!container) return;
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.textContent = message;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(8px)';
-                toast.style.transition = 'all 0.2s ease';
-                setTimeout(() => toast.remove(), 220);
-            }, 3000);
-        }
-
-        function openModal(id) {
-            const el = document.getElementById(id);
-            if (el) el.classList.add('open');
-        }
-
-        function closeModal(id) {
-            const el = document.getElementById(id);
-            if (el) el.classList.remove('open');
-        }
-
-        function applyTheme(themeName) {
-            const validThemes = ['indigo', 'emerald', 'rose', 'amber', 'dark'];
-            const chosen = validThemes.includes(themeName) ? themeName : 'indigo';
-            if (chosen === 'indigo') {
-                document.body.removeAttribute('data-theme');
-            } else {
-                document.body.setAttribute('data-theme', chosen);
-            }
+            setTimeout(() => toast.remove(), 3000);
         }
 
         function switchAuthMode(mode) {
             authMode = mode;
-            const loginBtn = document.getElementById('tabLoginBtn');
-            const regBtn = document.getElementById('tabRegisterBtn');
-            const submitBtn = document.getElementById('authSubmitBtn');
-            const errBox = document.getElementById('authErrorBox');
-            errBox.classList.add('hidden');
-
-            if (mode === 'login') {
-                loginBtn.classList.add('active');
-                regBtn.classList.remove('active');
-                submitBtn.textContent = 'Masuk ke Ruang Guru';
-            } else {
-                regBtn.classList.add('active');
-                loginBtn.classList.remove('active');
-                submitBtn.textContent = 'Daftar & Mulai Mengajar';
-            }
+            document.getElementById('tabLoginBtn').classList.toggle('active', mode === 'login');
+            document.getElementById('tabRegisterBtn').classList.toggle('active', mode === 'register');
+            document.getElementById('authSubmitBtn').textContent = mode === 'login'
+                ? 'Masuk ke Ruang Guru'
+                : 'Daftar & Buat Ruang Guru';
+            document.getElementById('authErrorBox').classList.add('hidden');
         }
 
         async function handleAuthSubmit(e) {
@@ -1740,27 +1709,22 @@
                 await setPersistence(auth, browserLocalPersistence);
                 if (authMode === 'login') {
                     await signInWithEmailAndPassword(auth, email, password);
-                    showToast('Berhasil masuk!', 'success');
+                    showToast('Berhasil masuk ke akun guru!', 'success');
                 } else {
                     await createUserWithEmailAndPassword(auth, email, password);
                     showToast('Akun guru berhasil dibuat!', 'success');
                 }
             } catch (err) {
-                let msg = 'Gagal autentikasi. Periksa kembali email dan kata sandi Anda.';
-                if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
-                    msg = 'Email atau kata sandi salah. Jika belum punya akun, klik tab "Daftar Akun Baru".';
-                } else if (err.code === 'auth/email-already-in-use') {
-                    msg = 'Email sudah terdaftar. Silakan pindah ke tab "Masuk (Login)".';
-                } else if (err.code === 'auth/weak-password') {
-                    msg = 'Kata sandi terlalu lemah (minimal 6 karakter).';
-                } else if (err.code === 'auth/invalid-email') {
-                    msg = 'Format email tidak valid.';
-                }
+                let msg = 'Gagal masuk. Periksa kembali email dan kata sandi Anda.';
+                if (err.code === 'auth/email-already-in-use') msg = 'Email sudah terdaftar. Silakan gunakan tab Masuk (Login).';
+                else if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') msg = 'Email atau kata sandi salah.';
+                else if (err.code === 'auth/weak-password') msg = 'Kata sandi minimal 6 karakter.';
+                else if (err.code === 'auth/invalid-email') msg = 'Format email tidak valid.';
                 errBox.textContent = msg;
                 errBox.classList.remove('hidden');
             } finally {
                 submitBtn.disabled = false;
-                switchAuthMode(authMode);
+                submitBtn.textContent = authMode === 'login' ? 'Masuk ke Ruang Guru' : 'Daftar & Buat Ruang Guru';
             }
         }
 
@@ -1773,130 +1737,126 @@
                 await signOut(auth);
                 workspaces = [];
                 activeWorkspaceId = '';
-                savedPreferredWorkspaceId = '';
                 tasksList = [];
-                if (window.location.hash) {
-                    history.replaceState(null, '', window.location.pathname + window.location.search);
-                }
                 showToast('Anda telah keluar dari akun.', 'info');
             } catch (err) {
                 showToast('Gagal keluar akun.', 'error');
             }
         }
 
-        async function persistLastOpenedWorkspace(wsId) {
-            if (!wsId) return;
-            savedPreferredWorkspaceId = wsId;
-            try {
-                history.replaceState(null, '', `${window.location.pathname}${window.location.search}#ws=${encodeURIComponent(wsId)}`);
-            } catch (e) {}
-
-            if (!currentUser || currentUser.isAnonymous) return;
-            try {
-                const prefRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'preferences', 'ui');
-                await setDoc(prefRef, {
-                    lastWorkspaceId: wsId,
-                    updatedAt: Date.now()
-                }, { merge: true });
-            } catch (e) {}
-        }
-
-        async function loadLastOpenedWorkspace(user) {
-            const hashWs = getInitialWorkspaceIdFromHash();
-            if (hashWs) {
-                savedPreferredWorkspaceId = hashWs;
-                return hashWs;
-            }
-            if (!user || user.isAnonymous) return '';
-            try {
-                const prefRef = doc(db, 'artifacts', appId, 'users', user.uid, 'preferences', 'ui');
-                const snap = await getDoc(prefRef);
-                if (snap.exists() && snap.data().lastWorkspaceId) {
-                    savedPreferredWorkspaceId = snap.data().lastWorkspaceId;
-                    return savedPreferredWorkspaceId;
-                }
-            } catch (e) {}
-            return '';
-        }
-
         async function saveToFirestore() {
             if (!currentUser || !activeWorkspaceId) return;
-            const wsData = {
-                id: activeWorkspaceId,
-                className: boardConfig.className,
-                title: boardConfig.title,
-                theme: boardConfig.theme,
-                stages: boardConfig.stages,
-                tasks: tasksList,
-                updatedAt: Date.now()
-            };
-
             try {
                 const wsRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'workspaces', activeWorkspaceId);
-                await setDoc(wsRef, wsData);
-
-                // Simpan ringkasan publik khusus siswa (Hanya Nama & Progres)
-                const totalStages = boardConfig.stages.length || 1;
-                const publicStudents = tasksList.map(t => {
-                    const completed = Array.isArray(t.completedStages) ? t.completedStages.length : 0;
-                    const percent = Math.round((completed / totalStages) * 100);
-                    return {
-                        studentName: t.studentName || 'Siswa',
-                        completedCount: completed,
-                        percent: percent
-                    };
-                });
-
-                const publicRef = doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', activeWorkspaceId);
-                await setDoc(publicRef, {
+                await setDoc(wsRef, {
+                    id: activeWorkspaceId,
                     className: boardConfig.className,
-                    title: boardConfig.title,
-                    theme: boardConfig.theme,
-                    totalStages: totalStages,
-                    students: publicStudents,
+                    name: boardConfig.title,
+                    boardConfig: boardConfig,
+                    tasksList: tasksList,
                     updatedAt: Date.now()
-                });
+                }, { merge: true });
+
+                await syncPublicShareBoard();
             } catch (err) {
-                console.error('Save Firestore error:', err);
-                showToast('Gagal menyinkronkan ke Cloud.', 'error');
+                console.error('Firestore save error:', err);
+                showToast('Gagal menyinkronkan data ke server.', 'error');
             }
+        }
+
+        function getShareIdForActiveWorkspace() {
+            if (!currentUser || !activeWorkspaceId) return '';
+            return `${currentUser.uid.slice(0, 8)}_${activeWorkspaceId}`;
+        }
+
+        async function syncPublicShareBoard() {
+            const shareId = getShareIdForActiveWorkspace();
+            if (!shareId) return;
+            const totalStages = boardConfig.stages.length;
+            const publicStudents = tasksList.map(task => {
+                const stagesArr = normalizeStagesArray(task.completedStages, totalStages);
+                const doneCount = stagesArr.filter(Boolean).length;
+                const percent = totalStages > 0 ? Math.round((doneCount / totalStages) * 100) : 0;
+                return {
+                    id: task.id,
+                    studentName: task.studentName,
+                    doneCount: doneCount,
+                    totalStages: totalStages,
+                    percent: percent
+                };
+            });
+
+            const publicRef = doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', shareId);
+            await setDoc(publicRef, {
+                className: boardConfig.className,
+                title: boardConfig.title,
+                theme: boardConfig.theme || 'indigo',
+                totalStages: totalStages,
+                students: publicStudents,
+                updatedAt: Date.now()
+            }, { merge: true });
         }
 
         function subscribeUserWorkspaces(user) {
             if (unsubscribeWorkspaces) {
                 unsubscribeWorkspaces();
             }
-            const wsCol = collection(db, 'artifacts', appId, 'users', user.uid, 'workspaces');
+
+            const workspacesCol = collection(db, 'artifacts', appId, 'users', user.uid, 'workspaces');
             let firstSnapshotLoaded = false;
 
-            unsubscribeWorkspaces = onSnapshot(wsCol, (snapshot) => {
-                workspaces = [];
-                snapshot.forEach((docSnap) => {
-                    workspaces.push({ id: docSnap.id, ...docSnap.data() });
+            unsubscribeWorkspaces = onSnapshot(workspacesCol, (snapshot) => {
+                const fetched = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    fetched.push({
+                        id: docSnap.id,
+                        className: data.className || data.boardConfig?.className || '',
+                        name: data.name || data.boardConfig?.title || '',
+                        boardConfig: data.boardConfig || {
+                            className: data.className || '',
+                            title: data.name || '',
+                            theme: 'indigo',
+                            stages: ['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Final ACC']
+                        },
+                        tasksList: Array.isArray(data.tasksList) ? data.tasksList.map(t => ({
+                            ...t,
+                            taskDescription: t.taskDescription !== undefined ? t.taskDescription : (t.teacherNote || '')
+                        })) : [],
+                        updatedAt: data.updatedAt || 0
+                    });
                 });
-                workspaces.sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+
+                // Urutkan terbaru di JavaScript memory
+                fetched.sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
+                workspaces = fetched;
 
                 if (workspaces.length === 0) {
                     if (!firstSnapshotLoaded) {
                         firstSnapshotLoaded = true;
                         isInitialSetup = true;
-                        activeWorkspaceId = 'ws_' + Date.now();
-                        boardConfig = { className: '', title: '', theme: 'indigo', stages: [''] };
+                        activeWorkspaceId = 'ruang-dkv-' + Date.now();
+                        boardConfig = {
+                            className: '',
+                            title: '',
+                            theme: 'indigo',
+                            stages: ['']
+                        };
                         tasksList = [];
-                        openBoardSettings(true);
+                        applyTheme('indigo');
+                        renderWorkspaceSelector();
+                        updateBoardUI();
+                        updateStats();
+                        renderTaskTable();
+                        openBoardSettingsModal(true);
                     }
                     return;
                 }
 
                 firstSnapshotLoaded = true;
                 if (!activeWorkspaceId || !workspaces.some(w => w.id === activeWorkspaceId)) {
-                    if (savedPreferredWorkspaceId && workspaces.some(w => w.id === savedPreferredWorkspaceId)) {
-                        activeWorkspaceId = savedPreferredWorkspaceId;
-                    } else {
-                        activeWorkspaceId = workspaces[0].id;
-                    }
+                    activeWorkspaceId = workspaces[0].id;
                 }
-                persistLastOpenedWorkspace(activeWorkspaceId);
 
                 if (!isInitialSetup) {
                     applyActiveWorkspaceFromCache();
@@ -1908,15 +1868,18 @@
         }
 
         function applyActiveWorkspaceFromCache() {
-            const active = workspaces.find(w => w.id === activeWorkspaceId);
-            if (!active) return;
+            const currentWs = workspaces.find(w => w.id === activeWorkspaceId);
+            if (!currentWs) return;
+
             boardConfig = {
-                className: active.className || 'Kelas DKV',
-                title: active.title || 'Tugas DKV',
-                theme: active.theme || 'indigo',
-                stages: Array.isArray(active.stages) && active.stages.length > 0 ? active.stages : ['Tahap 1']
+                className: currentWs.boardConfig?.className || currentWs.className || 'Kelas DKV',
+                title: currentWs.boardConfig?.title || currentWs.name || 'Tugas Praktik DKV',
+                theme: currentWs.boardConfig?.theme || 'indigo',
+                stages: Array.isArray(currentWs.boardConfig?.stages) && currentWs.boardConfig.stages.length
+                    ? currentWs.boardConfig.stages
+                    : ['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Final ACC']
             };
-            tasksList = Array.isArray(active.tasks) ? active.tasks : [];
+            tasksList = currentWs.tasksList || [];
 
             applyTheme(boardConfig.theme);
             renderWorkspaceSelector();
@@ -1925,54 +1888,17 @@
             renderTaskTable();
         }
 
-        function setupStudentViewUI() {
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('studentViewBanner').classList.remove('hidden');
-            document.getElementById('teacherHeaderControls').classList.add('hidden');
-            document.getElementById('teacherInputPanel').classList.add('hidden');
-            document.getElementById('editTitleIconBtn').classList.add('hidden');
-            document.getElementById('teacherUserPill').classList.add('hidden');
-        }
-
-        function subscribePublicSharedBoard(boardId) {
-            const publicRef = doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', boardId);
-            onSnapshot(publicRef, (docSnap) => {
-                if (!docSnap.exists()) {
-                    document.getElementById('boardTitleDisplay').textContent = 'Tautan Tidak Ditemukan';
-                    document.getElementById('boardSubtitleDisplay').textContent = 'Data kelas belum dipublikasikan oleh guru';
-                    return;
-                }
-                const data = docSnap.data();
-                boardConfig.className = data.className || 'Kelas';
-                boardConfig.title = data.title || 'Progres Tugas';
-                boardConfig.theme = data.theme || 'indigo';
-                sharedTotalStages = data.totalStages || 1;
-                sharedStudentsList = Array.isArray(data.students) ? data.students : [];
-
-                applyTheme(boardConfig.theme);
-                document.getElementById('boardTitleDisplay').textContent = `${boardConfig.className} — ${boardConfig.title}`;
-                document.getElementById('boardSubtitleDisplay').textContent = `Pantauan Live Siswa • ${sharedTotalStages} Tahapan`;
-                updateStats();
-                renderTaskTable();
-            }, (err) => {
-                console.error('Public board error:', err);
-                showToast('Gagal memuat papan pantauan siswa.', 'error');
-            });
-        }
-
         async function initApp() {
             if (isStudentShareMode) {
                 setupStudentViewUI();
-                subscribePublicSharedBoard(sharedBoardId);
-
-                onAuthStateChanged(auth, async (user) => {
-                    if (!user) {
-                        try {
-                            await setPersistence(auth, inMemoryPersistence);
-                            await signInAnonymously(auth);
-                        } catch (e) {}
+                try {
+                    if (!auth.currentUser) {
+                        await signInAnonymously(auth);
                     }
-                });
+                } catch (e) {
+                    // Tetap lanjut membaca public snapshot jika anonymous auth tidak aktif
+                }
+                subscribePublicSharedBoard(sharedBoardId);
                 return;
             }
 
@@ -1982,252 +1908,528 @@
                 console.error('Auth persistence error:', e);
             }
 
-            onAuthStateChanged(auth, async (user) => {
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
                 const authScreen = document.getElementById('authScreen');
-                const loadingState = document.getElementById('authLoadingState');
-                const formContainer = document.getElementById('authFormContainer');
-
-                if (user && !user.isAnonymous) {
-                    currentUser = user;
+                if (user) {
                     authScreen.classList.add('hidden');
                     const displayLabel = user.email ? user.email.split('@')[0] : 'Akun Guru';
                     document.getElementById('loggedInUserLabel').textContent = displayLabel;
-                    await loadLastOpenedWorkspace(user);
                     subscribeUserWorkspaces(user);
                 } else {
-                    currentUser = null;
-                    if (loadingState) loadingState.classList.add('hidden');
-                    if (formContainer) formContainer.classList.remove('hidden');
                     authScreen.classList.remove('hidden');
                     closeModal('settingsModal');
                 }
             });
         }
 
+        function setupStudentViewUI() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('editBoardInfoBtn').classList.add('hidden');
+            document.getElementById('teacherHeaderActions').classList.add('hidden');
+            document.getElementById('statsSection').classList.add('hidden');
+            document.getElementById('teacherInputPanel').classList.add('hidden');
+            document.getElementById('teacherUserDivider').classList.add('hidden');
+            document.getElementById('teacherUserPill').classList.add('hidden');
+
+            const workspaceBar = document.querySelector('.workspace-bar');
+            if (workspaceBar) {
+                workspaceBar.innerHTML = `<span class="status-dot"></span><span style="font-weight:700; color:var(--primary);">Mode Siswa • Hanya Lihat (Nama & Progres)</span>`;
+            }
+            document.getElementById('searchInput').placeholder = 'Cari nama kamu di sini...';
+        }
+
+        function subscribePublicSharedBoard(shareId) {
+            const publicRef = doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', shareId);
+            onSnapshot(publicRef, (docSnap) => {
+                if (!docSnap.exists()) {
+                    document.getElementById('boardClassBadge').textContent = 'INFO';
+                    document.getElementById('boardTitleDisplay').textContent = 'Link Progres Belum Tersedia';
+                    document.getElementById('taskTableBody').innerHTML = `
+                        <tr>
+                            <td colspan="3" style="padding:40px 16px; text-align:center; color:var(--text-muted);">
+                                Data kelas belum dibagikan oleh guru atau tautan tidak ditemukan.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                const data = docSnap.data();
+                boardConfig.className = data.className || 'KELAS DKV';
+                boardConfig.title = data.title || 'Progres Tugas DKV';
+                boardConfig.theme = data.theme || 'indigo';
+                sharedTotalStages = data.totalStages || 0;
+                sharedStudentsList = Array.isArray(data.students) ? data.students : [];
+
+                applyTheme(boardConfig.theme);
+                document.getElementById('boardClassBadge').textContent = boardConfig.className;
+                document.getElementById('boardTitleDisplay').textContent = boardConfig.title;
+                document.getElementById('studentCountBadge').textContent = `${sharedStudentsList.length} Siswa`;
+                renderStudentShareTable();
+            }, (err) => {
+                console.error('Error loading shared board:', err);
+                showToast('Gagal memuat data progres siswa.', 'error');
+            });
+        }
+
+        function renderStudentShareTable() {
+            const headerRow = document.getElementById('tableHeaderRow');
+            const tbody = document.getElementById('taskTableBody');
+            const searchQuery = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+
+            headerRow.innerHTML = `
+                <th style="width:52px; text-align:center;">No</th>
+                <th>Nama Siswa</th>
+                <th style="min-width:170px; text-align:center;">Progres</th>
+            `;
+
+            const filtered = sharedStudentsList.filter(item => {
+                const matchesSearch = (item.studentName || '').toLowerCase().includes(searchQuery);
+                if (!matchesSearch) return false;
+                const isAllDone = item.percent === 100;
+                if (filterStatus === 'done') return isAllDone;
+                if (filterStatus === 'progress') return !isAllDone;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="padding:40px 16px; text-align:center; color:var(--text-muted);">
+                            Nama siswa belum ditemukan.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((item, idx) => {
+                const percent = Number(item.percent) || 0;
+                const doneCount = Number(item.doneCount) || 0;
+                const totalStages = Number(item.totalStages) || sharedTotalStages || 0;
+                const isComplete = percent === 100;
+
+                return `
+                    <tr class="${isComplete ? 'row-done' : ''}">
+                        <td style="text-align:center; font-weight:700; color:var(--text-muted); font-size:0.8rem;">${idx + 1}</td>
+                        <td>
+                            <div class="student-name">${escapeHtml(item.studentName)}</div>
+                            ${isComplete ? '<span class="badge-acc">✓ TUNTAS / ACC</span>' : ''}
+                        </td>
+                        <td>
+                            <div class="progress-wrap" style="max-width:260px; margin:0 auto;">
+                                <div class="progress-labels">
+                                    <span style="color:${isComplete ? '#059669' : 'var(--primary)'};">${percent}%</span>
+                                    <span style="color:var(--text-muted); font-weight:600;">${doneCount}/${totalStages} Tahap</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill ${isComplete ? 'done' : ''}" style="width:${percent}%;"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getUniqueClasses() {
+            const set = new Set();
+            workspaces.forEach(w => {
+                if (w.className && w.className.trim()) {
+                    set.add(w.className.trim());
+                }
+            });
+            return Array.from(set);
+        }
+
         function renderWorkspaceSelector() {
-            const selector = document.getElementById('workspaceSelector');
-            if (!selector) return;
-            selector.innerHTML = workspaces.map(ws => {
-                const label = `${ws.className || 'Kelas'} — ${ws.title || 'Tugas'}`;
-                const selected = ws.id === activeWorkspaceId ? 'selected' : '';
-                return `<option value="${escapeHTML(ws.id)}" ${selected}>${escapeHTML(label)}</option>`;
+            const select = document.getElementById('workspaceSelect');
+            if (!select) return;
+            if (!workspaces.length) {
+                select.innerHTML = '<option value="">Belum ada kelas</option>';
+                return;
+            }
+            select.innerHTML = workspaces.map(ws => {
+                const label = ws.className ? `${ws.className} — ${ws.name}` : ws.name;
+                return `<option value="${escapeHtml(ws.id)}" ${ws.id === activeWorkspaceId ? 'selected' : ''}>${escapeHtml(label)}</option>`;
             }).join('');
         }
 
         function switchWorkspace(wsId) {
             if (!wsId || wsId === activeWorkspaceId) return;
             activeWorkspaceId = wsId;
-            persistLastOpenedWorkspace(wsId);
             applyActiveWorkspaceFromCache();
             showToast('Berpindah ke kelas terpilih.', 'info');
         }
 
-        function openNewWorkspaceModal() {
+        function createNewWorkspace() {
             isInitialSetup = true;
-            activeWorkspaceId = 'ws_' + Date.now();
-            boardConfig = { className: '', title: '', theme: boardConfig.theme || 'indigo', stages: [''] };
+            const newId = 'ruang-dkv-' + Date.now();
+            activeWorkspaceId = newId;
+            boardConfig = {
+                className: '',
+                title: '',
+                theme: boardConfig.theme || 'indigo',
+                stages: ['']
+            };
             tasksList = [];
-            openBoardSettings(false);
+            openBoardSettingsModal(true);
+            showToast('Silakan isi kelas, judul & tahapan tugas baru.', 'info');
         }
 
         async function deleteCurrentWorkspace() {
-            if (!currentUser || workspaces.length <= 1) {
-                showToast('Minimal harus ada 1 ruang kelas aktif.', 'error');
+            if (!currentUser) return;
+            if (workspaces.length <= 1) {
+                showToast('Minimal harus tersisa 1 kelas/ruang.', 'error');
                 return;
             }
-            const targetId = activeWorkspaceId;
-            const remaining = workspaces.filter(w => w.id !== targetId);
-            activeWorkspaceId = remaining[0].id;
-            await persistLastOpenedWorkspace(activeWorkspaceId);
-            await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'workspaces', targetId));
-            await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', targetId));
-            closeModal('settingsModal');
-            showToast('Ruang kelas dihapus.', 'info');
+            try {
+                const targetId = activeWorkspaceId;
+                const targetShareId = `${currentUser.uid.slice(0, 8)}_${targetId}`;
+                const remaining = workspaces.filter(w => w.id !== targetId);
+                activeWorkspaceId = remaining[0].id;
+                await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'workspaces', targetId));
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', targetShareId));
+                } catch (e) {}
+                closeModal('settingsModal');
+                showToast('Ruang kelas berhasil dihapus.', 'info');
+            } catch (err) {
+                showToast('Gagal menghapus ruang kelas.', 'error');
+            }
+        }
+
+        function applyTheme(themeName) {
+            const validTheme = THEME_PRIMARY_COLORS[themeName] ? themeName : 'indigo';
+            document.body.setAttribute('data-theme', validTheme);
         }
 
         function updateBoardUI() {
-            const fullTitle = boardConfig.className
-                ? `${boardConfig.className} — ${boardConfig.title}`
-                : (boardConfig.title || 'Tahap.in');
-            document.getElementById('boardTitleDisplay').textContent = fullTitle;
-            document.getElementById('boardSubtitleDisplay').textContent = `Kelas ${boardConfig.className || '-'} • ${boardConfig.stages.length} Tahapan`;
-            document.getElementById('printTitleText').textContent = `Tahap.in — ${fullTitle}`;
-            document.getElementById('printSubtitleText').textContent = `Kelas: ${boardConfig.className} | Dicetak: ${new Date().toLocaleDateString('id-ID')}`;
+            const classBadge = document.getElementById('boardClassBadge');
+            if (classBadge) {
+                classBadge.textContent = boardConfig.className || 'KELAS BARU';
+            }
+            const displayTitle = boardConfig.title || 'Belum Ada Judul Tugas';
+            document.getElementById('boardTitleDisplay').textContent = displayTitle;
+            document.getElementById('printTitleDisplay').textContent = boardConfig.className
+                ? `${boardConfig.className} — ${displayTitle}`
+                : displayTitle;
+            document.getElementById('studentCountBadge').textContent = `${tasksList.length} Siswa`;
+        }
+        function openBoardSettingsModal(forceBlank = false) {
+            const existingClasses = getUniqueClasses();
+            const selectContainer = document.getElementById('existingClassSelectContainer');
+            const inputContainer = document.getElementById('newClassInputContainer');
+            const classSelect = document.getElementById('settingClassSelect');
+            const classInput = document.getElementById('settingClassNameInput');
+            const titleInput = document.getElementById('settingBoardTitle');
+
+            const isFirstEver = workspaces.length === 0;
+            const cancelBtn = document.getElementById('cancelSettingsBtn');
+            const closeXBtn = document.getElementById('closeSettingsXBtn');
+            const deleteRow = document.getElementById('deleteWorkspaceRow');
+
+            // Sembunyikan tombol batal/tutup jika belum ada satu pun ruang tersimpan
+            if (isFirstEver) {
+                cancelBtn.classList.add('hidden');
+                closeXBtn.classList.add('hidden');
+                deleteRow.classList.add('hidden');
+                document.getElementById('settingsModalTitle').textContent = '✨ Buat Kelas, Judul, Tahapan & Tema';
+                document.getElementById('settingsModalSubtitle').textContent = 'Lengkapi pengaturan awal ruang mengajar Anda';
+            } else {
+                cancelBtn.classList.remove('hidden');
+                closeXBtn.classList.remove('hidden');
+                deleteRow.classList.toggle('hidden', forceBlank);
+                document.getElementById('settingsModalTitle').textContent = forceBlank
+                    ? '➕ Tambah Kelas / Proyek Baru'
+                    : '⚙️ Edit Kelas, Judul, Tahapan & Tema';
+                document.getElementById('settingsModalSubtitle').textContent = 'Tersimpan otomatis di ruang lokal perangkat Anda';
+            }
+
+            // Jika sudah ada kelas tersimpan -> tampilkan dropdown kelas; jika belum -> input teks langsung
+            if (existingClasses.length > 0) {
+                selectContainer.classList.remove('hidden');
+                classSelect.innerHTML = existingClasses.map(cls =>
+                    `<option value="${escapeHtml(cls)}">${escapeHtml(cls)}</option>`
+                ).join('') + `<option value="__NEW__">➕ Input Kelas Baru...</option>`;
+
+                if (!forceBlank && boardConfig.className && existingClasses.includes(boardConfig.className)) {
+                    classSelect.value = boardConfig.className;
+                    classInput.value = boardConfig.className;
+                    inputContainer.classList.add('hidden');
+                } else if (forceBlank) {
+                    classSelect.value = existingClasses[0];
+                    classInput.value = existingClasses[0];
+                    inputContainer.classList.add('hidden');
+                } else {
+                    classSelect.value = '__NEW__';
+                    classInput.value = boardConfig.className || '';
+                    inputContainer.classList.remove('hidden');
+                }
+            } else {
+                selectContainer.classList.add('hidden');
+                inputContainer.classList.remove('hidden');
+                classInput.value = forceBlank ? '' : (boardConfig.className || '');
+            }
+
+            if (forceBlank) {
+                titleInput.value = '';
+                tempStages = [''];
+                tempTheme = boardConfig.theme || 'indigo';
+            } else {
+                titleInput.value = boardConfig.title || '';
+                tempStages = boardConfig.stages.length ? [...boardConfig.stages] : [''];
+                tempTheme = boardConfig.theme || 'indigo';
+            }
+
+            selectTempTheme(tempTheme);
+            renderCustomStagesEditor();
+            openModal('settingsModal');
+        }
+
+        function handleClassDropdownChange(val) {
+            const inputContainer = document.getElementById('newClassInputContainer');
+            const classInput = document.getElementById('settingClassNameInput');
+            if (val === '__NEW__') {
+                inputContainer.classList.remove('hidden');
+                classInput.value = '';
+                classInput.focus();
+            } else {
+                inputContainer.classList.add('hidden');
+                classInput.value = val;
+            }
+        }
+
+        function selectTempTheme(themeKey) {
+            tempTheme = themeKey;
+            applyTheme(themeKey);
+            document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-theme-btn') === themeKey);
+            });
+        }
+
+        function applyPresetStages(presetArray) {
+            tempStages = [...presetArray];
+            renderCustomStagesEditor();
+        }
+
+        function addStageField() {
+            if (tempStages.length >= 10) {
+                showToast('Maksimal 10 tahapan ceklist.', 'info');
+                return;
+            }
+            tempStages.push('');
+            renderCustomStagesEditor();
+        }
+
+        function removeStageField(index) {
+            if (tempStages.length <= 1) {
+                showToast('Minimal harus ada 1 tahapan.', 'error');
+                return;
+            }
+            tempStages.splice(index, 1);
+            renderCustomStagesEditor();
+        }
+
+        function updateTempStageName(index, val) {
+            tempStages[index] = val;
+        }
+
+        function renderCustomStagesEditor() {
+            const container = document.getElementById('customStagesList');
+            document.getElementById('stageCountLabel').textContent = tempStages.length;
+
+            container.innerHTML = tempStages.map((stage, idx) => `
+                <div class="stage-editor-row">
+                    <span class="stage-num-badge">${idx + 1}</span>
+                    <input type="text" value="${escapeHtml(stage)}" placeholder="Nama tahap ${idx + 1} (misal: Sketsa)" oninput="updateTempStageName(${idx}, this.value)" class="form-control" style="padding:7px 10px; font-size:0.8rem;">
+                    <button type="button" onclick="removeStageField(${idx})" class="btn-icon-only" style="color:#ef4444;" title="Hapus Tahap">✕</button>
+                </div>
+            `).join('');
+        }
+
+        async function saveBoardSettings() {
+            const existingClasses = getUniqueClasses();
+            const classSelect = document.getElementById('settingClassSelect');
+            const classInputVal = document.getElementById('settingClassNameInput').value.trim();
+            const chosenClass = (existingClasses.length > 0 && classSelect.value !== '__NEW__')
+                ? classSelect.value.trim()
+                : classInputVal;
+
+            const chosenTitle = document.getElementById('settingBoardTitle').value.trim();
+
+            if (!chosenClass) {
+                showToast('Silakan isi atau pilih nama kelas terlebih dahulu.', 'error');
+                return;
+            }
+            if (!chosenTitle) {
+                showToast('Silakan isi judul utama tugas/proyek.', 'error');
+                return;
+            }
+
+            boardConfig.className = chosenClass;
+            boardConfig.title = chosenTitle;
+            boardConfig.theme = tempTheme || 'indigo';
+            boardConfig.stages = tempStages.map((s, i) => s.trim() || `Tahap ${i + 1}`);
+
+            isInitialSetup = false;
+            applyTheme(boardConfig.theme);
+            updateBoardUI();
+            updateStats();
+            renderTaskTable();
+            closeModal('settingsModal');
+            await saveToFirestore();
+            showToast(`Ruang kelas ${boardConfig.className} tersimpan ke Cloud!`, 'success');
         }
 
         function updateStats() {
-            if (isStudentShareMode) {
-                const total = sharedStudentsList.length;
-                const done = sharedStudentsList.filter(s => s.percent >= 100).length;
-                const inProg = total - done;
-                const avg = total > 0
-                    ? Math.round(sharedStudentsList.reduce((acc, s) => acc + (s.percent || 0), 0) / total)
-                    : 0;
-
-                document.getElementById('statTotal').textContent = total;
-                document.getElementById('statDone').textContent = done;
-                document.getElementById('statInProgress').textContent = inProg;
-                document.getElementById('statAvg').textContent = `${avg}%`;
-                return;
-            }
-
             const total = tasksList.length;
-            const totalStages = boardConfig.stages.length || 1;
-            let doneCount = 0;
+            const totalStages = boardConfig.stages.length;
+            let completedCount = 0;
             let sumPercent = 0;
 
-            tasksList.forEach(t => {
-                const completed = Array.isArray(t.completedStages) ? t.completedStages.length : 0;
-                const pct = Math.min(100, Math.round((completed / totalStages) * 100));
-                if (pct >= 100) doneCount++;
+            tasksList.forEach(task => {
+                const stagesArr = normalizeStagesArray(task.completedStages, totalStages);
+                const done = stagesArr.filter(Boolean).length;
+                const pct = totalStages > 0 ? (done / totalStages) * 100 : 0;
+                if (pct === 100) completedCount++;
                 sumPercent += pct;
             });
 
-            document.getElementById('statTotal').textContent = total;
-            document.getElementById('statDone').textContent = doneCount;
-            document.getElementById('statInProgress').textContent = total - doneCount;
-            document.getElementById('statAvg').textContent = `${total > 0 ? Math.round(sumPercent / total) : 0}%`;
+            document.getElementById('studentCountBadge').textContent = `${total} Siswa`;
+            document.getElementById('statTotalStudents').textContent = total;
+            document.getElementById('statCompleted').textContent = completedCount;
+            document.getElementById('statInProgress').textContent = total - completedCount;
+            document.getElementById('statAvgProgress').textContent = total > 0 ? `${Math.round(sumPercent / total)}%` : '0%';
         }
 
-        function setFilterStatus(status) {
-            filterStatus = status;
-            document.getElementById('filterAllBtn').classList.toggle('active', status === 'all');
-            document.getElementById('filterProgressBtn').classList.toggle('active', status === 'progress');
-            document.getElementById('filterDoneBtn').classList.toggle('active', status === 'done');
-            renderTaskTable();
+        function normalizeStagesArray(arr, targetLen) {
+            const result = [];
+            for (let i = 0; i < targetLen; i++) {
+                result.push(Boolean(arr && arr[i]));
+            }
+            return result;
         }
 
         function renderTaskTable() {
+            if (isStudentShareMode) {
+                renderStudentShareTable();
+                return;
+            }
             const headerRow = document.getElementById('tableHeaderRow');
             const tbody = document.getElementById('taskTableBody');
+            const stages = boardConfig.stages;
             const searchQuery = (document.getElementById('searchInput').value || '').toLowerCase().trim();
 
-            if (isStudentShareMode) {
-                headerRow.innerHTML = `
-                    <th class="sticky-col">Nama Siswa</th>
-                    <th>Status Penyelesaian</th>
-                    <th style="min-width:180px;">Progres Tugas</th>
-                `;
-
-                const filtered = sharedStudentsList.filter(s => {
-                    const matchSearch = (s.studentName || '').toLowerCase().includes(searchQuery);
-                    const isDone = (s.percent || 0) >= 100;
-                    if (filterStatus === 'done') return matchSearch && isDone;
-                    if (filterStatus === 'progress') return matchSearch && !isDone;
-                    return matchSearch;
-                });
-
-                if (filtered.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:32px; color:var(--text-muted);">Belum ada data progres siswa.</td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = filtered.map(s => {
-                    const pct = Math.min(100, s.percent || 0);
-                    const isDone = pct >= 100;
-                    return `
-                        <tr class="${isDone ? 'row-done' : ''}">
-                            <td class="sticky-col">
-                                <div class="student-name">${escapeHTML(s.studentName)}</div>
-                                ${isDone ? '<span class="badge-acc">✓ SELESAI</span>' : ''}
-                            </td>
-                            <td style="font-weight:700; color:var(--text-muted); font-size:0.8rem;">
-                                ${s.completedCount || 0} dari ${sharedTotalStages} Tahap
-                            </td>
-                            <td>
-                                <div class="progress-wrap">
-                                    <div class="progress-labels">
-                                        <span style="color:${isDone ? 'var(--emerald-dark)' : 'var(--primary)'};">${pct}%</span>
-                                        <span style="color:var(--text-muted);">${isDone ? 'Tuntas' : 'Berjalan'}</span>
-                                    </div>
-                                    <div class="progress-track">
-                                        <div class="progress-fill ${isDone ? 'done' : ''}" style="width:${pct}%;"></div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-                return;
-            }
-
-            // Mode Guru Lengkap
-            const stages = boardConfig.stages;
-            headerRow.innerHTML = `
+            let headerHTML = `
+                <th style="width:45px; text-align:center;">No</th>
                 <th class="sticky-col">Nama Siswa</th>
-                <th>Tugas & Deskripsi</th>
-                ${stages.map((st, idx) => `
+                <th style="min-width:190px;">Tugas Praktik DKV</th>
+                <th style="min-width:210px;">Deskripsi / Keterangan</th>
+            `;
+            stages.forEach((stageName, idx) => {
+                headerHTML += `
                     <th class="stage-col">
                         <div class="stage-num">TAHAP ${idx + 1}</div>
-                        <div class="stage-title">${escapeHTML(st)}</div>
+                        <div class="stage-title">${escapeHtml(stageName)}</div>
                     </th>
-                `).join('')}
-                <th style="min-width:145px;">Progres</th>
-                <th class="no-print" style="text-align:center; width:90px;">Aksi</th>
+                `;
+            });
+            headerHTML += `
+                <th style="min-width:130px; text-align:center;">Progres</th>
+                <th class="no-print" style="width:88px; text-align:center;">Aksi</th>
             `;
+            headerRow.innerHTML = headerHTML;
 
-            const totalStages = stages.length || 1;
-            const filtered = tasksList.filter(t => {
-                const matchSearch = (t.studentName || '').toLowerCase().includes(searchQuery) ||
-                                    (t.taskTitle || '').toLowerCase().includes(searchQuery) ||
-                                    (t.taskDesc || '').toLowerCase().includes(searchQuery);
-                const completed = Array.isArray(t.completedStages) ? t.completedStages.length : 0;
-                const isDone = completed >= totalStages;
-                if (filterStatus === 'done') return matchSearch && isDone;
-                if (filterStatus === 'progress') return matchSearch && !isDone;
-                return matchSearch;
+            const filteredTasks = tasksList.filter(task => {
+                const matchesSearch = task.studentName.toLowerCase().includes(searchQuery) ||
+                                      task.taskTitle.toLowerCase().includes(searchQuery) ||
+                                      (task.taskDescription || '').toLowerCase().includes(searchQuery);
+                if (!matchesSearch) return false;
+
+                const stagesArr = normalizeStagesArray(task.completedStages, stages.length);
+                const isAllDone = stagesArr.every(Boolean) && stages.length > 0;
+
+                if (filterStatus === 'done') return isAllDone;
+                if (filterStatus === 'progress') return !isAllDone;
+                return true;
             });
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${stages.length + 4}" style="text-align:center; padding:32px; color:var(--text-muted);">Belum ada tugas siswa yang ditambahkan pada kelas ini.</td></tr>`;
+            if (filteredTasks.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="${stages.length + 6}" style="padding:40px 16px; text-align:center; color:#64748b;">
+                            Belum ada data tugas siswa yang sesuai.
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
-            tbody.innerHTML = filtered.map(task => {
-                const completedArr = Array.isArray(task.completedStages) ? task.completedStages : [];
-                const validCompleted = completedArr.filter(i => i >= 0 && i < totalStages).length;
-                const pct = Math.min(100, Math.round((validCompleted / totalStages) * 100));
-                const isDone = pct >= 100;
+            tbody.innerHTML = filteredTasks.map((task, index) => {
+                const stagesArr = normalizeStagesArray(task.completedStages, stages.length);
+                const doneCount = stagesArr.filter(Boolean).length;
+                const percent = stages.length > 0 ? Math.round((doneCount / stages.length) * 100) : 0;
+                const isComplete = percent === 100;
+
+                let stagesCells = '';
+                stagesArr.forEach((checked, sIdx) => {
+                    stagesCells += `
+                        <td class="check-cell">
+                            <button onclick="toggleStage('${task.id}', ${sIdx})"
+                                class="stage-btn ${checked ? 'checked' : ''}"
+                                title="Klik untuk ubah status ${escapeHtml(stages[sIdx])}">
+                                ${checked ? '✓' : '—'}
+                            </button>
+                        </td>
+                    `;
+                });
+
+                const descText = task.taskDescription || '';
+                const descCell = `
+                    <td style="color:${descText ? '#475569' : '#94a3b8'}; font-size:0.8rem; line-height:1.4;">
+                        ${descText ? escapeHtml(descText) : '<em>- Belum ada deskripsi -</em>'}
+                    </td>
+                `;
 
                 return `
-                    <tr class="${isDone ? 'row-done' : ''}">
+                    <tr class="${isComplete ? 'row-done' : ''}">
+                        <td style="text-align:center; font-weight:700; color:#94a3b8; font-size:0.78rem;">${index + 1}</td>
                         <td class="sticky-col">
-                            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:4px;">
-                                <div class="student-name">${escapeHTML(task.studentName)}</div>
-                                <button onclick="openEditStudentModal('${escapeHTML(task.id)}')" class="btn-icon-only no-print" style="padding:2px 4px; font-size:0.75rem;" title="Edit Siswa & Tugas">✏️</button>
+                            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:6px;">
+                                <div>
+                                    <div class="student-name">${escapeHtml(task.studentName)}</div>
+                                    ${isComplete ? '<span class="badge-acc">✓ TUNTAS / ACC</span>' : ''}
+                                </div>
+                                <button onclick="openEditStudentModal('${task.id}')" class="btn-icon-only no-print" style="padding:4px; flex-shrink:0;" title="Edit Nama, Tugas & Deskripsi">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                                </button>
                             </div>
-                            ${isDone ? '<span class="badge-acc">✓ SELESAI</span>' : ''}
                         </td>
-                        <td style="min-width:180px;">
-                            <div style="font-weight:700; color:var(--text-main);">${escapeHTML(task.taskTitle)}</div>
-                            ${task.taskDesc ? `<div style="font-size:0.74rem; color:var(--text-muted); margin-top:2px;">${escapeHTML(task.taskDesc)}</div>` : ''}
-                        </td>
-                        ${stages.map((_, idx) => {
-                            const checked = completedArr.includes(idx);
-                            return `
-                                <td class="check-cell">
-                                    <button type="button" onclick="toggleStage('${escapeHTML(task.id)}', ${idx})" class="stage-btn ${checked ? 'checked' : ''}" title="${escapeHTML(stages[idx])}">
-                                        ${checked ? '✓' : idx + 1}
-                                    </button>
-                                </td>
-                            `;
-                        }).join('')}
+                        <td style="font-weight:600; color:#1e293b;">${escapeHtml(task.taskTitle)}</td>
+                        ${descCell}
+                        ${stagesCells}
                         <td>
                             <div class="progress-wrap">
                                 <div class="progress-labels">
-                                    <span style="color:${isDone ? 'var(--emerald-dark)' : 'var(--primary)'};">${pct}%</span>
-                                    <span style="color:var(--text-muted);">${validCompleted}/${totalStages}</span>
+                                    <span style="color:${isComplete ? '#059669' : 'var(--primary)'};">${percent}%</span>
+                                    <span style="color:#94a3b8; font-weight:500;">${doneCount}/${stages.length}</span>
                                 </div>
                                 <div class="progress-track">
-                                    <div class="progress-fill ${isDone ? 'done' : ''}" style="width:${pct}%;"></div>
+                                    <div class="progress-fill ${isComplete ? 'done' : ''}" style="width:${percent}%;"></div>
                                 </div>
                             </div>
                         </td>
-                        <td class="no-print" style="text-align:center;">
-                            <div style="display:inline-flex; gap:4px;">
-                                <button onclick="openEditStudentModal('${escapeHTML(task.id)}')" class="btn-icon-only" title="Edit Data">✏️</button>
-                                <button onclick="confirmDeleteTask('${escapeHTML(task.id)}')" class="btn-icon-only" style="color:var(--rose);" title="Hapus Siswa">🗑️</button>
-                            </div>
+                        <td class="no-print" style="text-align:center; white-space:nowrap;">
+                            <button onclick="openEditStudentModal('${task.id}')"
+                                class="btn-icon-only" style="color:var(--primary);" title="Edit Siswa & Tugas">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                            </button>
+                            <button onclick="confirmDeleteTask('${task.id}', '${escapeHtml(task.studentName)}')"
+                                class="btn-icon-only" style="color:#ef4444;" title="Hapus Siswa">
+                                🗑️
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -2236,433 +2438,483 @@
 
         async function handleAddTask(e) {
             e.preventDefault();
+
             const nameInput = document.getElementById('inputStudentName');
             const titleInput = document.getElementById('inputTaskTitle');
             const descInput = document.getElementById('inputTaskDesc');
 
             const studentName = nameInput.value.trim();
             const taskTitle = titleInput.value.trim();
-            const taskDesc = descInput.value.trim();
+            const taskDescription = descInput.value.trim();
 
             if (!studentName || !taskTitle) return;
 
             tasksList.push({
-                id: 'task_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-                studentName,
-                taskTitle,
-                taskDesc,
-                completedStages: []
+                id: 'siswa-' + Date.now(),
+                studentName: studentName,
+                taskTitle: taskTitle,
+                taskDescription: taskDescription,
+                completedStages: new Array(boardConfig.stages.length).fill(false),
+                createdAt: Date.now()
             });
+
+            updateStats();
+            renderTaskTable();
+            await saveToFirestore();
 
             nameInput.value = '';
             titleInput.value = '';
             descInput.value = '';
-
-            updateStats();
-            renderTaskTable();
-            await saveToFirestore();
-            showToast(`Tugas ${studentName} ditambahkan!`, 'success');
-        }
-
-        async function toggleStage(taskId, stageIdx) {
-            const task = tasksList.find(t => t.id === taskId);
-            if (!task) return;
-            if (!Array.isArray(task.completedStages)) task.completedStages = [];
-
-            const pos = task.completedStages.indexOf(stageIdx);
-            if (pos > -1) {
-                task.completedStages.splice(pos, 1);
-            } else {
-                task.completedStages.push(stageIdx);
-            }
-
-            updateStats();
-            renderTaskTable();
-            await saveToFirestore();
+            nameInput.focus();
+            showToast(`Tugas untuk ${studentName} berhasil ditambahkan!`, 'success');
         }
 
         function openEditStudentModal(taskId) {
             const task = tasksList.find(t => t.id === taskId);
             if (!task) return;
+
             document.getElementById('editStudentId').value = task.id;
-            document.getElementById('editStudentName').value = task.studentName || '';
-            document.getElementById('editStudentTaskTitle').value = task.taskTitle || '';
-            document.getElementById('editStudentTaskDesc').value = task.taskDesc || '';
+            document.getElementById('editStudentName').value = task.studentName;
+            document.getElementById('editStudentTaskTitle').value = task.taskTitle;
+            document.getElementById('editStudentTaskDesc').value = task.taskDescription || '';
             openModal('editStudentModal');
         }
 
         async function saveStudentEdit(e) {
             e.preventDefault();
-            const id = document.getElementById('editStudentId').value;
-            const task = tasksList.find(t => t.id === id);
-            if (!task) return;
-
-            task.studentName = document.getElementById('editStudentName').value.trim();
-            task.taskTitle = document.getElementById('editStudentTaskTitle').value.trim();
-            task.taskDesc = document.getElementById('editStudentTaskDesc').value.trim();
-
-            closeModal('editStudentModal');
-            renderTaskTable();
-            await saveToFirestore();
-            showToast('Perubahan data siswa disimpan.', 'success');
-        }
-
-        function confirmDeleteTask(taskId) {
+            const taskId = document.getElementById('editStudentId').value;
             const task = tasksList.find(t => t.id === taskId);
             if (!task) return;
-            document.getElementById('deleteStudentNameText').textContent = `Apakah Anda yakin ingin menghapus data tugas milik "${task.studentName}"?`;
-            const btn = document.getElementById('confirmDeleteBtn');
-            btn.onclick = async () => {
+
+            const newName = document.getElementById('editStudentName').value.trim();
+            const newTitle = document.getElementById('editStudentTaskTitle').value.trim();
+            const newDesc = document.getElementById('editStudentTaskDesc').value.trim();
+
+            if (!newName || !newTitle) return;
+
+            task.studentName = newName;
+            task.taskTitle = newTitle;
+            task.taskDescription = newDesc;
+
+            renderTaskTable();
+            closeModal('editStudentModal');
+            await saveToFirestore();
+            showToast('Data siswa & deskripsi tugas diperbarui!', 'success');
+        }
+
+        async function toggleStage(taskId, stageIndex) {
+            const task = tasksList.find(t => t.id === taskId);
+            if (!task) return;
+
+            task.completedStages = normalizeStagesArray(task.completedStages, boardConfig.stages.length);
+            task.completedStages[stageIndex] = !task.completedStages[stageIndex];
+
+            updateStats();
+            renderTaskTable();
+            await saveToFirestore();
+        }
+
+        function confirmDeleteTask(taskId, studentName) {
+            document.getElementById('deleteStudentNameText').innerHTML =
+                `Apakah Anda yakin ingin menghapus data tugas milik <strong>${escapeHtml(studentName)}</strong>?`;
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            confirmBtn.onclick = async () => {
                 tasksList = tasksList.filter(t => t.id !== taskId);
-                closeModal('deleteConfirmModal');
                 updateStats();
                 renderTaskTable();
+                closeModal('deleteConfirmModal');
                 await saveToFirestore();
                 showToast('Data siswa berhasil dihapus.', 'info');
             };
             openModal('deleteConfirmModal');
         }
 
-        /* PENGATURAN PAPAN, KELAS, TAHAPAN & TEMA */
-        function openBoardSettings(mandatoryFirstSetup = false) {
-            const titleEl = document.getElementById('settingsModalTitle');
-            const closeBtn = document.getElementById('closeSettingsBtn');
-            const cancelBtn = document.getElementById('cancelSettingsBtn');
-            const delWsBtn = document.getElementById('deleteWorkspaceBtn');
+        async function openShareModal() {
+            await syncPublicShareBoard();
+            const shareId = getShareIdForActiveWorkspace();
+            const baseUrl = window.location.origin + window.location.pathname;
+            const fullShareUrl = `${baseUrl}?share=${encodeURIComponent(shareId)}`;
 
-            if (mandatoryFirstSetup) {
-                titleEl.textContent = '✨ Buat Ruang Kelas & Tahapan Pertama';
-                closeBtn.classList.add('hidden');
-                cancelBtn.classList.add('hidden');
-                delWsBtn.classList.add('hidden');
-            } else {
-                titleEl.textContent = '⚙️ Pengaturan Kelas, Tahapan & Tema';
-                closeBtn.classList.remove('hidden');
-                cancelBtn.classList.remove('hidden');
-                if (workspaces.length > 1 && !isInitialSetup) {
-                    delWsBtn.classList.remove('hidden');
-                } else {
-                    delWsBtn.classList.add('hidden');
-                }
-            }
+            const linkInput = document.getElementById('studentShareLinkInput');
+            const previewAnchor = document.getElementById('previewStudentLinkAnchor');
+            if (linkInput) linkInput.value = fullShareUrl;
+            if (previewAnchor) previewAnchor.href = fullShareUrl;
 
-            // Kelola mode input kelas vs dropdown
-            const existingClasses = [...new Set(workspaces.map(w => w.className).filter(Boolean))];
-            const inputModeWrap = document.getElementById('classInputModeWrap');
-            const dropdownModeWrap = document.getElementById('classDropdownModeWrap');
-            const classInput = document.getElementById('settingClassNameInput');
-            const classSelect = document.getElementById('settingClassSelect');
-            const newClassInput = document.getElementById('settingNewClassInput');
-
-            if (existingClasses.length === 0) {
-                inputModeWrap.classList.remove('hidden');
-                dropdownModeWrap.classList.add('hidden');
-                classInput.value = boardConfig.className || '';
-            } else {
-                inputModeWrap.classList.add('hidden');
-                dropdownModeWrap.classList.remove('hidden');
-                newClassInput.classList.add('hidden');
-                newClassInput.value = '';
-
-                const optionsHtml = existingClasses.map(cls => {
-                    const sel = cls === boardConfig.className ? 'selected' : '';
-                    return `<option value="${escapeHTML(cls)}" ${sel}>${escapeHTML(cls)}</option>`;
-                }).join('') + `<option value="__NEW_CLASS__">+ Input Kelas Baru...</option>`;
-
-                classSelect.innerHTML = optionsHtml;
-                if (!boardConfig.className) {
-                    classSelect.value = '__NEW_CLASS__';
-                    newClassInput.classList.remove('hidden');
-                }
-            }
-
-            document.getElementById('settingBoardTitle').value = boardConfig.title || '';
-            tempTheme = boardConfig.theme || 'indigo';
-            selectTheme(tempTheme);
-
-            tempStages = Array.isArray(boardConfig.stages) && boardConfig.stages.length > 0
-                ? [...boardConfig.stages]
-                : [''];
-            renderStageEditorList();
-            openModal('settingsModal');
-        }
-
-        function handleSettingClassSelectChange(val) {
-            const newClassInput = document.getElementById('settingNewClassInput');
-            if (val === '__NEW_CLASS__') {
-                newClassInput.classList.remove('hidden');
-                newClassInput.focus();
-            } else {
-                newClassInput.classList.add('hidden');
-            }
-        }
-
-        function selectTheme(themeVal) {
-            tempTheme = themeVal;
-            applyTheme(themeVal);
-            document.querySelectorAll('.theme-swatch').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.themeVal === themeVal);
-            });
-        }
-
-        function applyStagePreset(presetArr) {
-            tempStages = [...presetArr];
-            renderStageEditorList();
-        }
-
-        function renderStageEditorList() {
-            const listEl = document.getElementById('stageEditorList');
-            listEl.innerHTML = tempStages.map((val, idx) => `
-                <div class="stage-editor-row">
-                    <span class="stage-num-badge">${idx + 1}</span>
-                    <input type="text" class="form-control stage-field-input" value="${escapeHTML(val)}" placeholder="Nama tahap ke-${idx + 1} (misal: Sketsa)" oninput="tempStages[${idx}] = this.value">
-                    ${tempStages.length > 1 ? `<button type="button" onclick="removeStageField(${idx})" class="btn-icon-only" style="color:var(--rose);">✕</button>` : ''}
-                </div>
-            `).join('');
-        }
-
-        function addStageField() {
-            tempStages.push('');
-            renderStageEditorList();
-        }
-
-        function removeStageField(idx) {
-            if (tempStages.length <= 1) return;
-            tempStages.splice(idx, 1);
-            renderStageEditorList();
-        }
-
-        async function saveBoardSettings() {
-            const existingClasses = [...new Set(workspaces.map(w => w.className).filter(Boolean))];
-            let chosenClass = '';
-
-            if (existingClasses.length === 0) {
-                chosenClass = document.getElementById('settingClassNameInput').value.trim();
-            } else {
-                const selVal = document.getElementById('settingClassSelect').value;
-                if (selVal === '__NEW_CLASS__') {
-                    chosenClass = document.getElementById('settingNewClassInput').value.trim();
-                } else {
-                    chosenClass = selVal;
-                }
-            }
-
-            const chosenTitle = document.getElementById('settingBoardTitle').value.trim();
-            const cleanedStages = tempStages.map(s => s.trim()).filter(Boolean);
-
-            if (!chosenClass) {
-                showToast('Nama kelas wajib diisi!', 'error');
-                return;
-            }
-            if (!chosenTitle) {
-                showToast('Judul utama papan tugas wajib diisi!', 'error');
-                return;
-            }
-            if (cleanedStages.length === 0) {
-                showToast('Minimal masukkan 1 tahapan ceklist!', 'error');
-                return;
-            }
-
-            boardConfig = {
-                className: chosenClass,
-                title: chosenTitle,
-                theme: tempTheme,
-                stages: cleanedStages
-            };
-
-            isInitialSetup = false;
-            applyTheme(boardConfig.theme);
-            updateBoardUI();
-            updateStats();
-            renderTaskTable();
-            closeModal('settingsModal');
-            await persistLastOpenedWorkspace(activeWorkspaceId);
-            await saveToFirestore();
-            showToast(`Ruang kelas ${boardConfig.className} tersimpan ke Cloud!`, 'success');
-        }
-
-        /* BAGIKAN LINK SISWA & REKAP WHATSAPP */
-        function openShareModal() {
-            const baseUrl = `${window.location.origin}${window.location.pathname}`;
-            const shareUrl = `${baseUrl}?share=${encodeURIComponent(activeWorkspaceId)}`;
-            document.getElementById('studentShareLinkInput').value = shareUrl;
-            document.getElementById('previewStudentLinkAnchor').href = shareUrl;
             openModal('shareModal');
         }
 
-        function copyTextFallback(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            ta.remove();
-        }
-
         function copyStudentShareLink() {
-            const linkVal = document.getElementById('studentShareLinkInput').value;
-            copyTextFallback(linkVal);
-            showToast('Link pantauan siswa berhasil disalin!', 'success');
-        }
-
-        function copyWhatsAppSummary() {
-            const totalStages = boardConfig.stages.length || 1;
-            const lines = [
-                `*REKAP PROGRES TUGAS — ${boardConfig.className.toUpperCase()}*`,
-                `Proyek: *${boardConfig.title}*`,
-                `Tahapan (${totalStages}): ${boardConfig.stages.join(' → ')}`,
-                `----------------------------------`
-            ];
-
-            if (tasksList.length === 0) {
-                lines.push('Belum ada data siswa.');
-            } else {
-                tasksList.forEach((t, idx) => {
-                    const done = Array.isArray(t.completedStages) ? t.completedStages.length : 0;
-                    const pct = Math.min(100, Math.round((done / totalStages) * 100));
-                    const statusIcon = pct >= 100 ? '✅' : '⏳';
-                    lines.push(`${idx + 1}. ${statusIcon} *${t.studentName}* — ${t.taskTitle} (${pct}% | ${done}/${totalStages} tahap)`);
-                });
+            const linkInput = document.getElementById('studentShareLinkInput');
+            if (!linkInput || !linkInput.value) return;
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                showToast('Link khusus siswa berhasil disalin!', 'success');
+            } catch (err) {
+                showToast('Gagal menyalin link siswa.', 'error');
             }
-
-            copyTextFallback(lines.join('\n'));
-            showToast('Rekap WhatsApp berhasil disalin!', 'success');
-        }
-
-        /* EKSPOR GAMBAR (PNG) & PDF */
-        function exportTableToPNG() {
-            if (tasksList.length === 0) {
-                showToast('Tambahkan minimal 1 siswa sebelum mengekspor gambar.', 'error');
-                return;
-            }
-
-            const stages = boardConfig.stages;
-            const totalStages = stages.length || 1;
-            const rowHeight = 46;
-            const headerHeight = 115;
-            const tableHeaderH = 42;
-            const colWidths = [190, 210, ...stages.map(() => 95), 110];
-            const totalW = colWidths.reduce((a, b) => a + b, 0) + 48;
-            const totalH = headerHeight + tableHeaderH + (tasksList.length * rowHeight) + 50;
-
-            const canvas = document.createElement('canvas');
-            const scale = 2;
-            canvas.width = totalW * scale;
-            canvas.height = totalH * scale;
-            const ctx = canvas.getContext('2d');
-            ctx.scale(scale, scale);
-
-            // Background
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, totalW, totalH);
-
-            // Banner Header
-            const primaryColor = THEME_PRIMARY_COLORS[boardConfig.theme] || '#4f46e5';
-            ctx.fillStyle = primaryColor;
-            ctx.fillRect(0, 0, totalW, 92);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 20px sans-serif';
-            ctx.fillText(`Tahap.in — ${boardConfig.className} | ${boardConfig.title}`, 24, 40);
-
-            ctx.fillStyle = 'rgba(255,255,255,0.88)';
-            ctx.font = '13px sans-serif';
-            ctx.fillText(`Total Siswa: ${tasksList.length} • Jumlah Tahapan: ${totalStages} • Dicetak: ${new Date().toLocaleDateString('id-ID')}`, 24, 66);
-
-            // Table Header
-            let x = 24;
-            const yHead = headerHeight;
-            ctx.fillStyle = '#f1f5f9';
-            ctx.fillRect(24, yHead, totalW - 48, tableHeaderH);
-            ctx.strokeStyle = '#cbd5e1';
-            ctx.strokeRect(24, yHead, totalW - 48, tableHeaderH);
-
-            const headers = ['Nama Siswa', 'Tugas & Deskripsi', ...stages.map((s, i) => `T${i + 1}: ${s.slice(0, 10)}`), 'Progres'];
-            ctx.fillStyle = '#0f172a';
-            ctx.font = 'bold 12px sans-serif';
-            headers.forEach((h, i) => {
-                ctx.fillText(h, x + 10, yHead + 26);
-                x += colWidths[i];
-            });
-
-            // Rows
-            tasksList.forEach((t, rIdx) => {
-                const y = yHead + tableHeaderH + (rIdx * rowHeight);
-                const doneArr = Array.isArray(t.completedStages) ? t.completedStages : [];
-                const pct = Math.min(100, Math.round((doneArr.length / totalStages) * 100));
-
-                ctx.fillStyle = pct >= 100 ? '#ecfdf5' : (rIdx % 2 === 0 ? '#ffffff' : '#f8fafc');
-                ctx.fillRect(24, y, totalW - 48, rowHeight);
-                ctx.strokeStyle = '#e2e8f0';
-                ctx.strokeRect(24, y, totalW - 48, rowHeight);
-
-                let cx = 24;
-                ctx.fillStyle = '#0f172a';
-                ctx.font = 'bold 12px sans-serif';
-                ctx.fillText((t.studentName || '').slice(0, 24), cx + 10, y + 27);
-                cx += colWidths[0];
-
-                ctx.font = '12px sans-serif';
-                ctx.fillStyle = '#334155';
-                ctx.fillText((t.taskTitle || '').slice(0, 28), cx + 10, y + 27);
-                cx += colWidths[1];
-
-                stages.forEach((_, sIdx) => {
-                    const isChecked = doneArr.includes(sIdx);
-                    ctx.fillStyle = isChecked ? '#059669' : '#94a3b8';
-                    ctx.font = 'bold 13px sans-serif';
-                    ctx.fillText(isChecked ? '✓' : '—', cx + 38, y + 28);
-                    cx += colWidths[2 + sIdx];
-                });
-
-                ctx.fillStyle = pct >= 100 ? '#059669' : primaryColor;
-                ctx.font = 'bold 12px sans-serif';
-                ctx.fillText(`${pct}% (${doneArr.length}/${totalStages})`, cx + 10, y + 27);
-            });
-
-            const dataUrl = canvas.toDataURL('image/png');
-            document.getElementById('exportedImagePreview').src = dataUrl;
-            const dlAnchor = document.getElementById('downloadImageAnchor');
-            dlAnchor.href = dataUrl;
-            dlAnchor.download = `Tahapin_${(boardConfig.className || 'Rekap').replace(/\s+/g, '_')}.png`;
-            openModal('imagePreviewModal');
         }
 
         function exportToPDF() {
-            window.print();
+            const nowStr = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('printTitleDisplay').textContent = boardConfig.className
+                ? `${boardConfig.className} — ${boardConfig.title}`
+                : boardConfig.title;
+            document.getElementById('printDateDisplay').textContent = `Dicetak pada: ${nowStr} • Total Siswa: ${tasksList.length}`;
+            showToast('Menyiapkan dokumen PDF / Cetak...', 'info');
+            setTimeout(() => {
+                window.print();
+            }, 250);
         }
 
-        // Expose functions globally for inline HTML event handlers
-        window.switchAuthMode = switchAuthMode;
-        window.handleAuthSubmit = handleAuthSubmit;
-        window.handleLogout = handleLogout;
-        window.switchWorkspace = switchWorkspace;
-        window.openNewWorkspaceModal = openNewWorkspaceModal;
-        window.deleteCurrentWorkspace = deleteCurrentWorkspace;
-        window.setFilterStatus = setFilterStatus;
-        window.renderTaskTable = renderTaskTable;
-        window.handleAddTask = handleAddTask;
-        window.toggleStage = toggleStage;
-        window.openEditStudentModal = openEditStudentModal;
-        window.saveStudentEdit = saveStudentEdit;
-        window.confirmDeleteTask = confirmDeleteTask;
-        window.openBoardSettings = openBoardSettings;
-        window.handleSettingClassSelectChange = handleSettingClassSelectChange;
-        window.selectTheme = selectTheme;
-        window.applyStagePreset = applyStagePreset;
-        window.addStageField = addStageField;
-        window.removeStageField = removeStageField;
-        window.saveBoardSettings = saveBoardSettings;
-        window.openShareModal = openShareModal;
-        window.copyStudentShareLink = copyStudentShareLink;
-        window.copyWhatsAppSummary = copyWhatsAppSummary;
-        window.exportTableToPNG = exportTableToPNG;
-        window.exportToPDF = exportToPDF;
-        window.closeModal = closeModal;
+        function wrapCanvasText(ctx, text, maxWidth) {
+            const words = String(text || '').split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (let i = 0; i < words.length; i++) {
+                const testLine = currentLine ? currentLine + ' ' + words[i] : words[i];
+                if (ctx.measureText(testLine).width > maxWidth && currentLine) {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            if (currentLine) lines.push(currentLine);
+            return lines.length ? lines : [''];
+        }
 
-        initApp();
+        function exportToImage() {
+            try {
+                const stages = boardConfig.stages;
+                const dpr = 2; // Resolusi tajam (Retina/HD)
+                const padding = 32;
+                const colNoW = 48;
+                const colNameW = 185;
+                const colTaskW = 210;
+                const colDescW = 230;
+                const colStageW = 115;
+                const colProgW = 110;
+
+                const tableWidth = colNoW + colNameW + colTaskW + colDescW + (stages.length * colStageW) + colProgW;
+                const canvasWidth = tableWidth + (padding * 2);
+
+                const headerHeight = 115;
+                const tableHeadHeight = 56;
+                const rowHeight = 66;
+                const footerHeight = 42;
+                const rowsCount = Math.max(tasksList.length, 1);
+                const canvasHeight = padding + headerHeight + tableHeadHeight + (rowsCount * rowHeight) + footerHeight + padding;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = canvasWidth * dpr;
+                canvas.height = canvasHeight * dpr;
+                const ctx = canvas.getContext('2d');
+                ctx.scale(dpr, dpr);
+
+                // Background
+                ctx.fillStyle = '#f8fafc';
+                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+                // Top Banner Card (sesuai tema aktif)
+                const activeTheme = boardConfig.theme || 'indigo';
+                const bannerBg = THEME_BANNER_COLORS[activeTheme] || '#1e1b4b';
+                const accentColor = THEME_PRIMARY_COLORS[activeTheme] || '#4f46e5';
+
+                ctx.fillStyle = bannerBg;
+                ctx.beginPath();
+                ctx.roundRect(padding, padding, tableWidth, 92, 14);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                const fullBannerTitle = boardConfig.className ? `[${boardConfig.className}] ${boardConfig.title}` : boardConfig.title;
+                ctx.fillText(fullBannerTitle, padding + 24, padding + 38);
+
+                const dateLabel = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText(`Rekap Progres Tugas Praktik DKV • Tanggal: ${dateLabel} • Total: ${tasksList.length} Siswa`, padding + 24, padding + 66);
+
+                // Table Header
+                let curY = padding + headerHeight;
+                ctx.fillStyle = '#f1f5f9';
+                ctx.fillRect(padding, curY, tableWidth, tableHeadHeight);
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(padding, curY, tableWidth, tableHeadHeight);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.textBaseline = 'middle';
+
+                let curX = padding;
+                ctx.textAlign = 'center';
+                ctx.fillText('NO', curX + colNoW / 2, curY + tableHeadHeight / 2);
+                curX += colNoW;
+
+                ctx.textAlign = 'left';
+                ctx.fillText('NAMA SISWA', curX + 12, curY + tableHeadHeight / 2);
+                curX += colNameW;
+
+                ctx.fillText('TUGAS PRAKTIK DKV', curX + 12, curY + tableHeadHeight / 2);
+                curX += colTaskW;
+
+                ctx.fillText('DESKRIPSI / KETERANGAN', curX + 12, curY + tableHeadHeight / 2);
+                curX += colDescW;
+
+                stages.forEach((stName, idx) => {
+                    ctx.strokeStyle = '#cbd5e1';
+                    ctx.beginPath();
+                    ctx.moveTo(curX, curY);
+                    ctx.lineTo(curX, curY + tableHeadHeight);
+                    ctx.stroke();
+
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = accentColor;
+                    ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    ctx.fillText(`TAHAP ${idx + 1}`, curX + colStageW / 2, curY + 18);
+
+                    ctx.fillStyle = '#0f172a';
+                    ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    const shortStage = stName.length > 15 ? stName.slice(0, 14) + '…' : stName;
+                    ctx.fillText(shortStage, curX + colStageW / 2, curY + 37);
+
+                    curX += colStageW;
+                });
+
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText('PROGRES', curX + colProgW / 2, curY + tableHeadHeight / 2);
+
+                curY += tableHeadHeight;
+
+                // Table Rows
+                if (tasksList.length === 0) {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(padding, curY, tableWidth, rowHeight);
+                    ctx.strokeRect(padding, curY, tableWidth, rowHeight);
+                    ctx.fillStyle = '#64748b';
+                    ctx.textAlign = 'center';
+                    ctx.font = '13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                    ctx.fillText('Belum ada data tugas siswa.', padding + tableWidth / 2, curY + rowHeight / 2);
+                    curY += rowHeight;
+                } else {
+                    tasksList.forEach((task, rIdx) => {
+                        const stagesArr = normalizeStagesArray(task.completedStages, stages.length);
+                        const doneCount = stagesArr.filter(Boolean).length;
+                        const pct = stages.length > 0 ? Math.round((doneCount / stages.length) * 100) : 0;
+                        const isDone = pct === 100;
+
+                        ctx.fillStyle = isDone ? '#f0fdf4' : (rIdx % 2 === 0 ? '#ffffff' : '#f8fafc');
+                        ctx.fillRect(padding, curY, tableWidth, rowHeight);
+                        ctx.strokeStyle = '#e2e8f0';
+                        ctx.strokeRect(padding, curY, tableWidth, rowHeight);
+
+                        let rx = padding;
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        ctx.fillText(String(rIdx + 1), rx + colNoW / 2, curY + rowHeight / 2);
+                        rx += colNoW;
+
+                        // Nama Siswa
+                        ctx.textAlign = 'left';
+                        ctx.fillStyle = '#0f172a';
+                        ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        const nameLines = wrapCanvasText(ctx, task.studentName, colNameW - 20);
+                        ctx.fillText(nameLines[0], rx + 12, curY + (isDone ? 22 : rowHeight / 2));
+                        if (isDone) {
+                            ctx.fillStyle = '#059669';
+                            ctx.font = 'bold 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                            ctx.fillText('✓ TUNTAS / ACC', rx + 12, curY + 42);
+                        }
+                        rx += colNameW;
+
+                        // Judul Tugas
+                        ctx.fillStyle = '#1e293b';
+                        ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        const taskLines = wrapCanvasText(ctx, task.taskTitle, colTaskW - 20);
+                        ctx.fillText(taskLines[0], rx + 12, curY + (taskLines[1] ? 23 : rowHeight / 2));
+                        if (taskLines[1]) {
+                            ctx.fillText(taskLines[1], rx + 12, curY + 41);
+                        }
+                        rx += colTaskW;
+
+                        // Deskripsi Tugas
+                        ctx.fillStyle = task.taskDescription ? '#475569' : '#94a3b8';
+                        ctx.font = task.taskDescription ? '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : 'italic 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        const descText = task.taskDescription || '- Tidak ada deskripsi -';
+                        const descLines = wrapCanvasText(ctx, descText, colDescW - 20);
+                        ctx.fillText(descLines[0], rx + 12, curY + (descLines[1] ? 23 : rowHeight / 2));
+                        if (descLines[1]) {
+                            ctx.fillText(descLines[1], rx + 12, curY + 41);
+                        }
+                        rx += colDescW;
+
+                        // Tahapan
+                        stagesArr.forEach(checked => {
+                            const boxSize = 26;
+                            const bx = rx + (colStageW - boxSize) / 2;
+                            const by = curY + (rowHeight - boxSize) / 2;
+
+                            ctx.fillStyle = checked ? '#10b981' : '#f1f5f9';
+                            ctx.beginPath();
+                            ctx.roundRect(bx, by, boxSize, boxSize, 6);
+                            ctx.fill();
+
+                            ctx.fillStyle = checked ? '#ffffff' : '#94a3b8';
+                            ctx.textAlign = 'center';
+                            ctx.font = 'bold 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                            ctx.fillText(checked ? '✓' : '—', rx + colStageW / 2, curY + rowHeight / 2);
+                            rx += colStageW;
+                        });
+
+                        // Progres
+                        ctx.textAlign = 'center';
+                        ctx.fillStyle = isDone ? '#059669' : accentColor;
+                        ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        ctx.fillText(`${pct}%`, rx + colProgW / 2, curY + 23);
+                        ctx.fillStyle = '#64748b';
+                        ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                        ctx.fillText(`(${doneCount}/${stages.length})`, rx + colProgW / 2, curY + 41);
+
+                        curY += rowHeight;
+                    });
+                }
+
+                // Footer
+                ctx.fillStyle = '#64748b';
+                ctx.textAlign = 'right';
+                ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+                ctx.fillText('Tahap.in • Laporan Progres Praktik Siswa', padding + tableWidth, curY + 24);
+
+                const dataUrl = canvas.toDataURL('image/png');
+                const fileName = `TahapIn-${boardConfig.title.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30)}.png`;
+
+                // Tampilkan modal pratinjau agar tetap bisa disimpan di Acode WebView + picu auto-download
+                const previewImg = document.getElementById('exportedImagePreview');
+                const downloadAnchor = document.getElementById('downloadImageAnchor');
+                previewImg.src = dataUrl;
+                downloadAnchor.href = dataUrl;
+                downloadAnchor.download = fileName;
+                openModal('imagePreviewModal');
+
+                try {
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } catch (e) {}
+
+                showToast('Gambar tabel berhasil dibuat!', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('Gagal mengekspor gambar.', 'error');
+            }
+        }
+
+        function copyWhatsAppSummary() {
+            const totalStages = boardConfig.stages.length;
+            const headerTitle = boardConfig.className ? `${boardConfig.className} — ${boardConfig.title}` : boardConfig.title;
+            let text = `*REKAP PROGRES TUGAS DKV*\n*${headerTitle}*\n\n`;
+
+            if (tasksList.length === 0) {
+                text += '_Belum ada data siswa._';
+            } else {
+                tasksList.forEach((task, idx) => {
+                    const stagesArr = normalizeStagesArray(task.completedStages, totalStages);
+                    const doneCount = stagesArr.filter(Boolean).length;
+                    const pct = totalStages > 0 ? Math.round((doneCount / totalStages) * 100) : 0;
+                    const statusIcon = pct === 100 ? '✅' : '⏳';
+
+                    text += `${idx + 1}. *${task.studentName}* ${statusIcon} (${pct}%)\n`;
+                    text += `   Tugas: ${task.taskTitle}\n`;
+                    if (task.taskDescription) {
+                        text += `   Deskripsi: _${task.taskDescription}_\n`;
+                    }
+                    text += `   Tahap: ${doneCount}/${totalStages} selesai\n\n`;
+                });
+            }
+
+            const tempArea = document.createElement('textarea');
+            tempArea.value = text.trim();
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Rekap teks siap tempel di WhatsApp!', 'success');
+            } catch (err) {
+                showToast('Gagal menyalin teks rekap.', 'error');
+            }
+            document.body.removeChild(tempArea);
+        }
+
+        function setFilterStatus(status) {
+            filterStatus = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.getElementById(`filter-${status}`);
+            if (activeBtn) activeBtn.classList.add('active');
+            renderTaskTable();
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Expose functions to global window for inline HTML handlers
+        Object.assign(window, {
+            switchAuthMode,
+            handleAuthSubmit,
+            handleLogout,
+            switchWorkspace,
+            createNewWorkspace,
+            deleteCurrentWorkspace,
+            openBoardSettingsModal,
+            handleClassDropdownChange,
+            selectTempTheme,
+            applyPresetStages,
+            addStageField,
+            removeStageField,
+            updateTempStageName,
+            saveBoardSettings,
+            renderTaskTable,
+            handleAddTask,
+            openEditStudentModal,
+            saveStudentEdit,
+            toggleStage,
+            confirmDeleteTask,
+            openShareModal,
+            copyStudentShareLink,
+            exportToPDF,
+            exportToImage,
+            copyWhatsAppSummary,
+            setFilterStatus,
+            openModal,
+            closeModal
+        });
+
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
