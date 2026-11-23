@@ -24,6 +24,17 @@
             --purple: #7c3aed;
             --brand-grad: linear-gradient(135deg, #4f46e5, #9333ea, #ec4899);
             --banner-bg: #1e1b4b;
+            --page-bg-grad: linear-gradient(180deg, #eef2ff 0%, #f1f5f9 45%, #f8fafc 100%);
+            --dot-color: #c7d2fe;
+            --header-bg: rgba(255, 255, 255, 0.92);
+            --thead-bg: #f8fafc;
+            --panel-grad: linear-gradient(90deg, #eef2ff, #f3e8ff, #fce7f3);
+            --panel-title-color: #1e1b4b;
+            --badge-bg: #e0e7ff;
+            --badge-color: #3730a3;
+            --surface-subtle: #f8fafc;
+            --row-hover: #f5f7ff;
+            --input-bg: #ffffff;
             --radius-lg: 16px;
             --radius-md: 12px;
             --radius-sm: 8px;
@@ -32,34 +43,98 @@
             --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.15);
         }
 
-        /* Theme Presets */
+        /* Theme Presets - Full UI Surface & Palette Transformation */
         body[data-theme="emerald"] {
+            --bg-main: #ecfdf5;
+            --bg-card: #ffffff;
+            --text-main: #064e3b;
+            --text-muted: #047857;
+            --border-color: #a7f3d0;
             --primary: #059669;
             --primary-hover: #047857;
-            --primary-soft: #ecfdf5;
+            --primary-soft: #d1fae5;
             --brand-grad: linear-gradient(135deg, #059669, #0d9488, #0284c7);
             --banner-bg: #064e3b;
+            --page-bg-grad: linear-gradient(180deg, #d1fae5 0%, #ecfdf5 45%, #f0fdfa 100%);
+            --dot-color: #6ee7b7;
+            --header-bg: rgba(236, 253, 245, 0.94);
+            --thead-bg: #ecfdf5;
+            --panel-grad: linear-gradient(90deg, #d1fae5, #ccfbf1, #e0f2fe);
+            --panel-title-color: #064e3b;
+            --badge-bg: #a7f3d0;
+            --badge-color: #065f46;
+            --surface-subtle: #f0fdf4;
+            --row-hover: #ecfdf5;
         }
         body[data-theme="rose"] {
+            --bg-main: #fff1f2;
+            --bg-card: #ffffff;
+            --text-main: #4c0519;
+            --text-muted: #9f1239;
+            --border-color: #fecdd3;
             --primary: #e11d48;
             --primary-hover: #be123c;
-            --primary-soft: #fff1f2;
+            --primary-soft: #ffe4e6;
             --brand-grad: linear-gradient(135deg, #e11d48, #db2777, #9333ea);
             --banner-bg: #4c0519;
+            --page-bg-grad: linear-gradient(180deg, #ffe4e6 0%, #fff1f2 45%, #fdf2f8 100%);
+            --dot-color: #fda4af;
+            --header-bg: rgba(255, 241, 242, 0.94);
+            --thead-bg: #fff1f2;
+            --panel-grad: linear-gradient(90deg, #ffe4e6, #fce7f3, #f3e8ff);
+            --panel-title-color: #881337;
+            --badge-bg: #fecdd3;
+            --badge-color: #9f1239;
+            --surface-subtle: #fff5f7;
+            --row-hover: #fff1f2;
         }
         body[data-theme="amber"] {
+            --bg-main: #fffbeb;
+            --bg-card: #ffffff;
+            --text-main: #451a03;
+            --text-muted: #92400e;
+            --border-color: #fde68a;
             --primary: #d97706;
             --primary-hover: #b45309;
-            --primary-soft: #fffbeb;
+            --primary-soft: #fef3c7;
             --brand-grad: linear-gradient(135deg, #d97706, #ea580c, #dc2626);
             --banner-bg: #451a03;
+            --page-bg-grad: linear-gradient(180deg, #fef3c7 0%, #fffbeb 45%, #fff7ed 100%);
+            --dot-color: #fcd34d;
+            --header-bg: rgba(255, 251, 235, 0.94);
+            --thead-bg: #fffbeb;
+            --panel-grad: linear-gradient(90deg, #fef3c7, #ffedd5, #fee2e2);
+            --panel-title-color: #78350f;
+            --badge-bg: #fde68a;
+            --badge-color: #92400e;
+            --surface-subtle: #fffbeb;
+            --row-hover: #fefce8;
         }
-        body[data-theme="slate"] {
-            --primary: #1e293b;
-            --primary-hover: #0f172a;
-            --primary-soft: #f1f5f9;
-            --brand-grad: linear-gradient(135deg, #1e293b, #334155, #475569);
+        body[data-theme="dark"] {
+            --bg-main: #0b1120;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --primary: #818cf8;
+            --primary-hover: #6366f1;
+            --primary-soft: rgba(99, 102, 241, 0.2);
+            --brand-grad: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
             --banner-bg: #0f172a;
+            --page-bg-grad: linear-gradient(180deg, #090d16 0%, #0f172a 50%, #1e1b4b 100%);
+            --dot-color: #1e293b;
+            --header-bg: rgba(15, 23, 42, 0.92);
+            --thead-bg: #0f172a;
+            --panel-grad: linear-gradient(90deg, #1e1b4b, #311042, #1e293b);
+            --panel-title-color: #e0e7ff;
+            --badge-bg: rgba(129, 140, 248, 0.2);
+            --badge-color: #c7d2fe;
+            --surface-subtle: #0f172a;
+            --row-hover: #263349;
+            --input-bg: #0f172a;
+            --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
+            --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.6);
         }
 
         * {
@@ -71,14 +146,16 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-main);
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-image: radial-gradient(var(--dot-color) 1px, transparent 1px), var(--page-bg-grad);
+            background-size: 20px 20px, 100% 100%;
+            background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         /* Header */
@@ -86,11 +163,12 @@
             position: sticky;
             top: 0;
             z-index: 30;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
             padding: 14px 16px;
+            transition: background 0.25s ease, border-color 0.25s ease;
         }
 
         .header-inner {
@@ -223,23 +301,28 @@
         }
 
         .btn-outline {
-            background: #ffffff;
-            color: #334155;
-            border-color: #cbd5e1;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border-color);
         }
 
         .btn-outline:hover {
-            background: #f8fafc;
-            border-color: #94a3b8;
+            background: var(--primary-soft);
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         .btn-icon-only {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             padding: 6px;
             border-radius: 8px;
+            border: 1px solid transparent;
             background: transparent;
-            border: none;
             color: var(--text-muted);
             cursor: pointer;
+            transition: all 0.15s ease;
         }
 
         .btn-icon-only:hover {
@@ -247,30 +330,22 @@
             color: var(--primary);
         }
 
-        /* Main Container */
+        /* Main Layout & Stats */
         .main-container {
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
             padding: 20px 16px;
-            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
+            flex: 1;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 16px;
-            }
         }
 
         .stat-card {
@@ -279,6 +354,7 @@
             border-radius: var(--radius-lg);
             padding: 16px;
             box-shadow: var(--shadow-sm);
+            transition: background 0.25s ease, border-color 0.25s ease;
         }
 
         .stat-header {
@@ -286,7 +362,7 @@
             align-items: center;
             justify-content: space-between;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-muted);
             margin-bottom: 6px;
         }
@@ -294,19 +370,20 @@
         .stat-value {
             font-size: 1.5rem;
             font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
-        /* Teacher Input Panel */
+        /* Input Panel */
         .input-panel {
             background: var(--bg-card);
-            border: 2px solid var(--border-color);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
         }
 
         .input-panel-header {
-            background: var(--primary-soft);
+            background: var(--panel-grad);
             padding: 12px 18px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
@@ -322,7 +399,7 @@
             gap: 8px;
             font-weight: 800;
             font-size: 0.9rem;
-            color: var(--primary);
+            color: var(--panel-title-color);
         }
 
         .badge-lock {
@@ -331,60 +408,28 @@
             text-transform: uppercase;
             padding: 3px 10px;
             border-radius: 999px;
-            background: #ffffff;
-            color: var(--primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .input-panel-header {
-            background: linear-gradient(90deg, #eef2ff, #f3e8ff, #fce7f3);
-            padding: 12px 18px;
-            border-bottom: 1px solid #e0e7ff;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-        }
-
-        .panel-title-wrap {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            color: #1e1b4b;
-        }
-
-        .badge-lock {
-            font-size: 0.68rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 3px 10px;
-            border-radius: 999px;
-            background: #e0e7ff;
-            color: #3730a3;
+            background: var(--badge-bg);
+            color: var(--badge-color);
         }
 
         .input-form-grid {
-            padding: 18px;
+            padding: 16px 18px;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
+            grid-template-columns: 1.1fr 1.3fr 1.5fr auto;
+            gap: 12px;
+            align-items: end;
         }
 
-        @media (min-width: 768px) {
-            .input-form-grid {
-                grid-template-columns: 1.2fr 1.6fr 1.2fr auto;
-                align-items: end;
-            }
+        .form-group {
+            display: flex;
+            flex-direction: column;
         }
 
         .form-group label {
             display: block;
             font-size: 0.75rem;
             font-weight: 700;
-            color: #334155;
+            color: var(--text-main);
             margin-bottom: 6px;
         }
 
@@ -396,20 +441,20 @@
             width: 100%;
             padding: 10px 12px;
             border-radius: var(--radius-md);
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border-color);
             font-size: 0.85rem;
             color: var(--text-main);
-            background: #ffffff;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            background: var(--input-bg);
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+            box-shadow: 0 0 0 3px var(--primary-soft);
         }
 
-        /* Search & Filters */
+        /* Toolbar & Filters */
         .toolbar-row {
             display: flex;
             flex-wrap: wrap;
@@ -430,19 +475,19 @@
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: #94a3b8;
+            color: var(--text-muted);
+            display: flex;
             pointer-events: none;
         }
 
-        .search-box input {
+        .search-box .form-control {
             padding-left: 36px;
-            box-shadow: var(--shadow-sm);
         }
 
         .filter-group {
             display: flex;
+            align-items: center;
             gap: 8px;
-            overflow-x: auto;
         }
 
         .filter-btn {
@@ -451,16 +496,16 @@
             font-size: 0.75rem;
             font-weight: 700;
             border: 1px solid var(--border-color);
-            background: #ffffff;
-            color: #475569;
+            background: var(--bg-card);
+            color: var(--text-muted);
             cursor: pointer;
             white-space: nowrap;
         }
 
         .filter-btn.active {
-            background: #0f172a;
+            background: var(--primary);
             color: #ffffff;
-            border-color: #0f172a;
+            border-color: var(--primary);
         }
 
         /* Table Container */
@@ -486,13 +531,13 @@
         }
 
         thead th {
-            background: #f8fafc;
+            background: var(--thead-bg);
             border-bottom: 2px solid var(--border-color);
             padding: 12px 14px;
             font-size: 0.72rem;
             font-weight: 800;
             text-transform: uppercase;
-            color: #475569;
+            color: var(--text-muted);
             letter-spacing: 0.03em;
             white-space: nowrap;
         }
@@ -501,9 +546,141 @@
             background: var(--primary-soft);
             text-align: center;
             min-width: 115px;
-            border-left: 1px solid #e2e8f0;
-            border-right: 1px solid #e2e8f0;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
         }
+
+        .stage-num {
+            font-size: 0.65rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .stage-title {
+            font-size: 0.78rem;
+            color: var(--text-main);
+            font-weight: 700;
+            text-transform: none;
+            margin-top: 2px;
+        }
+
+        tbody td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: var(--row-hover);
+        }
+
+        tbody tr.row-done {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        /* Sticky Student Name Column for Mobile Readability */
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            background: var(--bg-card);
+            min-width: 165px;
+            box-shadow: 3px 0 6px -2px rgba(0, 0, 0, 0.08);
+        }
+
+        thead th.sticky-col {
+            background: var(--thead-bg);
+            z-index: 15;
+        }
+
+        tbody tr.row-done td.sticky-col {
+            background: #ecfdf5;
+        }
+
+        body[data-theme="dark"] tbody tr.row-done td.sticky-col {
+            background: #132a2e;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.85rem;
+        }
+
+        .badge-acc {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Checklist Buttons & Progress */
+        .check-cell {
+            text-align: center;
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .stage-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--surface-subtle);
+            color: var(--text-muted);
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .stage-btn.checked {
+            background: var(--emerald);
+            border-color: var(--emerald-dark);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
+        }
+
+        .progress-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 7px;
+            border-radius: 999px;
+            background: var(--surface-subtle);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 999px;
+            transition: width 0.25s ease;
+        }
+
+        .progress-fill.done {
+            background: var(--emerald);
+        }
+
+        /* Theme & Workspace Controls */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -517,12 +694,12 @@
             gap: 5px;
             padding: 8px 4px;
             border-radius: 10px;
-            border: 2px solid #e2e8f0;
-            background: #ffffff;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
             cursor: pointer;
             font-size: 0.7rem;
             font-weight: 700;
-            color: #475569;
+            color: var(--text-muted);
         }
 
         .theme-swatch.active {
@@ -548,182 +725,12 @@
         .workspace-select {
             padding: 5px 10px;
             border-radius: 8px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--border-color);
             font-size: 0.74rem;
             font-weight: 700;
             color: var(--text-main);
-            background: #f8fafc;
+            background: var(--bg-card);
             max-width: 210px;
-        }
-
-        .stage-title {
-            font-size: 0.78rem;
-            color: #1e293b;
-            font-weight: 700;
-            text-transform: none;
-            margin-top: 2px;
-        }
-
-        tbody td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #f1f5f9;
-            vertical-align: middle;
-        }
-
-        tbody tr:hover {
-            background: #f8fafc;
-        }
-
-        tbody tr.row-done {
-            background: #f0fdf4;
-        }
-
-        /* Sticky Student Name Column for Mobile Readability */
-        .sticky-col {
-            position: sticky;
-            left: 0;
-            z-index: 10;
-            background: #ffffff;
-            min-width: 165px;
-            box-shadow: 3px 0 6px -2px rgba(0, 0, 0, 0.06);
-        }
-
-        thead th.sticky-col {
-            background: #f8fafc;
-            z-index: 15;
-        }
-
-        tbody tr.row-done td.sticky-col {
-            background: #f0fdf4;
-        }
-
-        .student-name {
-            font-weight: 700;
-            color: var(--text-main);
-            font-size: 0.85rem;
-        }
-
-        .badge-acc {
-            display: inline-block;
-            margin-top: 4px;
-            padding: 2px 8px;
-            border-radius: 999px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        /* Checklist Buttons */
-        .check-cell {
-            text-align: center;
-            border-left: 1px solid #f1f5f9;
-            border-right: 1px solid #f1f5f9;
-        }
-
-        .stage-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            border: 1px solid #cbd5e1;
-            background: #f8fafc;
-            color: #94a3b8;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .stage-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: var(--primary-soft);
-        }
-
-        .stage-btn.checked {
-            background: var(--emerald);
-            border-color: var(--emerald);
-            color: #ffffff;
-            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
-        }
-
-        .stage-badge-readonly {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            color: #cbd5e1;
-        }
-
-        .stage-badge-readonly.checked {
-            background: #d1fae5;
-            border-color: #6ee7b7;
-            color: #047857;
-        }
-
-        /* Progress Bar */
-        .progress-wrap {
-            min-width: 120px;
-        }
-
-        .progress-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.72rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 999px;
-            transition: width 0.3s ease;
-        }
-
-        .progress-fill.done {
-            background: var(--emerald);
-        }
-
-        /* Teacher Note Cell */
-        .note-input {
-            width: 100%;
-            min-width: 190px;
-            padding: 7px 10px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            background: #f8fafc;
-            font-size: 0.78rem;
-            color: var(--text-main);
-        }
-
-        .note-input:focus {
-            outline: none;
-            background: #ffffff;
-            border-color: var(--primary);
-        }
-
-        .note-readonly-box {
-            min-width: 180px;
-            background: #fffbeb;
-            border: 1px solid #fde68a;
-            color: #92400e;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 0.78rem;
         }
 
         /* Modals */
@@ -731,7 +738,7 @@
             position: fixed;
             inset: 0;
             z-index: 50;
-            background: rgba(15, 23, 42, 0.65);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(4px);
             display: none;
             align-items: center;
@@ -744,7 +751,9 @@
         }
 
         .modal-card {
-            background: #ffffff;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
             width: 100%;
             max-width: 460px;
@@ -761,25 +770,26 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
         }
 
         .modal-title {
-            font-size: 1rem;
+            font-size: 0.98rem;
             font-weight: 800;
             color: var(--text-main);
         }
 
         .modal-body {
-            padding: 20px;
+            padding: 18px 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
         .modal-footer {
             padding: 14px 20px;
-            background: #f8fafc;
+            background: var(--surface-subtle);
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: flex-end;
@@ -795,15 +805,15 @@
         .preset-chip {
             padding: 6px 10px;
             border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            background: var(--surface-subtle);
+            color: var(--text-main);
             font-size: 0.72rem;
             font-weight: 600;
             cursor: pointer;
         }
 
         .preset-chip:hover {
-            background: var(--primary-soft);
             border-color: var(--primary);
             color: var(--primary);
         }
@@ -876,6 +886,149 @@
             padding: 20px 16px;
             font-size: 0.75rem;
             color: var(--text-muted);
+        }
+
+        /* Mobile & Small Screen Responsive Optimization */
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .input-form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                overflow-x: hidden;
+            }
+            .app-header {
+                padding: 10px 12px;
+            }
+            .header-inner {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .brand-group {
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .brand-logo {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+            }
+            .board-title {
+                font-size: 0.98rem;
+                line-height: 1.3;
+                word-break: break-word;
+            }
+            .workspace-bar {
+                width: 100%;
+            }
+            .workspace-select {
+                flex: 1;
+                max-width: none;
+                min-width: 0;
+            }
+            .header-actions {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+                width: 100%;
+            }
+            .header-actions .btn {
+                width: 100%;
+                padding: 8px 8px;
+                font-size: 0.73rem;
+            }
+            .main-container {
+                padding: 12px 10px;
+                gap: 14px;
+            }
+            .stats-grid {
+                gap: 8px;
+            }
+            .stat-card {
+                padding: 12px;
+                border-radius: 12px;
+            }
+            .stat-value {
+                font-size: 1.25rem;
+            }
+            .input-panel-header {
+                padding: 10px 14px;
+            }
+            .input-form-grid {
+                padding: 12px 14px;
+                gap: 10px;
+            }
+            .form-control {
+                font-size: 16px;
+                padding: 9px 11px;
+            }
+            .toolbar-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .search-box {
+                max-width: 100%;
+                min-width: 0;
+            }
+            .filter-group {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+            .filter-btn {
+                padding: 8px 6px;
+                font-size: 0.72rem;
+                text-align: center;
+            }
+            .sticky-col {
+                min-width: 128px;
+                max-width: 142px;
+            }
+            .student-name {
+                font-size: 0.8rem;
+                word-break: break-word;
+            }
+            thead th {
+                padding: 10px 8px;
+                font-size: 0.68rem;
+            }
+            thead th.stage-col {
+                min-width: 96px;
+            }
+            tbody td {
+                padding: 10px 8px;
+                font-size: 0.8rem;
+            }
+            .stage-btn {
+                width: 34px;
+                height: 34px;
+            }
+            .theme-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .modal-card {
+                max-height: 92vh;
+            }
+            .modal-header,
+            .modal-body,
+            .modal-footer {
+                padding: 12px 14px;
+            }
+            .toast-container {
+                left: 12px;
+                right: 12px;
+                bottom: 12px;
+            }
+            .toast {
+                text-align: center;
+            }
         }
 
         /* Print / Export PDF Styles */
@@ -954,19 +1107,20 @@
                 </div>
                 <div>
                     <div class="board-title-row">
-                        <h1 id="boardTitleDisplay" class="board-title">XII DKV 1 — Proyek Desain Poster</h1>
-                        <button id="editBoardInfoBtn" onclick="openBoardSettingsModal()" class="btn-icon-only" title="Edit Judul, Tahapan & Tema">
+                        <span id="boardClassBadge" class="badge-lock" style="font-size:0.72rem; padding:3px 10px;">KELAS</span>
+                        <h1 id="boardTitleDisplay" class="board-title">Proyek Desain DKV</h1>
+                        <button id="editBoardInfoBtn" onclick="openBoardSettingsModal()" class="btn-icon-only" title="Edit Kelas, Judul, Tahapan & Tema">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                         </button>
                     </div>
                     <div class="board-subtitle" style="flex-wrap:wrap; margin-top:4px;">
                         <div class="workspace-bar">
                             <span class="status-dot"></span>
-                            <select id="workspaceSelect" onchange="switchWorkspace(this.value)" class="workspace-select" title="Pilih Ruang / Kelas Guru"></select>
-                            <button onclick="createNewWorkspace()" class="btn-icon-only" style="font-size:0.72rem; font-weight:700; color:var(--primary); padding:3px 7px; background:var(--primary-soft);" title="Buat Ruang / Kelas Baru">+ Ruang Baru</button>
+                            <select id="workspaceSelect" onchange="switchWorkspace(this.value)" class="workspace-select" title="Pilih Kelas / Ruang Tugas"></select>
+                            <button onclick="createNewWorkspace()" class="btn-icon-only" style="font-size:0.72rem; font-weight:700; color:var(--primary); padding:3px 7px; background:var(--primary-soft);" title="Tambah Kelas / Tugas Baru">+ Kelas / Tugas</button>
                         </div>
                         <span>•</span>
-                        <strong id="studentCountBadge" style="color:#334155;">0 Siswa</strong>
+                        <strong id="studentCountBadge" style="color:var(--text-main);">0 Siswa</strong>
                     </div>
                 </div>
             </div>
@@ -1105,15 +1259,26 @@
         <div class="modal-card" style="max-width:520px;">
             <div class="modal-header">
                 <div>
-                    <h3 class="modal-title">⚙️ Edit Judul, Tahapan & Tema</h3>
-                    <p style="font-size:0.72rem; color:#64748b;">Tersimpan otomatis di ruang lokal perangkat Anda</p>
+                    <h3 id="settingsModalTitle" class="modal-title">⚙️ Buat Kelas, Judul, Tahapan & Tema</h3>
+                    <p id="settingsModalSubtitle" style="font-size:0.72rem; color:var(--text-muted);">Tersimpan otomatis di ruang lokal perangkat Anda</p>
                 </div>
-                <button onclick="closeModal('settingsModal')" class="btn-icon-only">✕</button>
+                <button id="closeSettingsXBtn" onclick="closeModal('settingsModal')" class="btn-icon-only">✕</button>
             </div>
             <div class="modal-body">
+                <!-- Input Kelas Dinamis (Input teks saat pertama kali, Dropdown jika kelas sudah ada) -->
                 <div class="form-group">
-                    <label>Judul Utama Papan / Kelas</label>
-                    <input type="text" id="settingBoardTitle" class="form-control" placeholder="XII DKV 1 — Proyek Poster">
+                    <label>Nama Kelas <span class="req">*</span></label>
+                    <div id="existingClassSelectContainer" class="hidden" style="margin-bottom:8px;">
+                        <select id="settingClassSelect" onchange="handleClassDropdownChange(this.value)" class="form-control"></select>
+                    </div>
+                    <div id="newClassInputContainer">
+                        <input type="text" id="settingClassNameInput" class="form-control" placeholder="Contoh: XII DKV 1 atau XI DKV 2">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Judul Utama Tugas / Proyek <span class="req">*</span></label>
+                    <input type="text" id="settingBoardTitle" class="form-control" placeholder="Contoh: Proyek Desain Poster & Branding">
                 </div>
 
                 <div class="form-group">
@@ -1121,23 +1286,23 @@
                     <div class="theme-grid" id="themeSelectorGrid">
                         <button type="button" onclick="selectTempTheme('indigo')" data-theme-btn="indigo" class="theme-swatch active">
                             <span class="swatch-circle" style="background:linear-gradient(135deg,#4f46e5,#9333ea);"></span>
-                            <span>Indigo</span>
+                            <span>Studio Indigo</span>
                         </button>
                         <button type="button" onclick="selectTempTheme('emerald')" data-theme-btn="emerald" class="theme-swatch">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#059669,#0284c7);"></span>
-                            <span>Emerald</span>
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#059669,#10b981);"></span>
+                            <span>Mint Hijau</span>
                         </button>
                         <button type="button" onclick="selectTempTheme('rose')" data-theme-btn="rose" class="theme-swatch">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#e11d48,#9333ea);"></span>
-                            <span>Magenta</span>
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#e11d48,#f43f5e);"></span>
+                            <span>Sakura Pink</span>
                         </button>
                         <button type="button" onclick="selectTempTheme('amber')" data-theme-btn="amber" class="theme-swatch">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#d97706,#dc2626);"></span>
-                            <span>Sunset</span>
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#d97706,#f59e0b);"></span>
+                            <span>Krem Hangat</span>
                         </button>
-                        <button type="button" onclick="selectTempTheme('slate')" data-theme-btn="slate" class="theme-swatch">
-                            <span class="swatch-circle" style="background:linear-gradient(135deg,#1e293b,#475569);"></span>
-                            <span>Monokrom</span>
+                        <button type="button" onclick="selectTempTheme('dark')" data-theme-btn="dark" class="theme-swatch">
+                            <span class="swatch-circle" style="background:linear-gradient(135deg,#0f172a,#312e81);"></span>
+                            <span>Mode Gelap</span>
                         </button>
                     </div>
                 </div>
@@ -1153,20 +1318,20 @@
 
                 <div class="form-group">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                        <label style="margin:0;">Daftar Tahapan (<span id="stageCountLabel">5</span> Tahap)</label>
+                        <label style="margin:0;">Daftar Tahapan (<span id="stageCountLabel">1</span> Tahap) <span class="req">*</span></label>
                         <button type="button" onclick="addStageField()" class="btn btn-outline" style="padding:5px 10px; font-size:0.72rem;">+ Tambah Tahap</button>
                     </div>
                     <div id="customStagesList"></div>
                 </div>
 
-                <div style="border-top:1px solid #e2e8f0; padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.72rem; color:#64748b;">Hapus ruang kelas aktif ini dari penyimpanan lokal:</span>
+                <div id="deleteWorkspaceRow" style="border-top:1px solid var(--border-color); padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:0.72rem; color:var(--text-muted);">Hapus kelas/ruang aktif ini dari penyimpanan lokal:</span>
                     <button type="button" onclick="deleteCurrentWorkspace()" class="btn btn-outline" style="color:#e11d48; border-color:#fecdd3; padding:5px 10px; font-size:0.72rem;">Hapus Ruang Ini</button>
                 </div>
             </div>
             <div class="modal-footer">
-                <button onclick="closeModal('settingsModal')" class="btn btn-outline">Batal</button>
-                <button onclick="saveBoardSettings()" class="btn btn-primary">Simpan Perubahan</button>
+                <button id="cancelSettingsBtn" onclick="closeModal('settingsModal')" class="btn btn-outline">Batal</button>
+                <button onclick="saveBoardSettings()" class="btn btn-primary">Simpan & Mulai</button>
             </div>
         </div>
     </div>
@@ -1181,6 +1346,30 @@
                 </div>
                 <button onclick="closeModal('editStudentModal')" class="btn-icon-only">✕</button>
             </div>
+            <form onsubmit="saveStudentEdit(event)">
+                <div class="modal-body">
+                    <input type="hidden" id="editStudentId">
+                    <div class="form-group">
+                        <label>Nama Lengkap Siswa <span class="req">*</span></label>
+                        <input type="text" id="editStudentName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Judul / Nama Tugas DKV <span class="req">*</span></label>
+                        <input type="text" id="editStudentTaskTitle" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi / Keterangan Tugas</label>
+                        <input type="text" id="editStudentTaskDesc" class="form-control" placeholder="Contoh: Ukuran A3, CMYK 300dpi">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeModal('editStudentModal')" class="btn btn-outline">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL 2: REKAP TEKS WHATSAPP -->
     <div id="shareModal" class="modal-backdrop">
         <div class="modal-card" style="max-width:440px;">
@@ -1252,16 +1441,12 @@
         let workspaces = [];
         let activeWorkspaceId = '';
         let filterStatus = 'all';
+        let isInitialSetup = false;
         let boardConfig = {
-            title: 'XII DKV 1 — Proyek Desain Poster & Branding',
+            className: '',
+            title: '',
             theme: 'indigo',
-            stages: [
-                '1. Sketsa Konsep',
-                '2. Digitalisasi',
-                '3. Pewarnaan',
-                '4. Revisi Guru',
-                '5. Final ACC'
-            ]
+            stages: ['']
         };
         let tasksList = [];
         let tempStages = [];
@@ -1272,7 +1457,7 @@
             emerald: '#064e3b',
             rose: '#4c0519',
             amber: '#451a03',
-            slate: '#0f172a'
+            dark: '#0f172a'
         };
 
         const THEME_PRIMARY_COLORS = {
@@ -1280,7 +1465,7 @@
             emerald: '#059669',
             rose: '#e11d48',
             amber: '#d97706',
-            slate: '#1e293b'
+            dark: '#6366f1'
         };
 
         function showToast(message, type = 'info') {
@@ -1294,9 +1479,10 @@
 
         function saveToStorage() {
             try {
-                // Sinkronkan nama ruang di daftar workspace
+                // Sinkronkan nama kelas & judul di daftar workspace
                 const wsObj = workspaces.find(w => w.id === activeWorkspaceId);
                 if (wsObj) {
+                    wsObj.className = boardConfig.className;
                     wsObj.name = boardConfig.title;
                 }
                 localStorage.setItem(WORKSPACE_INDEX_KEY, JSON.stringify({
@@ -1319,8 +1505,10 @@
                 const savedRaw = localStorage.getItem(`${STORAGE_PREFIX}${wsId}`);
                 if (savedRaw) {
                     const parsed = JSON.parse(savedRaw);
+                    const wsMeta = workspaces.find(w => w.id === wsId);
                     boardConfig = {
-                        title: parsed.boardConfig?.title || 'Ruang Tugas DKV',
+                        className: parsed.boardConfig?.className || (wsMeta && wsMeta.className) || 'Kelas DKV',
+                        title: parsed.boardConfig?.title || (wsMeta && wsMeta.name) || 'Tugas Praktik DKV',
                         theme: parsed.boardConfig?.theme || 'indigo',
                         stages: Array.isArray(parsed.boardConfig?.stages) && parsed.boardConfig.stages.length
                             ? parsed.boardConfig.stages
@@ -1333,35 +1521,12 @@
                 } else {
                     const wsMeta = workspaces.find(w => w.id === wsId);
                     boardConfig = {
-                        title: wsMeta ? wsMeta.name : 'XII DKV 1 — Proyek Desain Poster',
+                        className: (wsMeta && wsMeta.className) || '',
+                        title: (wsMeta && wsMeta.name) || '',
                         theme: 'indigo',
-                        stages: [
-                            '1. Sketsa Konsep',
-                            '2. Digitalisasi',
-                            '3. Pewarnaan',
-                            '4. Revisi Guru',
-                            '5. Final ACC'
-                        ]
+                        stages: ['']
                     };
-                    tasksList = [
-                        {
-                            id: 'siswa-1',
-                            studentName: 'Alya Putri Maharani',
-                            taskTitle: 'Poster Kampanye Bebas Sampah Plastik',
-                            taskDescription: 'Ukuran A3, teknik ilustrasi vektor flat design, palet warna hijau-biru.',
-                            completedStages: [true, true, true, false, false],
-                            createdAt: Date.now()
-                        },
-                        {
-                            id: 'siswa-2',
-                            studentName: 'Dimas Aditya Saputra',
-                            taskTitle: 'Re-Branding Kemasan Kopi Lokal',
-                            taskDescription: 'Standing pouch 250gr, fokus tipografi modern & logo maskot.',
-                            completedStages: [true, true, true, true, true],
-                            createdAt: Date.now() + 10
-                        }
-                    ];
-                    saveToStorage();
+                    tasksList = [];
                 }
             } catch (err) {
                 console.error('Storage read error:', err);
@@ -1384,51 +1549,77 @@
                 }
             } catch (e) {}
 
+            // Jika pertama kali dibuka (belum ada ruang tersimpan), langsung tampilkan popup dengan isian kosong
             if (!workspaces.length) {
-                const defaultId = 'ruang-dkv-1';
-                workspaces = [{ id: defaultId, name: 'XII DKV 1 — Proyek Desain Poster' }];
-                activeWorkspaceId = defaultId;
+                isInitialSetup = true;
+                activeWorkspaceId = 'ruang-dkv-' + Date.now();
+                boardConfig = {
+                    className: '',
+                    title: '',
+                    theme: 'indigo',
+                    stages: ['']
+                };
+                tasksList = [];
+                applyTheme('indigo');
+                renderWorkspaceSelector();
+                updateBoardUI();
+                updateStats();
+                renderTaskTable();
+                openBoardSettingsModal(true);
+                return;
             }
 
             loadWorkspaceData(activeWorkspaceId);
         }
 
+        function getUniqueClasses() {
+            const set = new Set();
+            workspaces.forEach(w => {
+                if (w.className && w.className.trim()) {
+                    set.add(w.className.trim());
+                }
+            });
+            return Array.from(set);
+        }
+
         function renderWorkspaceSelector() {
             const select = document.getElementById('workspaceSelect');
             if (!select) return;
-            select.innerHTML = workspaces.map(ws =>
-                `<option value="${escapeHtml(ws.id)}" ${ws.id === activeWorkspaceId ? 'selected' : ''}>${escapeHtml(ws.name)}</option>`
-            ).join('');
+            if (!workspaces.length) {
+                select.innerHTML = '<option value="">Belum ada kelas</option>';
+                return;
+            }
+            select.innerHTML = workspaces.map(ws => {
+                const label = ws.className ? `${ws.className} — ${ws.name}` : ws.name;
+                return `<option value="${escapeHtml(ws.id)}" ${ws.id === activeWorkspaceId ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+            }).join('');
         }
 
         function switchWorkspace(wsId) {
             if (!wsId || wsId === activeWorkspaceId) return;
             saveToStorage();
             loadWorkspaceData(wsId);
-            showToast('Berpindah ke ruang kelas terpilih.', 'info');
+            showToast('Berpindah ke kelas terpilih.', 'info');
         }
 
         function createNewWorkspace() {
+            isInitialSetup = true;
             const newId = 'ruang-dkv-' + Date.now();
-            const roomNum = workspaces.length + 1;
-            const defaultName = `Kelas DKV #${roomNum} — Tugas Baru`;
-            workspaces.push({ id: newId, name: defaultName });
             activeWorkspaceId = newId;
             boardConfig = {
-                title: defaultName,
-                theme: 'indigo',
-                stages: ['1. Sketsa', '2. Digitalisasi', '3. Finishing', '4. Final ACC']
+                className: '',
+                title: '',
+                theme: boardConfig.theme || 'indigo',
+                stages: ['']
             };
             tasksList = [];
-            saveToStorage();
-            loadWorkspaceData(newId);
-            openBoardSettingsModal();
-            showToast('Ruang kelas baru dibuat! Silakan atur judul & tahapan.', 'success');
+            openBoardSettingsModal(true);
+            showToast('Silakan isi kelas, judul & tahapan tugas baru.', 'info');
         }
 
         function deleteCurrentWorkspace() {
             if (workspaces.length <= 1) {
-                showToast('Minimal harus tersisa 1 ruang kelas.', 'error');
+                showToast('Minimal harus tersisa 1 kelas/ruang.', 'error');
                 return;
             }
             localStorage.removeItem(`${STORAGE_PREFIX}${activeWorkspaceId}`);
@@ -1446,9 +1637,190 @@
         }
 
         function updateBoardUI() {
-            document.getElementById('boardTitleDisplay').textContent = boardConfig.title;
-            document.getElementById('printTitleDisplay').textContent = boardConfig.title;
+            const classBadge = document.getElementById('boardClassBadge');
+            if (classBadge) {
+                classBadge.textContent = boardConfig.className || 'KELAS BARU';
+            }
+            const displayTitle = boardConfig.title || 'Belum Ada Judul Tugas';
+            document.getElementById('boardTitleDisplay').textContent = displayTitle;
+            document.getElementById('printTitleDisplay').textContent = boardConfig.className
+                ? `${boardConfig.className} — ${displayTitle}`
+                : displayTitle;
             document.getElementById('studentCountBadge').textContent = `${tasksList.length} Siswa`;
+        }
+        function openBoardSettingsModal(forceBlank = false) {
+            const existingClasses = getUniqueClasses();
+            const selectContainer = document.getElementById('existingClassSelectContainer');
+            const inputContainer = document.getElementById('newClassInputContainer');
+            const classSelect = document.getElementById('settingClassSelect');
+            const classInput = document.getElementById('settingClassNameInput');
+            const titleInput = document.getElementById('settingBoardTitle');
+
+            const isFirstEver = workspaces.length === 0;
+            const cancelBtn = document.getElementById('cancelSettingsBtn');
+            const closeXBtn = document.getElementById('closeSettingsXBtn');
+            const deleteRow = document.getElementById('deleteWorkspaceRow');
+
+            // Sembunyikan tombol batal/tutup jika belum ada satu pun ruang tersimpan
+            if (isFirstEver) {
+                cancelBtn.classList.add('hidden');
+                closeXBtn.classList.add('hidden');
+                deleteRow.classList.add('hidden');
+                document.getElementById('settingsModalTitle').textContent = '✨ Buat Kelas, Judul, Tahapan & Tema';
+                document.getElementById('settingsModalSubtitle').textContent = 'Lengkapi pengaturan awal ruang mengajar Anda';
+            } else {
+                cancelBtn.classList.remove('hidden');
+                closeXBtn.classList.remove('hidden');
+                deleteRow.classList.toggle('hidden', forceBlank);
+                document.getElementById('settingsModalTitle').textContent = forceBlank
+                    ? '➕ Tambah Kelas / Proyek Baru'
+                    : '⚙️ Edit Kelas, Judul, Tahapan & Tema';
+                document.getElementById('settingsModalSubtitle').textContent = 'Tersimpan otomatis di ruang lokal perangkat Anda';
+            }
+
+            // Jika sudah ada kelas tersimpan -> tampilkan dropdown kelas; jika belum -> input teks langsung
+            if (existingClasses.length > 0) {
+                selectContainer.classList.remove('hidden');
+                classSelect.innerHTML = existingClasses.map(cls =>
+                    `<option value="${escapeHtml(cls)}">${escapeHtml(cls)}</option>`
+                ).join('') + `<option value="__NEW__">➕ Input Kelas Baru...</option>`;
+
+                if (!forceBlank && boardConfig.className && existingClasses.includes(boardConfig.className)) {
+                    classSelect.value = boardConfig.className;
+                    classInput.value = boardConfig.className;
+                    inputContainer.classList.add('hidden');
+                } else if (forceBlank) {
+                    classSelect.value = existingClasses[0];
+                    classInput.value = existingClasses[0];
+                    inputContainer.classList.add('hidden');
+                } else {
+                    classSelect.value = '__NEW__';
+                    classInput.value = boardConfig.className || '';
+                    inputContainer.classList.remove('hidden');
+                }
+            } else {
+                selectContainer.classList.add('hidden');
+                inputContainer.classList.remove('hidden');
+                classInput.value = forceBlank ? '' : (boardConfig.className || '');
+            }
+
+            if (forceBlank) {
+                titleInput.value = '';
+                tempStages = [''];
+                tempTheme = boardConfig.theme || 'indigo';
+            } else {
+                titleInput.value = boardConfig.title || '';
+                tempStages = boardConfig.stages.length ? [...boardConfig.stages] : [''];
+                tempTheme = boardConfig.theme || 'indigo';
+            }
+
+            selectTempTheme(tempTheme);
+            renderCustomStagesEditor();
+            openModal('settingsModal');
+        }
+
+        function handleClassDropdownChange(val) {
+            const inputContainer = document.getElementById('newClassInputContainer');
+            const classInput = document.getElementById('settingClassNameInput');
+            if (val === '__NEW__') {
+                inputContainer.classList.remove('hidden');
+                classInput.value = '';
+                classInput.focus();
+            } else {
+                inputContainer.classList.add('hidden');
+                classInput.value = val;
+            }
+        }
+
+        function selectTempTheme(themeKey) {
+            tempTheme = themeKey;
+            applyTheme(themeKey);
+            document.querySelectorAll('[data-theme-btn]').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-theme-btn') === themeKey);
+            });
+        }
+
+        function applyPresetStages(presetArray) {
+            tempStages = [...presetArray];
+            renderCustomStagesEditor();
+        }
+
+        function addStageField() {
+            if (tempStages.length >= 10) {
+                showToast('Maksimal 10 tahapan ceklist.', 'info');
+                return;
+            }
+            tempStages.push('');
+            renderCustomStagesEditor();
+        }
+
+        function removeStageField(index) {
+            if (tempStages.length <= 1) {
+                showToast('Minimal harus ada 1 tahapan.', 'error');
+                return;
+            }
+            tempStages.splice(index, 1);
+            renderCustomStagesEditor();
+        }
+
+        function updateTempStageName(index, val) {
+            tempStages[index] = val;
+        }
+
+        function renderCustomStagesEditor() {
+            const container = document.getElementById('customStagesList');
+            document.getElementById('stageCountLabel').textContent = tempStages.length;
+
+            container.innerHTML = tempStages.map((stage, idx) => `
+                <div class="stage-editor-row">
+                    <span class="stage-num-badge">${idx + 1}</span>
+                    <input type="text" value="${escapeHtml(stage)}" placeholder="Nama tahap ${idx + 1} (misal: Sketsa)" oninput="updateTempStageName(${idx}, this.value)" class="form-control" style="padding:7px 10px; font-size:0.8rem;">
+                    <button type="button" onclick="removeStageField(${idx})" class="btn-icon-only" style="color:#ef4444;" title="Hapus Tahap">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function saveBoardSettings() {
+            const existingClasses = getUniqueClasses();
+            const classSelect = document.getElementById('settingClassSelect');
+            const classInputVal = document.getElementById('settingClassNameInput').value.trim();
+            const chosenClass = (existingClasses.length > 0 && classSelect.value !== '__NEW__')
+                ? classSelect.value.trim()
+                : classInputVal;
+
+            const chosenTitle = document.getElementById('settingBoardTitle').value.trim();
+
+            if (!chosenClass) {
+                showToast('Silakan isi atau pilih nama kelas terlebih dahulu.', 'error');
+                return;
+            }
+            if (!chosenTitle) {
+                showToast('Silakan isi judul utama tugas/proyek.', 'error');
+                return;
+            }
+
+            boardConfig.className = chosenClass;
+            boardConfig.title = chosenTitle;
+            boardConfig.theme = tempTheme || 'indigo';
+            boardConfig.stages = tempStages.map((s, i) => s.trim() || `Tahap ${i + 1}`);
+
+            // Jika workspace baru belum terdaftar di indeks, daftarkan sekarang
+            if (!workspaces.some(w => w.id === activeWorkspaceId)) {
+                workspaces.push({
+                    id: activeWorkspaceId,
+                    className: boardConfig.className,
+                    name: boardConfig.title
+                });
+            }
+
+            isInitialSetup = false;
+            applyTheme(boardConfig.theme);
+            saveToStorage();
+            updateBoardUI();
+            updateStats();
+            renderTaskTable();
+            closeModal('settingsModal');
+            showToast(`Ruang kelas ${boardConfig.className} siap digunakan!`, 'success');
         }
 
         function updateStats() {
@@ -1459,12 +1831,10 @@
 
             tasksList.forEach(task => {
                 const stagesArr = normalizeStagesArray(task.completedStages, totalStages);
-                const doneCount = stagesArr.filter(Boolean).length;
-                const pct = totalStages > 0 ? Math.round((doneCount / totalStages) * 100) : 0;
+                const done = stagesArr.filter(Boolean).length;
+                const pct = totalStages > 0 ? (done / totalStages) * 100 : 0;
+                if (pct === 100) completedCount++;
                 sumPercent += pct;
-                if (doneCount === totalStages && totalStages > 0) {
-                    completedCount++;
-                }
             });
 
             document.getElementById('studentCountBadge').textContent = `${total} Siswa`;
@@ -1704,76 +2074,6 @@
             openModal('deleteConfirmModal');
         }
 
-        function openBoardSettingsModal() {
-            document.getElementById('settingBoardTitle').value = boardConfig.title;
-            tempStages = [...boardConfig.stages];
-            tempTheme = boardConfig.theme || 'indigo';
-            selectTempTheme(tempTheme);
-            renderCustomStagesEditor();
-            openModal('settingsModal');
-        }
-
-        function selectTempTheme(themeKey) {
-            tempTheme = themeKey;
-            document.querySelectorAll('[data-theme-btn]').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-theme-btn') === themeKey);
-            });
-        }
-
-        function applyPresetStages(presetArray) {
-            tempStages = [...presetArray];
-            renderCustomStagesEditor();
-        }
-
-        function addStageField() {
-            if (tempStages.length >= 10) {
-                showToast('Maksimal 10 tahapan ceklist.', 'info');
-                return;
-            }
-            tempStages.push(`${tempStages.length + 1}. Tahap Baru`);
-            renderCustomStagesEditor();
-        }
-
-        function removeStageField(index) {
-            if (tempStages.length <= 1) {
-                showToast('Minimal harus ada 1 tahapan.', 'error');
-                return;
-            }
-            tempStages.splice(index, 1);
-            renderCustomStagesEditor();
-        }
-
-        function updateTempStageName(index, val) {
-            tempStages[index] = val;
-        }
-
-        function renderCustomStagesEditor() {
-            const container = document.getElementById('customStagesList');
-            document.getElementById('stageCountLabel').textContent = tempStages.length;
-
-            container.innerHTML = tempStages.map((stage, idx) => `
-                <div class="stage-editor-row">
-                    <span class="stage-num-badge">${idx + 1}</span>
-                    <input type="text" value="${escapeHtml(stage)}" oninput="updateTempStageName(${idx}, this.value)" class="form-control" style="padding:7px 10px; font-size:0.8rem;">
-                    <button type="button" onclick="removeStageField(${idx})" class="btn-icon-only" style="color:#ef4444;" title="Hapus Tahap">✕</button>
-                </div>
-            `).join('');
-        }
-
-        function saveBoardSettings() {
-            boardConfig.title = document.getElementById('settingBoardTitle').value.trim() || boardConfig.title;
-            boardConfig.theme = tempTheme || 'indigo';
-            boardConfig.stages = tempStages.map((s, i) => s.trim() || `Tahap ${i + 1}`);
-
-            applyTheme(boardConfig.theme);
-            saveToStorage();
-            updateBoardUI();
-            updateStats();
-            renderTaskTable();
-            closeModal('settingsModal');
-            showToast('Judul, tema & tahapan berhasil disimpan!', 'success');
-        }
-
         function openShareModal() {
             openModal('shareModal');
         }
@@ -1782,7 +2082,9 @@
             const nowStr = new Date().toLocaleDateString('id-ID', {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
-            document.getElementById('printTitleDisplay').textContent = boardConfig.title;
+            document.getElementById('printTitleDisplay').textContent = boardConfig.className
+                ? `${boardConfig.className} — ${boardConfig.title}`
+                : boardConfig.title;
             document.getElementById('printDateDisplay').textContent = `Dicetak pada: ${nowStr} • Total Siswa: ${tasksList.length}`;
             showToast('Menyiapkan dokumen PDF / Cetak...', 'info');
             setTimeout(() => {
@@ -1851,7 +2153,8 @@
 
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-                ctx.fillText(boardConfig.title, padding + 24, padding + 38);
+                const fullBannerTitle = boardConfig.className ? `[${boardConfig.className}] ${boardConfig.title}` : boardConfig.title;
+                ctx.fillText(fullBannerTitle, padding + 24, padding + 38);
 
                 const dateLabel = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
                 ctx.fillStyle = '#e2e8f0';
@@ -2041,7 +2344,8 @@
 
         function copyWhatsAppSummary() {
             const totalStages = boardConfig.stages.length;
-            let text = `*REKAP PROGRES TUGAS DKV*\n*${boardConfig.title}*\n\n`;
+            const headerTitle = boardConfig.className ? `${boardConfig.className} — ${boardConfig.title}` : boardConfig.title;
+            let text = `*REKAP PROGRES TUGAS DKV*\n*${headerTitle}*\n\n`;
 
             if (tasksList.length === 0) {
                 text += '_Belum ada data siswa._';
