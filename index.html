@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DKV Studio Tracker — Pantauan Tugas Siswa</title>
+    <title>Tahap.in — Pantauan Progres Tugas Siswa</title>
     <style>
         :root {
             --bg-main: #f1f5f9;
@@ -188,16 +188,25 @@
         }
 
         .brand-logo {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            background: var(--brand-grad);
-            color: #ffffff;
+            width: auto;
+            height: 44px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+            padding: 0;
+        }
+
+        .auth-logo-wrap {
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 6px;
         }
 
         .board-title-row {
@@ -982,9 +991,8 @@
                 gap: 10px;
             }
             .brand-logo {
-                width: 36px;
+                width: auto;
                 height: 36px;
-                border-radius: 10px;
             }
             .board-title {
                 font-size: 0.98rem;
@@ -1167,12 +1175,33 @@
     <!-- LAYAR LOGIN / DAFTAR GURU (Tampil saat pertama kali masuk) -->
     <div id="authScreen" class="auth-screen">
         <div class="auth-card">
-            <div class="auth-banner">
-                <div style="width:48px; height:48px; margin:0 auto 10px; border-radius:14px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            <div class="auth-banner" style="background: var(--bg-card); color: var(--text-main); border-bottom: 1px solid var(--border-color); padding: 26px 20px 20px;">
+                <div class="auth-logo-wrap">
+                    <!-- Logo Presisi Tahap.in Tanpa Background -->
+                    <svg width="175" height="96" viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Tahap.in">
+                        <!-- Tangga 1 (Navy) -->
+                        <path d="M98 106 H132 V78 H120 V95 H98 Z" fill="#0B2347"/>
+                        <!-- Tangga 2 (Teal) -->
+                        <path d="M120 78 H158 V50 H146 V67 H120 Z" fill="#075E68"/>
+                        <!-- Bayangan lipatan Tangga 1-2 -->
+                        <polygon points="120,78 132,78 132,89" fill="#061630"/>
+                        <!-- Tangga 3 (Hijau) -->
+                        <path d="M146 50 H186 V22 H174 V39 H146 Z" fill="#0BA354"/>
+                        <!-- Bayangan lipatan Tangga 2-3 -->
+                        <polygon points="146,50 158,50 158,61" fill="#054249"/>
+                        <!-- Tangga 4 & Lengan Ceklis Atas (Oranye/Amber) -->
+                        <path d="M174 22 H224 L212 33 H186 V54 L174 42 Z" fill="#F39C12"/>
+                        <!-- Badan Ceklis Utama (Oranye/Amber) -->
+                        <polygon points="186,33 212,56 266,8 212,72 186,46" fill="#F39C12"/>
+                        <!-- Sisi Bawah Ceklis (Hijau) -->
+                        <polygon points="186,46 212,72 266,8 212,86 186,58" fill="#0BA354"/>
+                        <!-- Wordmark Tahap.in -->
+                        <text x="180" y="156" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="800" font-size="52" letter-spacing="-1.5">
+                            <tspan fill="#0B2347">Tahap</tspan><tspan fill="#0BA354">.in</tspan>
+                        </text>
+                    </svg>
                 </div>
-                <h2 style="font-size:1.15rem; font-weight:800; letter-spacing:-0.01em;">DKV Studio Tracker</h2>
-                <p style="font-size:0.76rem; opacity:0.9; margin-top:3px;">Masuk untuk menyinkronkan ruang kelas & progres siswa ke Cloud</p>
+                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">Masuk untuk menyinkronkan ruang kelas & progres siswa ke Cloud</p>
             </div>
 
             <div class="auth-tabs">
@@ -1208,12 +1237,23 @@
     <header class="app-header">
         <div class="header-inner">
             <div class="brand-group">
-                <div class="brand-logo">
-                    <!-- Pen Tool SVG -->
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                <div class="brand-logo" title="Tahap.in">
+                    <!-- Logo Ikon Presisi Tahap.in Tanpa Background -->
+                    <svg width="54" height="40" viewBox="92 4 180 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tahap.in">
+                        <path d="M98 96 H132 V68 H120 V85 H98 Z" fill="#0B2347"/>
+                        <path d="M120 68 H158 V40 H146 V57 H120 Z" fill="#075E68"/>
+                        <polygon points="120,68 132,68 132,79" fill="#061630"/>
+                        <path d="M146 40 H186 V14 H174 V29 H146 Z" fill="#0BA354"/>
+                        <polygon points="146,40 158,40 158,51" fill="#054249"/>
+                        <path d="M174 14 H224 L212 25 H186 V44 L174 32 Z" fill="#F39C12"/>
+                        <polygon points="186,25 212,48 266,4 212,64 186,38" fill="#F39C12"/>
+                        <polygon points="186,38 212,64 266,4 212,78 186,50" fill="#0BA354"/>
+                    </svg>
                 </div>
                 <div>
                     <div class="board-title-row">
+                        <span style="font-weight:900; font-size:0.88rem; letter-spacing:-0.02em; color:#0B2347;">Tahap<span style="color:#0BA354;">.in</span></span>
+                        <span style="color:var(--border-color);">|</span>
                         <span id="boardClassBadge" class="badge-lock" style="font-size:0.72rem; padding:3px 10px;">KELAS</span>
                         <h1 id="boardTitleDisplay" class="board-title">Proyek Desain DKV</h1>
                         <button id="editBoardInfoBtn" onclick="openBoardSettingsModal()" class="btn-icon-only" title="Edit Kelas, Judul, Tahapan & Tema">
@@ -1363,7 +1403,7 @@
     </main>
 
     <footer class="app-footer">
-        DKV Studio Tracker • Tersinkronisasi dengan Cloud Firestore untuk Guru SMK DKV
+        Tahap.in • Pantauan Progres Tugas Siswa SMK DKV
     </footer>
 
     <!-- MODAL 1: PENGATURAN TAHAPAN, JUDUL & TEMA -->
@@ -2751,10 +2791,10 @@
                 ctx.fillStyle = '#64748b';
                 ctx.textAlign = 'right';
                 ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-                ctx.fillText('DKV Studio Tracker • Laporan Progres Praktik Siswa', padding + tableWidth, curY + 24);
+                ctx.fillText('Tahap.in • Laporan Progres Praktik Siswa', padding + tableWidth, curY + 24);
 
                 const dataUrl = canvas.toDataURL('image/png');
-                const fileName = `Rekap-DKV-${boardConfig.title.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30)}.png`;
+                const fileName = `TahapIn-${boardConfig.title.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30)}.png`;
 
                 // Tampilkan modal pratinjau agar tetap bisa disimpan di Acode WebView + picu auto-download
                 const previewImg = document.getElementById('exportedImagePreview');
