@@ -200,13 +200,34 @@
             padding: 0;
         }
 
+        .brand-wordmark {
+            font-weight: 900;
+            font-size: 0.92rem;
+            letter-spacing: -0.02em;
+            color: #0B2347;
+            transition: color 0.25s ease;
+        }
+
+        .logo-navy {
+            fill: #0B2347;
+            transition: fill 0.25s ease;
+        }
+
+        body[data-theme="dark"] .brand-wordmark {
+            color: #f1f5f9;
+        }
+
+        body[data-theme="dark"] .logo-navy {
+            fill: #60a5fa;
+        }
+
         .auth-logo-wrap {
             background: transparent;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 6px;
+            margin: 0 auto 4px;
         }
 
         .board-title-row {
@@ -922,10 +943,19 @@
         }
 
         .auth-banner {
-            background: var(--brand-grad);
-            color: #ffffff;
-            padding: 24px 20px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding: 26px 20px 20px;
             text-align: center;
+        }
+
+        .auth-tagline {
+            font-size: 0.84rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 2px;
+            letter-spacing: -0.01em;
         }
 
         .auth-tabs {
@@ -1161,12 +1191,6 @@
                 padding: 8px 6px !important;
                 border: 1px solid #cbd5e1 !important;
             }
-            .note-input {
-                border: none !important;
-                background: transparent !important;
-                padding: 0 !important;
-                min-width: auto !important;
-            }
         }
     </style>
 </head>
@@ -1175,12 +1199,12 @@
     <!-- LAYAR LOGIN / DAFTAR GURU (Tampil saat pertama kali masuk) -->
     <div id="authScreen" class="auth-screen">
         <div class="auth-card">
-            <div class="auth-banner" style="background: var(--bg-card); color: var(--text-main); border-bottom: 1px solid var(--border-color); padding: 26px 20px 20px;">
+            <div class="auth-banner">
                 <div class="auth-logo-wrap">
                     <!-- Logo Presisi Tahap.in Tanpa Background -->
                     <svg width="175" height="96" viewBox="0 0 360 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Tahap.in">
                         <!-- Tangga 1 (Navy) -->
-                        <path d="M98 106 H132 V78 H120 V95 H98 Z" fill="#0B2347"/>
+                        <path d="M98 106 H132 V78 H120 V95 H98 Z" class="logo-navy"/>
                         <!-- Tangga 2 (Teal) -->
                         <path d="M120 78 H158 V50 H146 V67 H120 Z" fill="#075E68"/>
                         <!-- Bayangan lipatan Tangga 1-2 -->
@@ -1197,11 +1221,12 @@
                         <polygon points="186,46 212,72 266,8 212,86 186,58" fill="#0BA354"/>
                         <!-- Wordmark Tahap.in -->
                         <text x="180" y="156" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" font-weight="800" font-size="52" letter-spacing="-1.5">
-                            <tspan fill="#0B2347">Tahap</tspan><tspan fill="#0BA354">.in</tspan>
+                            <tspan class="logo-navy">Tahap</tspan><tspan fill="#0BA354">.in</tspan>
                         </text>
                     </svg>
                 </div>
-                <p style="font-size:0.78rem; color:var(--text-muted); margin-top:4px;">Masuk untuk menyinkronkan ruang kelas & progres siswa ke Cloud</p>
+                <p class="auth-tagline">"Pantau Progres, Tuntaskan Tugas."</p>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Masuk untuk menyinkronkan ruang kelas & progres siswa ke Cloud</p>
             </div>
 
             <div class="auth-tabs">
@@ -1214,7 +1239,7 @@
 
                 <div class="form-group">
                     <label>Email Guru <span class="req">*</span></label>
-                    <input type="email" id="authEmailInput" class="form-control" required placeholder="nama.guru@smk.sch.id" autocomplete="email">
+                    <input type="email" id="authEmailInput" class="form-control" required placeholder="nama.guru@sekolah.sch.id" autocomplete="email">
                 </div>
 
                 <div class="form-group">
@@ -1237,10 +1262,10 @@
     <header class="app-header">
         <div class="header-inner">
             <div class="brand-group">
-                <div class="brand-logo" title="Tahap.in">
+                <div class="brand-logo" title="Tahap.in — Pantau Progres, Tuntaskan Tugas.">
                     <!-- Logo Ikon Presisi Tahap.in Tanpa Background -->
                     <svg width="54" height="40" viewBox="92 4 180 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Tahap.in">
-                        <path d="M98 96 H132 V68 H120 V85 H98 Z" fill="#0B2347"/>
+                        <path d="M98 96 H132 V68 H120 V85 H98 Z" class="logo-navy"/>
                         <path d="M120 68 H158 V40 H146 V57 H120 Z" fill="#075E68"/>
                         <polygon points="120,68 132,68 132,79" fill="#061630"/>
                         <path d="M146 40 H186 V14 H174 V29 H146 Z" fill="#0BA354"/>
@@ -1252,7 +1277,7 @@
                 </div>
                 <div>
                     <div class="board-title-row">
-                        <span style="font-weight:900; font-size:0.88rem; letter-spacing:-0.02em; color:#0B2347;">Tahap<span style="color:#0BA354;">.in</span></span>
+                        <span class="brand-wordmark">Tahap<span style="color:#0BA354;">.in</span></span>
                         <span style="color:var(--border-color);">|</span>
                         <span id="boardClassBadge" class="badge-lock" style="font-size:0.72rem; padding:3px 10px;">KELAS</span>
                         <h1 id="boardTitleDisplay" class="board-title">Proyek Desain DKV</h1>
@@ -1317,7 +1342,7 @@
                     <span>Total Siswa</span>
                     <span style="color:#4f46e5;">●</span>
                 </div>
-                <div id="statTotalStudents" class="stat-value" style="color:#0f172a;">0</div>
+                <div id="statTotalStudents" class="stat-value" style="color:var(--text-main);">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-header">
@@ -1357,7 +1382,7 @@
                     <input type="text" id="inputStudentName" class="form-control" required placeholder="Contoh: Budi Santoso">
                 </div>
                 <div class="form-group">
-                    <label>Judul / Nama Tugas DKV <span class="req">*</span></label>
+                    <label>Judul / Nama Tugas <span class="req">*</span></label>
                     <input type="text" id="inputTaskTitle" class="form-control" required placeholder="Contoh: Poster Kampanye Lingkungan A3">
                 </div>
                 <div class="form-group">
@@ -1403,7 +1428,7 @@
     </main>
 
     <footer class="app-footer">
-        Tahap.in • Pantauan Progres Tugas Siswa SMK DKV
+        Tahap.in • Pantau Progres, Tuntaskan Tugas.
     </footer>
 
     <!-- MODAL 1: PENGATURAN TAHAPAN, JUDUL & TEMA -->
@@ -1412,7 +1437,7 @@
             <div class="modal-header">
                 <div>
                     <h3 id="settingsModalTitle" class="modal-title">⚙️ Buat Kelas, Judul, Tahapan & Tema</h3>
-                    <p id="settingsModalSubtitle" style="font-size:0.72rem; color:var(--text-muted);">Tersimpan otomatis di ruang lokal perangkat Anda</p>
+                    <p id="settingsModalSubtitle" style="font-size:0.72rem; color:var(--text-muted);">Tersimpan otomatis ke akun Cloud Anda</p>
                 </div>
                 <button id="closeSettingsXBtn" onclick="closeModal('settingsModal')" class="btn-icon-only">✕</button>
             </div>
@@ -1424,7 +1449,7 @@
                         <select id="settingClassSelect" onchange="handleClassDropdownChange(this.value)" class="form-control"></select>
                     </div>
                     <div id="newClassInputContainer">
-                        <input type="text" id="settingClassNameInput" class="form-control" placeholder="Contoh: XII DKV 1 atau XI DKV 2">
+                        <input type="text" id="settingClassNameInput" class="form-control" placeholder="Contoh: XII DKV 1 atau XI IPA 2">
                     </div>
                 </div>
 
@@ -1460,7 +1485,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Template Cepat Tahapan DKV:</label>
+                    <label>Template Cepat Tahapan:</label>
                     <div class="preset-group">
                         <button type="button" onclick="applyPresetStages(['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Revisi', '5. Final ACC'])" class="preset-chip">Desain Grafis (5 Tahap)</button>
                         <button type="button" onclick="applyPresetStages(['1. Konsep & Moodboard', '2. Pemotretan', '3. Editing/Color', '4. Cetak & ACC'])" class="preset-chip">Fotografi (4 Tahap)</button>
@@ -1477,7 +1502,7 @@
                 </div>
 
                 <div id="deleteWorkspaceRow" style="border-top:1px solid var(--border-color); padding-top:12px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:0.72rem; color:var(--text-muted);">Hapus kelas/ruang aktif ini dari penyimpanan lokal:</span>
+                    <span style="font-size:0.72rem; color:var(--text-muted);">Hapus kelas/ruang aktif ini dari penyimpanan Cloud:</span>
                     <button type="button" onclick="deleteCurrentWorkspace()" class="btn btn-outline" style="color:#e11d48; border-color:#fecdd3; padding:5px 10px; font-size:0.72rem;">Hapus Ruang Ini</button>
                 </div>
             </div>
@@ -1494,7 +1519,7 @@
             <div class="modal-header">
                 <div>
                     <h3 class="modal-title">✏️ Edit Data Tugas Siswa</h3>
-                    <p style="font-size:0.72rem; color:#64748b;">Perbarui nama siswa, judul tugas, atau deskripsi keterangan</p>
+                    <p style="font-size:0.72rem; color:var(--text-muted);">Perbarui nama siswa, judul tugas, atau deskripsi keterangan</p>
                 </div>
                 <button onclick="closeModal('editStudentModal')" class="btn-icon-only">✕</button>
             </div>
@@ -1506,7 +1531,7 @@
                         <input type="text" id="editStudentName" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Judul / Nama Tugas DKV <span class="req">*</span></label>
+                        <label>Judul / Nama Tugas <span class="req">*</span></label>
                         <input type="text" id="editStudentTaskTitle" class="form-control" required>
                     </div>
                     <div class="form-group">
@@ -1560,22 +1585,22 @@
         </div>
     </div>
 
-    <!-- MODAL 3: PRATINJAU HASIL EKSPOR GAMBAR (Fallback untuk WebView Acode) -->
+    <!-- MODAL 3: PRATINJAU HASIL EKSPOR GAMBAR (Fallback untuk WebView Mobile) -->
     <div id="imagePreviewModal" class="modal-backdrop">
         <div class="modal-card" style="max-width:640px;">
             <div class="modal-header">
                 <div>
                     <h3 class="modal-title">🖼️ Hasil Ekspor Gambar (PNG)</h3>
-                    <p style="font-size:0.72rem; color:#64748b;">Tekan & tahan gambar jika unduhan otomatis diblokir oleh aplikasi</p>
+                    <p style="font-size:0.72rem; color:var(--text-muted);">Tekan & tahan gambar jika unduhan otomatis diblokir oleh aplikasi</p>
                 </div>
                 <button onclick="closeModal('imagePreviewModal')" class="btn-icon-only">✕</button>
             </div>
-            <div class="modal-body" style="align-items:center; background:#f1f5f9;">
-                <img id="exportedImagePreview" alt="Hasil Ekspor Tabel DKV" style="max-width:100%; height:auto; border-radius:10px; border:1px solid #cbd5e1; box-shadow:var(--shadow-md);">
+            <div class="modal-body" style="align-items:center; background:var(--surface-subtle);">
+                <img id="exportedImagePreview" alt="Hasil Ekspor Tabel Tahap.in" style="max-width:100%; height:auto; border-radius:10px; border:1px solid var(--border-color); box-shadow:var(--shadow-md);">
             </div>
             <div class="modal-footer">
                 <button onclick="closeModal('imagePreviewModal')" class="btn btn-outline">Tutup</button>
-                <a id="downloadImageAnchor" download="rekap-tugas-dkv.png" class="btn btn-emerald">⬇️ Unduh Gambar PNG</a>
+                <a id="downloadImageAnchor" download="rekap-tahap-in.png" class="btn btn-emerald">⬇️ Unduh Gambar PNG</a>
             </div>
         </div>
     </div>
@@ -1588,7 +1613,7 @@
                 <button onclick="closeModal('deleteConfirmModal')" class="btn-icon-only">✕</button>
             </div>
             <div class="modal-body">
-                <p id="deleteStudentNameText" style="font-size:0.82rem; color:#475569;"></p>
+                <p id="deleteStudentNameText" style="font-size:0.82rem; color:var(--text-muted);"></p>
             </div>
             <div class="modal-footer">
                 <button onclick="closeModal('deleteConfirmModal')" class="btn btn-outline">Batal</button>
@@ -1682,6 +1707,32 @@
             toast.textContent = message;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function copyTextToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    return true;
+                } catch (err) {
+                    // Fallback ke execCommand di bawah
+                }
+            }
+            const tempArea = document.createElement('textarea');
+            tempArea.value = text;
+            tempArea.style.position = 'fixed';
+            tempArea.style.left = '-9999px';
+            document.body.appendChild(tempArea);
+            tempArea.focus();
+            tempArea.select();
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {
+                success = false;
+            }
+            document.body.removeChild(tempArea);
+            return success;
         }
 
         function switchAuthMode(mode) {
@@ -1827,7 +1878,6 @@
                     });
                 });
 
-                // Urutkan terbaru di JavaScript memory
                 fetched.sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
                 workspaces = fetched;
 
@@ -1835,7 +1885,7 @@
                     if (!firstSnapshotLoaded) {
                         firstSnapshotLoaded = true;
                         isInitialSetup = true;
-                        activeWorkspaceId = 'ruang-dkv-' + Date.now();
+                        activeWorkspaceId = 'ruang-tugas-' + Date.now();
                         boardConfig = {
                             className: '',
                             title: '',
@@ -1872,8 +1922,8 @@
             if (!currentWs) return;
 
             boardConfig = {
-                className: currentWs.boardConfig?.className || currentWs.className || 'Kelas DKV',
-                title: currentWs.boardConfig?.title || currentWs.name || 'Tugas Praktik DKV',
+                className: currentWs.boardConfig?.className || currentWs.className || 'Kelas',
+                title: currentWs.boardConfig?.title || currentWs.name || 'Tugas Siswa',
                 theme: currentWs.boardConfig?.theme || 'indigo',
                 stages: Array.isArray(currentWs.boardConfig?.stages) && currentWs.boardConfig.stages.length
                     ? currentWs.boardConfig.stages
@@ -1956,8 +2006,8 @@
                 }
 
                 const data = docSnap.data();
-                boardConfig.className = data.className || 'KELAS DKV';
-                boardConfig.title = data.title || 'Progres Tugas DKV';
+                boardConfig.className = data.className || 'KELAS';
+                boardConfig.title = data.title || 'Progres Tugas Siswa';
                 boardConfig.theme = data.theme || 'indigo';
                 sharedTotalStages = data.totalStages || 0;
                 sharedStudentsList = Array.isArray(data.students) ? data.students : [];
@@ -2065,7 +2115,7 @@
 
         function createNewWorkspace() {
             isInitialSetup = true;
-            const newId = 'ruang-dkv-' + Date.now();
+            const newId = 'ruang-tugas-' + Date.now();
             activeWorkspaceId = newId;
             boardConfig = {
                 className: '',
@@ -2117,6 +2167,7 @@
                 : displayTitle;
             document.getElementById('studentCountBadge').textContent = `${tasksList.length} Siswa`;
         }
+
         function openBoardSettingsModal(forceBlank = false) {
             const existingClasses = getUniqueClasses();
             const selectContainer = document.getElementById('existingClassSelectContainer');
@@ -2130,7 +2181,6 @@
             const closeXBtn = document.getElementById('closeSettingsXBtn');
             const deleteRow = document.getElementById('deleteWorkspaceRow');
 
-            // Sembunyikan tombol batal/tutup jika belum ada satu pun ruang tersimpan
             if (isFirstEver) {
                 cancelBtn.classList.add('hidden');
                 closeXBtn.classList.add('hidden');
@@ -2144,10 +2194,9 @@
                 document.getElementById('settingsModalTitle').textContent = forceBlank
                     ? '➕ Tambah Kelas / Proyek Baru'
                     : '⚙️ Edit Kelas, Judul, Tahapan & Tema';
-                document.getElementById('settingsModalSubtitle').textContent = 'Tersimpan otomatis di ruang lokal perangkat Anda';
+                document.getElementById('settingsModalSubtitle').textContent = 'Tersimpan otomatis ke akun Cloud Anda';
             }
 
-            // Jika sudah ada kelas tersimpan -> tampilkan dropdown kelas; jika belum -> input teks langsung
             if (existingClasses.length > 0) {
                 selectContainer.classList.remove('hidden');
                 classSelect.innerHTML = existingClasses.map(cls =>
@@ -2325,7 +2374,7 @@
             let headerHTML = `
                 <th style="width:45px; text-align:center;">No</th>
                 <th class="sticky-col">Nama Siswa</th>
-                <th style="min-width:190px;">Tugas Praktik DKV</th>
+                <th style="min-width:190px;">Tugas / Proyek</th>
                 <th style="min-width:210px;">Deskripsi / Keterangan</th>
             `;
             stages.forEach((stageName, idx) => {
@@ -2388,7 +2437,7 @@
 
                 const descText = task.taskDescription || '';
                 const descCell = `
-                    <td style="color:${descText ? '#475569' : '#94a3b8'}; font-size:0.8rem; line-height:1.4;">
+                    <td style="color:${descText ? 'var(--text-muted)' : '#94a3b8'}; font-size:0.8rem; line-height:1.4;">
                         ${descText ? escapeHtml(descText) : '<em>- Belum ada deskripsi -</em>'}
                     </td>
                 `;
@@ -2407,7 +2456,7 @@
                                 </button>
                             </div>
                         </td>
-                        <td style="font-weight:600; color:#1e293b;">${escapeHtml(task.taskTitle)}</td>
+                        <td style="font-weight:600; color:var(--text-main);">${escapeHtml(task.taskTitle)}</td>
                         ${descCell}
                         ${stagesCells}
                         <td>
@@ -2530,7 +2579,6 @@
         }
 
         async function openShareModal() {
-            await syncPublicShareBoard();
             const shareId = getShareIdForActiveWorkspace();
             const baseUrl = window.location.origin + window.location.pathname;
             const fullShareUrl = `${baseUrl}?share=${encodeURIComponent(shareId)}`;
@@ -2541,17 +2589,22 @@
             if (previewAnchor) previewAnchor.href = fullShareUrl;
 
             openModal('shareModal');
+
+            // Sinkronisasi ke publik dijalankan di latar belakang agar link tetap tampil instan saat offline/lambat
+            try {
+                await syncPublicShareBoard();
+            } catch (err) {
+                console.warn('Sinkronisasi publik tertunda:', err);
+            }
         }
 
-        function copyStudentShareLink() {
+        async function copyStudentShareLink() {
             const linkInput = document.getElementById('studentShareLinkInput');
             if (!linkInput || !linkInput.value) return;
-            linkInput.select();
-            linkInput.setSelectionRange(0, 99999);
-            try {
-                document.execCommand('copy');
+            const copied = await copyTextToClipboard(linkInput.value);
+            if (copied) {
                 showToast('Link khusus siswa berhasil disalin!', 'success');
-            } catch (err) {
+            } else {
                 showToast('Gagal menyalin link siswa.', 'error');
             }
         }
@@ -2563,7 +2616,7 @@
             document.getElementById('printTitleDisplay').textContent = boardConfig.className
                 ? `${boardConfig.className} — ${boardConfig.title}`
                 : boardConfig.title;
-            document.getElementById('printDateDisplay').textContent = `Dicetak pada: ${nowStr} • Total Siswa: ${tasksList.length}`;
+            document.getElementById('printDateDisplay').textContent = `Tahap.in • Dicetak pada: ${nowStr} • Total Siswa: ${tasksList.length}`;
             showToast('Menyiapkan dokumen PDF / Cetak...', 'info');
             setTimeout(() => {
                 window.print();
@@ -2637,7 +2690,7 @@
                 const dateLabel = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
                 ctx.fillStyle = '#e2e8f0';
                 ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-                ctx.fillText(`Rekap Progres Tugas Praktik DKV • Tanggal: ${dateLabel} • Total: ${tasksList.length} Siswa`, padding + 24, padding + 66);
+                ctx.fillText(`Tahap.in • Rekap Progres Tugas Siswa • Tanggal: ${dateLabel} • Total: ${tasksList.length} Siswa`, padding + 24, padding + 66);
 
                 // Table Header
                 let curY = padding + headerHeight;
@@ -2660,7 +2713,7 @@
                 ctx.fillText('NAMA SISWA', curX + 12, curY + tableHeadHeight / 2);
                 curX += colNameW;
 
-                ctx.fillText('TUGAS PRAKTIK DKV', curX + 12, curY + tableHeadHeight / 2);
+                ctx.fillText('TUGAS / PROYEK', curX + 12, curY + tableHeadHeight / 2);
                 curX += colTaskW;
 
                 ctx.fillText('DESKRIPSI / KETERANGAN', curX + 12, curY + tableHeadHeight / 2);
@@ -2791,12 +2844,11 @@
                 ctx.fillStyle = '#64748b';
                 ctx.textAlign = 'right';
                 ctx.font = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-                ctx.fillText('Tahap.in • Laporan Progres Praktik Siswa', padding + tableWidth, curY + 24);
+                ctx.fillText('Tahap.in • Pantau Progres, Tuntaskan Tugas.', padding + tableWidth, curY + 24);
 
                 const dataUrl = canvas.toDataURL('image/png');
                 const fileName = `TahapIn-${boardConfig.title.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30)}.png`;
 
-                // Tampilkan modal pratinjau agar tetap bisa disimpan di Acode WebView + picu auto-download
                 const previewImg = document.getElementById('exportedImagePreview');
                 const downloadAnchor = document.getElementById('downloadImageAnchor');
                 previewImg.src = dataUrl;
@@ -2820,10 +2872,10 @@
             }
         }
 
-        function copyWhatsAppSummary() {
+        async function copyWhatsAppSummary() {
             const totalStages = boardConfig.stages.length;
             const headerTitle = boardConfig.className ? `${boardConfig.className} — ${boardConfig.title}` : boardConfig.title;
-            let text = `*REKAP PROGRES TUGAS DKV*\n*${headerTitle}*\n\n`;
+            let text = `*REKAP PROGRES TUGAS — TAHAP.IN*\n*${headerTitle}*\n\n`;
 
             if (tasksList.length === 0) {
                 text += '_Belum ada data siswa._';
@@ -2843,17 +2895,12 @@
                 });
             }
 
-            const tempArea = document.createElement('textarea');
-            tempArea.value = text.trim();
-            document.body.appendChild(tempArea);
-            tempArea.select();
-            try {
-                document.execCommand('copy');
+            const copied = await copyTextToClipboard(text.trim());
+            if (copied) {
                 showToast('Rekap teks siap tempel di WhatsApp!', 'success');
-            } catch (err) {
+            } else {
                 showToast('Gagal menyalin teks rekap.', 'error');
             }
-            document.body.removeChild(tempArea);
         }
 
         function setFilterStatus(status) {
