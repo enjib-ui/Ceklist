@@ -1228,8 +1228,8 @@
                         </div>
                         <span>•</span>
                         <strong id="studentCountBadge" style="color:var(--text-main);">0 Siswa</strong>
-                        <span>•</span>
-                        <span class="user-pill">
+                        <span id="teacherUserDivider">•</span>
+                        <span id="teacherUserPill" class="user-pill">
                             <span id="loggedInUserLabel">Guru</span>
                             <button type="button" onclick="handleLogout()" style="border:none; background:transparent; color:#e11d48; font-weight:800; font-size:0.7rem; cursor:pointer; margin-left:4px;" title="Keluar Akun">Keluar</button>
                         </span>
@@ -1237,7 +1237,7 @@
                 </div>
             </div>
 
-            <div class="header-actions">
+            <div id="teacherHeaderActions" class="header-actions">
                 <button id="btnManageStages" onclick="openBoardSettingsModal()" class="btn btn-outline">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
                     <span>Tahapan & Tema</span>
@@ -1255,7 +1255,7 @@
 
                 <button onclick="openShareModal()" class="btn btn-dark">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
-                    <span>Rekap Teks</span>
+                    <span>Bagikan & Rekap</span>
                 </button>
             </div>
         </div>
@@ -1271,7 +1271,7 @@
         </div>
 
         <!-- Ringkasan Statistik -->
-        <section class="stats-grid">
+        <section id="statsSection" class="stats-grid">
             <div class="stat-card">
                 <div class="stat-header">
                     <span>Total Siswa</span>
@@ -1470,7 +1470,7 @@
                         <input type="text" id="editStudentTaskTitle" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Deskripsi / Keterangan Tugas</label>
+                        <label>Deskripsi / Keterangan Tugas (Opsional)</label>
                         <input type="text" id="editStudentTaskDesc" class="form-control" placeholder="Contoh: Ukuran A3, CMYK 300dpi">
                     </div>
                 </div>
@@ -1482,23 +1482,37 @@
         </div>
     </div>
 
-    <!-- MODAL 2: REKAP TEKS WHATSAPP -->
+    <!-- MODAL 2: BAGIKAN LINK SISWA & REKAP TEKS WHATSAPP -->
     <div id="shareModal" class="modal-backdrop">
-        <div class="modal-card" style="max-width:440px;">
+        <div class="modal-card" style="max-width:460px;">
             <div class="modal-header">
                 <div>
-                    <h3 class="modal-title">📋 Rekap Progres Kelas</h3>
-                    <p style="font-size:0.72rem; color:#64748b;">Salin ringkasan progres untuk dibagikan ke grup WhatsApp kelas</p>
+                    <h3 class="modal-title">🔗 Bagikan ke Siswa & Rekap</h3>
+                    <p style="font-size:0.72rem; color:var(--text-muted);">Siswa hanya dapat melihat Nama & Progres secara live</p>
                 </div>
                 <button onclick="closeModal('shareModal')" class="btn-icon-only">✕</button>
             </div>
             <div class="modal-body">
-                <div class="info-alert">
-                    Format teks berisi daftar nama siswa, judul tugas, deskripsi, jumlah tahapan selesai, serta persentase progres masing-masing siswa.
+                <div class="form-group">
+                    <label>Link Pantauan Siswa (Hanya Lihat — Nama & Progres):</label>
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="studentShareLinkInput" readonly class="form-control" style="font-size:0.78rem; background:var(--surface-subtle);">
+                        <button type="button" onclick="copyStudentShareLink()" class="btn btn-primary" style="white-space:nowrap;">Salin Link</button>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+                        <span style="font-size:0.7rem; color:var(--text-muted);">Otomatis terupdate saat Anda mencentang tugas.</span>
+                        <a id="previewStudentLinkAnchor" href="#" target="_blank" style="font-size:0.72rem; font-weight:700; color:var(--primary); text-decoration:none;">Buka Pratinjau ↗</a>
+                    </div>
                 </div>
-                <button onclick="copyWhatsAppSummary()" class="btn btn-emerald" style="width:100%; padding:12px;">
-                    <span>📋 Salin Rekap Teks untuk WhatsApp</span>
-                </button>
+
+                <div style="border-top:1px solid var(--border-color); padding-top:12px;">
+                    <div class="info-alert" style="margin-bottom:10px;">
+                        Atau salin format teks ringkas untuk ditempel langsung ke grup WhatsApp kelas:
+                    </div>
+                    <button onclick="copyWhatsAppSummary()" class="btn btn-emerald" style="width:100%; padding:11px;">
+                        <span>📋 Salin Rekap Teks untuk WhatsApp</span>
+                    </button>
+                </div>
             </div>
             <div class="modal-footer">
                 <button onclick="closeModal('shareModal')" class="btn btn-outline">Tutup</button>
@@ -1555,6 +1569,7 @@
             onAuthStateChanged,
             signInWithEmailAndPassword,
             createUserWithEmailAndPassword,
+            signInAnonymously,
             signOut
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import {
@@ -1580,6 +1595,10 @@
         const db = getFirestore(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'counting-8ba9d';
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedBoardId = urlParams.get('share');
+        const isStudentShareMode = Boolean(sharedBoardId);
+
         let currentUser = null;
         let unsubscribeWorkspaces = null;
         let authMode = 'login';
@@ -1595,6 +1614,8 @@
             stages: ['']
         };
         let tasksList = [];
+        let sharedStudentsList = [];
+        let sharedTotalStages = 0;
         let tempStages = [];
         let tempTheme = 'indigo';
 
@@ -1695,10 +1716,45 @@
                     tasksList: tasksList,
                     updatedAt: Date.now()
                 }, { merge: true });
+
+                await syncPublicShareBoard();
             } catch (err) {
                 console.error('Firestore save error:', err);
                 showToast('Gagal menyinkronkan data ke server.', 'error');
             }
+        }
+
+        function getShareIdForActiveWorkspace() {
+            if (!currentUser || !activeWorkspaceId) return '';
+            return `${currentUser.uid.slice(0, 8)}_${activeWorkspaceId}`;
+        }
+
+        async function syncPublicShareBoard() {
+            const shareId = getShareIdForActiveWorkspace();
+            if (!shareId) return;
+            const totalStages = boardConfig.stages.length;
+            const publicStudents = tasksList.map(task => {
+                const stagesArr = normalizeStagesArray(task.completedStages, totalStages);
+                const doneCount = stagesArr.filter(Boolean).length;
+                const percent = totalStages > 0 ? Math.round((doneCount / totalStages) * 100) : 0;
+                return {
+                    id: task.id,
+                    studentName: task.studentName,
+                    doneCount: doneCount,
+                    totalStages: totalStages,
+                    percent: percent
+                };
+            });
+
+            const publicRef = doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', shareId);
+            await setDoc(publicRef, {
+                className: boardConfig.className,
+                title: boardConfig.title,
+                theme: boardConfig.theme || 'indigo',
+                totalStages: totalStages,
+                students: publicStudents,
+                updatedAt: Date.now()
+            }, { merge: true });
         }
 
         function subscribeUserWorkspaces(user) {
@@ -1793,6 +1849,19 @@
         }
 
         async function initApp() {
+            if (isStudentShareMode) {
+                setupStudentViewUI();
+                try {
+                    if (!auth.currentUser) {
+                        await signInAnonymously(auth);
+                    }
+                } catch (e) {
+                    // Tetap lanjut membaca public snapshot jika anonymous auth tidak aktif
+                }
+                subscribePublicSharedBoard(sharedBoardId);
+                return;
+            }
+
             try {
                 await setPersistence(auth, browserLocalPersistence);
             } catch (e) {
@@ -1812,6 +1881,116 @@
                     closeModal('settingsModal');
                 }
             });
+        }
+
+        function setupStudentViewUI() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('editBoardInfoBtn').classList.add('hidden');
+            document.getElementById('teacherHeaderActions').classList.add('hidden');
+            document.getElementById('statsSection').classList.add('hidden');
+            document.getElementById('teacherInputPanel').classList.add('hidden');
+            document.getElementById('teacherUserDivider').classList.add('hidden');
+            document.getElementById('teacherUserPill').classList.add('hidden');
+
+            const workspaceBar = document.querySelector('.workspace-bar');
+            if (workspaceBar) {
+                workspaceBar.innerHTML = `<span class="status-dot"></span><span style="font-weight:700; color:var(--primary);">Mode Siswa • Hanya Lihat (Nama & Progres)</span>`;
+            }
+            document.getElementById('searchInput').placeholder = 'Cari nama kamu di sini...';
+        }
+
+        function subscribePublicSharedBoard(shareId) {
+            const publicRef = doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', shareId);
+            onSnapshot(publicRef, (docSnap) => {
+                if (!docSnap.exists()) {
+                    document.getElementById('boardClassBadge').textContent = 'INFO';
+                    document.getElementById('boardTitleDisplay').textContent = 'Link Progres Belum Tersedia';
+                    document.getElementById('taskTableBody').innerHTML = `
+                        <tr>
+                            <td colspan="3" style="padding:40px 16px; text-align:center; color:var(--text-muted);">
+                                Data kelas belum dibagikan oleh guru atau tautan tidak ditemukan.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                const data = docSnap.data();
+                boardConfig.className = data.className || 'KELAS DKV';
+                boardConfig.title = data.title || 'Progres Tugas DKV';
+                boardConfig.theme = data.theme || 'indigo';
+                sharedTotalStages = data.totalStages || 0;
+                sharedStudentsList = Array.isArray(data.students) ? data.students : [];
+
+                applyTheme(boardConfig.theme);
+                document.getElementById('boardClassBadge').textContent = boardConfig.className;
+                document.getElementById('boardTitleDisplay').textContent = boardConfig.title;
+                document.getElementById('studentCountBadge').textContent = `${sharedStudentsList.length} Siswa`;
+                renderStudentShareTable();
+            }, (err) => {
+                console.error('Error loading shared board:', err);
+                showToast('Gagal memuat data progres siswa.', 'error');
+            });
+        }
+
+        function renderStudentShareTable() {
+            const headerRow = document.getElementById('tableHeaderRow');
+            const tbody = document.getElementById('taskTableBody');
+            const searchQuery = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+
+            headerRow.innerHTML = `
+                <th style="width:52px; text-align:center;">No</th>
+                <th>Nama Siswa</th>
+                <th style="min-width:170px; text-align:center;">Progres</th>
+            `;
+
+            const filtered = sharedStudentsList.filter(item => {
+                const matchesSearch = (item.studentName || '').toLowerCase().includes(searchQuery);
+                if (!matchesSearch) return false;
+                const isAllDone = item.percent === 100;
+                if (filterStatus === 'done') return isAllDone;
+                if (filterStatus === 'progress') return !isAllDone;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="padding:40px 16px; text-align:center; color:var(--text-muted);">
+                            Nama siswa belum ditemukan.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((item, idx) => {
+                const percent = Number(item.percent) || 0;
+                const doneCount = Number(item.doneCount) || 0;
+                const totalStages = Number(item.totalStages) || sharedTotalStages || 0;
+                const isComplete = percent === 100;
+
+                return `
+                    <tr class="${isComplete ? 'row-done' : ''}">
+                        <td style="text-align:center; font-weight:700; color:var(--text-muted); font-size:0.8rem;">${idx + 1}</td>
+                        <td>
+                            <div class="student-name">${escapeHtml(item.studentName)}</div>
+                            ${isComplete ? '<span class="badge-acc">✓ TUNTAS / ACC</span>' : ''}
+                        </td>
+                        <td>
+                            <div class="progress-wrap" style="max-width:260px; margin:0 auto;">
+                                <div class="progress-labels">
+                                    <span style="color:${isComplete ? '#059669' : 'var(--primary)'};">${percent}%</span>
+                                    <span style="color:var(--text-muted); font-weight:600;">${doneCount}/${totalStages} Tahap</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill ${isComplete ? 'done' : ''}" style="width:${percent}%;"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function getUniqueClasses() {
@@ -1867,9 +2046,13 @@
             }
             try {
                 const targetId = activeWorkspaceId;
+                const targetShareId = `${currentUser.uid.slice(0, 8)}_${targetId}`;
                 const remaining = workspaces.filter(w => w.id !== targetId);
                 activeWorkspaceId = remaining[0].id;
                 await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'workspaces', targetId));
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'shared_boards', targetShareId));
+                } catch (e) {}
                 closeModal('settingsModal');
                 showToast('Ruang kelas berhasil dihapus.', 'info');
             } catch (err) {
@@ -2090,6 +2273,10 @@
         }
 
         function renderTaskTable() {
+            if (isStudentShareMode) {
+                renderStudentShareTable();
+                return;
+            }
             const headerRow = document.getElementById('tableHeaderRow');
             const tbody = document.getElementById('taskTableBody');
             const stages = boardConfig.stages;
@@ -2279,9 +2466,8 @@
             const task = tasksList.find(t => t.id === taskId);
             if (!task) return;
 
-            const updatedStages = normalizeStagesArray(task.completedStages, boardConfig.stages.length);
-            updatedStages[stageIndex] = !updatedStages[stageIndex];
-            task.completedStages = updatedStages;
+            task.completedStages = normalizeStagesArray(task.completedStages, boardConfig.stages.length);
+            task.completedStages[stageIndex] = !task.completedStages[stageIndex];
 
             updateStats();
             renderTaskTable();
@@ -2289,7 +2475,8 @@
         }
 
         function confirmDeleteTask(taskId, studentName) {
-            document.getElementById('deleteStudentNameText').textContent = `Hapus data tugas milik "${studentName}"? Tindakan ini tidak bisa dibatalkan.`;
+            document.getElementById('deleteStudentNameText').innerHTML =
+                `Apakah Anda yakin ingin menghapus data tugas milik <strong>${escapeHtml(studentName)}</strong>?`;
             const confirmBtn = document.getElementById('confirmDeleteBtn');
             confirmBtn.onclick = async () => {
                 tasksList = tasksList.filter(t => t.id !== taskId);
@@ -2302,8 +2489,31 @@
             openModal('deleteConfirmModal');
         }
 
-        function openShareModal() {
+        async function openShareModal() {
+            await syncPublicShareBoard();
+            const shareId = getShareIdForActiveWorkspace();
+            const baseUrl = window.location.origin + window.location.pathname;
+            const fullShareUrl = `${baseUrl}?share=${encodeURIComponent(shareId)}`;
+
+            const linkInput = document.getElementById('studentShareLinkInput');
+            const previewAnchor = document.getElementById('previewStudentLinkAnchor');
+            if (linkInput) linkInput.value = fullShareUrl;
+            if (previewAnchor) previewAnchor.href = fullShareUrl;
+
             openModal('shareModal');
+        }
+
+        function copyStudentShareLink() {
+            const linkInput = document.getElementById('studentShareLinkInput');
+            if (!linkInput || !linkInput.value) return;
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                showToast('Link khusus siswa berhasil disalin!', 'success');
+            } catch (err) {
+                showToast('Gagal menyalin link siswa.', 'error');
+            }
         }
 
         function exportToPDF() {
@@ -2655,6 +2865,7 @@
             toggleStage,
             confirmDeleteTask,
             openShareModal,
+            copyStudentShareLink,
             exportToPDF,
             exportToImage,
             copyWhatsAppSummary,
