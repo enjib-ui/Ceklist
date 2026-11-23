@@ -888,6 +888,73 @@
             color: var(--text-muted);
         }
 
+        /* Login Screen Overlay */
+        .auth-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background-color: var(--bg-main);
+            background-image: radial-gradient(var(--dot-color) 1px, transparent 1px), var(--page-bg-grad);
+            background-size: 20px 20px, 100% 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 410px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .auth-banner {
+            background: var(--brand-grad);
+            color: #ffffff;
+            padding: 24px 20px;
+            text-align: center;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--surface-subtle);
+        }
+
+        .auth-tab-btn {
+            padding: 12px;
+            border: none;
+            background: transparent;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-tab-btn.active {
+            color: var(--primary);
+            background: var(--bg-card);
+            border-bottom-color: var(--primary);
+        }
+
+        .user-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
         /* Mobile & Small Screen Responsive Optimization */
         @media (max-width: 900px) {
             .stats-grid {
@@ -1097,6 +1164,46 @@
 </head>
 <body>
 
+    <!-- LAYAR LOGIN / DAFTAR GURU (Tampil saat pertama kali masuk) -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-card">
+            <div class="auth-banner">
+                <div style="width:48px; height:48px; margin:0 auto 10px; border-radius:14px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                </div>
+                <h2 style="font-size:1.15rem; font-weight:800; letter-spacing:-0.01em;">DKV Studio Tracker</h2>
+                <p style="font-size:0.76rem; opacity:0.9; margin-top:3px;">Masuk untuk menyinkronkan ruang kelas & progres siswa ke Cloud</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button type="button" id="tabLoginBtn" onclick="switchAuthMode('login')" class="auth-tab-btn active">Masuk (Login)</button>
+                <button type="button" id="tabRegisterBtn" onclick="switchAuthMode('register')" class="auth-tab-btn">Daftar Akun Baru</button>
+            </div>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" style="padding:20px; display:flex; flex-direction:column; gap:13px;">
+                <div id="authErrorBox" class="hidden" style="background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; padding:10px 12px; border-radius:10px; font-size:0.76rem; font-weight:600;"></div>
+
+                <div class="form-group">
+                    <label>Email Guru <span class="req">*</span></label>
+                    <input type="email" id="authEmailInput" class="form-control" required placeholder="nama.guru@smk.sch.id" autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label>Kata Sandi <span class="req">*</span></label>
+                    <input type="password" id="authPasswordInput" class="form-control" required minlength="6" placeholder="Minimal 6 karakter" autocomplete="current-password">
+                </div>
+
+                <button type="submit" id="authSubmitBtn" class="btn btn-primary" style="width:100%; padding:11px; font-size:0.85rem; margin-top:4px;">
+                    Masuk ke Ruang Guru
+                </button>
+
+                <div style="text-align:center; font-size:0.7rem; color:var(--text-muted); margin-top:2px;">
+                    Sesi login tersimpan otomatis di perangkat ini • Data aman per akun
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Top Navigation Bar -->
     <header class="app-header">
         <div class="header-inner">
@@ -1121,6 +1228,11 @@
                         </div>
                         <span>•</span>
                         <strong id="studentCountBadge" style="color:var(--text-main);">0 Siswa</strong>
+                        <span>•</span>
+                        <span class="user-pill">
+                            <span id="loggedInUserLabel">Guru</span>
+                            <button type="button" onclick="handleLogout()" style="border:none; background:transparent; color:#e11d48; font-weight:800; font-size:0.7rem; cursor:pointer; margin-left:4px;" title="Keluar Akun">Keluar</button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -1251,7 +1363,7 @@
     </main>
 
     <footer class="app-footer">
-        DKV Studio Tracker • Penyimpanan Lokal Mandiri untuk Guru SMK DKV
+        DKV Studio Tracker • Tersinkronisasi dengan Cloud Firestore untuk Guru SMK DKV
     </footer>
 
     <!-- MODAL 1: PENGATURAN TAHAPAN, JUDUL & TEMA -->
@@ -1434,9 +1546,43 @@
     <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script>
-        const WORKSPACE_INDEX_KEY = 'dkv_studio_workspaces_v4';
-        const STORAGE_PREFIX = 'dkv_studio_room_v4_';
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import {
+            getAuth,
+            setPersistence,
+            browserLocalPersistence,
+            onAuthStateChanged,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            setDoc,
+            deleteDoc,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOtQ163ALGOz_nKgwZg85ke1-1BoG8vbw",
+            authDomain: "counting-8ba9d.firebaseapp.com",
+            projectId: "counting-8ba9d",
+            storageBucket: "counting-8ba9d.firebasestorage.app",
+            messagingSenderId: "1023489535017",
+            appId: "1:1023489535017:web:2a81726592889785a50038"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'counting-8ba9d';
+
+        let currentUser = null;
+        let unsubscribeWorkspaces = null;
+        let authMode = 'login';
 
         let workspaces = [];
         let activeWorkspaceId = '';
@@ -1477,60 +1623,167 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        function saveToStorage() {
+        function switchAuthMode(mode) {
+            authMode = mode;
+            document.getElementById('tabLoginBtn').classList.toggle('active', mode === 'login');
+            document.getElementById('tabRegisterBtn').classList.toggle('active', mode === 'register');
+            document.getElementById('authSubmitBtn').textContent = mode === 'login'
+                ? 'Masuk ke Ruang Guru'
+                : 'Daftar & Buat Ruang Guru';
+            document.getElementById('authErrorBox').classList.add('hidden');
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmailInput').value.trim();
+            const password = document.getElementById('authPasswordInput').value;
+            const errBox = document.getElementById('authErrorBox');
+            const submitBtn = document.getElementById('authSubmitBtn');
+
+            errBox.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Memproses...';
+
             try {
-                // Sinkronkan nama kelas & judul di daftar workspace
-                const wsObj = workspaces.find(w => w.id === activeWorkspaceId);
-                if (wsObj) {
-                    wsObj.className = boardConfig.className;
-                    wsObj.name = boardConfig.title;
+                await setPersistence(auth, browserLocalPersistence);
+                if (authMode === 'login') {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    showToast('Berhasil masuk ke akun guru!', 'success');
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    showToast('Akun guru berhasil dibuat!', 'success');
                 }
-                localStorage.setItem(WORKSPACE_INDEX_KEY, JSON.stringify({
-                    activeId: activeWorkspaceId,
-                    list: workspaces
-                }));
-                localStorage.setItem(`${STORAGE_PREFIX}${activeWorkspaceId}`, JSON.stringify({
-                    boardConfig: boardConfig,
-                    tasksList: tasksList
-                }));
-                renderWorkspaceSelector();
             } catch (err) {
-                console.error('Storage save error:', err);
+                let msg = 'Gagal masuk. Periksa kembali email dan kata sandi Anda.';
+                if (err.code === 'auth/email-already-in-use') msg = 'Email sudah terdaftar. Silakan gunakan tab Masuk (Login).';
+                else if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') msg = 'Email atau kata sandi salah.';
+                else if (err.code === 'auth/weak-password') msg = 'Kata sandi minimal 6 karakter.';
+                else if (err.code === 'auth/invalid-email') msg = 'Format email tidak valid.';
+                errBox.textContent = msg;
+                errBox.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = authMode === 'login' ? 'Masuk ke Ruang Guru' : 'Daftar & Buat Ruang Guru';
             }
         }
 
-        function loadWorkspaceData(wsId) {
-            activeWorkspaceId = wsId;
+        async function handleLogout() {
             try {
-                const savedRaw = localStorage.getItem(`${STORAGE_PREFIX}${wsId}`);
-                if (savedRaw) {
-                    const parsed = JSON.parse(savedRaw);
-                    const wsMeta = workspaces.find(w => w.id === wsId);
-                    boardConfig = {
-                        className: parsed.boardConfig?.className || (wsMeta && wsMeta.className) || 'Kelas DKV',
-                        title: parsed.boardConfig?.title || (wsMeta && wsMeta.name) || 'Tugas Praktik DKV',
-                        theme: parsed.boardConfig?.theme || 'indigo',
-                        stages: Array.isArray(parsed.boardConfig?.stages) && parsed.boardConfig.stages.length
-                            ? parsed.boardConfig.stages
-                            : ['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Final ACC']
-                    };
-                    tasksList = Array.isArray(parsed.tasksList) ? parsed.tasksList.map(t => ({
-                        ...t,
-                        taskDescription: t.taskDescription !== undefined ? t.taskDescription : (t.teacherNote || '')
-                    })) : [];
-                } else {
-                    const wsMeta = workspaces.find(w => w.id === wsId);
-                    boardConfig = {
-                        className: (wsMeta && wsMeta.className) || '',
-                        title: (wsMeta && wsMeta.name) || '',
-                        theme: 'indigo',
-                        stages: ['']
-                    };
-                    tasksList = [];
+                if (unsubscribeWorkspaces) {
+                    unsubscribeWorkspaces();
+                    unsubscribeWorkspaces = null;
                 }
+                await signOut(auth);
+                workspaces = [];
+                activeWorkspaceId = '';
+                tasksList = [];
+                showToast('Anda telah keluar dari akun.', 'info');
             } catch (err) {
-                console.error('Storage read error:', err);
+                showToast('Gagal keluar akun.', 'error');
             }
+        }
+
+        async function saveToFirestore() {
+            if (!currentUser || !activeWorkspaceId) return;
+            try {
+                const wsRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'workspaces', activeWorkspaceId);
+                await setDoc(wsRef, {
+                    id: activeWorkspaceId,
+                    className: boardConfig.className,
+                    name: boardConfig.title,
+                    boardConfig: boardConfig,
+                    tasksList: tasksList,
+                    updatedAt: Date.now()
+                }, { merge: true });
+            } catch (err) {
+                console.error('Firestore save error:', err);
+                showToast('Gagal menyinkronkan data ke server.', 'error');
+            }
+        }
+
+        function subscribeUserWorkspaces(user) {
+            if (unsubscribeWorkspaces) {
+                unsubscribeWorkspaces();
+            }
+
+            const workspacesCol = collection(db, 'artifacts', appId, 'users', user.uid, 'workspaces');
+            let firstSnapshotLoaded = false;
+
+            unsubscribeWorkspaces = onSnapshot(workspacesCol, (snapshot) => {
+                const fetched = [];
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    fetched.push({
+                        id: docSnap.id,
+                        className: data.className || data.boardConfig?.className || '',
+                        name: data.name || data.boardConfig?.title || '',
+                        boardConfig: data.boardConfig || {
+                            className: data.className || '',
+                            title: data.name || '',
+                            theme: 'indigo',
+                            stages: ['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Final ACC']
+                        },
+                        tasksList: Array.isArray(data.tasksList) ? data.tasksList.map(t => ({
+                            ...t,
+                            taskDescription: t.taskDescription !== undefined ? t.taskDescription : (t.teacherNote || '')
+                        })) : [],
+                        updatedAt: data.updatedAt || 0
+                    });
+                });
+
+                // Urutkan terbaru di JavaScript memory
+                fetched.sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
+                workspaces = fetched;
+
+                if (workspaces.length === 0) {
+                    if (!firstSnapshotLoaded) {
+                        firstSnapshotLoaded = true;
+                        isInitialSetup = true;
+                        activeWorkspaceId = 'ruang-dkv-' + Date.now();
+                        boardConfig = {
+                            className: '',
+                            title: '',
+                            theme: 'indigo',
+                            stages: ['']
+                        };
+                        tasksList = [];
+                        applyTheme('indigo');
+                        renderWorkspaceSelector();
+                        updateBoardUI();
+                        updateStats();
+                        renderTaskTable();
+                        openBoardSettingsModal(true);
+                    }
+                    return;
+                }
+
+                firstSnapshotLoaded = true;
+                if (!activeWorkspaceId || !workspaces.some(w => w.id === activeWorkspaceId)) {
+                    activeWorkspaceId = workspaces[0].id;
+                }
+
+                if (!isInitialSetup) {
+                    applyActiveWorkspaceFromCache();
+                }
+            }, (error) => {
+                console.error('Firestore listener error:', error);
+                showToast('Gagal memuat data dari Firestore.', 'error');
+            });
+        }
+
+        function applyActiveWorkspaceFromCache() {
+            const currentWs = workspaces.find(w => w.id === activeWorkspaceId);
+            if (!currentWs) return;
+
+            boardConfig = {
+                className: currentWs.boardConfig?.className || currentWs.className || 'Kelas DKV',
+                title: currentWs.boardConfig?.title || currentWs.name || 'Tugas Praktik DKV',
+                theme: currentWs.boardConfig?.theme || 'indigo',
+                stages: Array.isArray(currentWs.boardConfig?.stages) && currentWs.boardConfig.stages.length
+                    ? currentWs.boardConfig.stages
+                    : ['1. Sketsa', '2. Digitalisasi', '3. Pewarnaan', '4. Final ACC']
+            };
+            tasksList = currentWs.tasksList || [];
 
             applyTheme(boardConfig.theme);
             renderWorkspaceSelector();
@@ -1539,37 +1792,26 @@
             renderTaskTable();
         }
 
-        function initApp() {
+        async function initApp() {
             try {
-                const indexRaw = localStorage.getItem(WORKSPACE_INDEX_KEY);
-                if (indexRaw) {
-                    const parsedIndex = JSON.parse(indexRaw);
-                    workspaces = Array.isArray(parsedIndex.list) && parsedIndex.list.length ? parsedIndex.list : [];
-                    activeWorkspaceId = parsedIndex.activeId || (workspaces[0] && workspaces[0].id);
-                }
-            } catch (e) {}
-
-            // Jika pertama kali dibuka (belum ada ruang tersimpan), langsung tampilkan popup dengan isian kosong
-            if (!workspaces.length) {
-                isInitialSetup = true;
-                activeWorkspaceId = 'ruang-dkv-' + Date.now();
-                boardConfig = {
-                    className: '',
-                    title: '',
-                    theme: 'indigo',
-                    stages: ['']
-                };
-                tasksList = [];
-                applyTheme('indigo');
-                renderWorkspaceSelector();
-                updateBoardUI();
-                updateStats();
-                renderTaskTable();
-                openBoardSettingsModal(true);
-                return;
+                await setPersistence(auth, browserLocalPersistence);
+            } catch (e) {
+                console.error('Auth persistence error:', e);
             }
 
-            loadWorkspaceData(activeWorkspaceId);
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user;
+                const authScreen = document.getElementById('authScreen');
+                if (user) {
+                    authScreen.classList.add('hidden');
+                    const displayLabel = user.email ? user.email.split('@')[0] : 'Akun Guru';
+                    document.getElementById('loggedInUserLabel').textContent = displayLabel;
+                    subscribeUserWorkspaces(user);
+                } else {
+                    authScreen.classList.remove('hidden');
+                    closeModal('settingsModal');
+                }
+            });
         }
 
         function getUniqueClasses() {
@@ -1597,8 +1839,8 @@
 
         function switchWorkspace(wsId) {
             if (!wsId || wsId === activeWorkspaceId) return;
-            saveToStorage();
-            loadWorkspaceData(wsId);
+            activeWorkspaceId = wsId;
+            applyActiveWorkspaceFromCache();
             showToast('Berpindah ke kelas terpilih.', 'info');
         }
 
@@ -1617,18 +1859,22 @@
             showToast('Silakan isi kelas, judul & tahapan tugas baru.', 'info');
         }
 
-        function deleteCurrentWorkspace() {
+        async function deleteCurrentWorkspace() {
+            if (!currentUser) return;
             if (workspaces.length <= 1) {
                 showToast('Minimal harus tersisa 1 kelas/ruang.', 'error');
                 return;
             }
-            localStorage.removeItem(`${STORAGE_PREFIX}${activeWorkspaceId}`);
-            workspaces = workspaces.filter(w => w.id !== activeWorkspaceId);
-            activeWorkspaceId = workspaces[0].id;
-            saveToStorage();
-            closeModal('settingsModal');
-            loadWorkspaceData(activeWorkspaceId);
-            showToast('Ruang kelas berhasil dihapus.', 'info');
+            try {
+                const targetId = activeWorkspaceId;
+                const remaining = workspaces.filter(w => w.id !== targetId);
+                activeWorkspaceId = remaining[0].id;
+                await deleteDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'workspaces', targetId));
+                closeModal('settingsModal');
+                showToast('Ruang kelas berhasil dihapus.', 'info');
+            } catch (err) {
+                showToast('Gagal menghapus ruang kelas.', 'error');
+            }
         }
 
         function applyTheme(themeName) {
@@ -1780,7 +2026,7 @@
             `).join('');
         }
 
-        function saveBoardSettings() {
+        async function saveBoardSettings() {
             const existingClasses = getUniqueClasses();
             const classSelect = document.getElementById('settingClassSelect');
             const classInputVal = document.getElementById('settingClassNameInput').value.trim();
@@ -1804,23 +2050,14 @@
             boardConfig.theme = tempTheme || 'indigo';
             boardConfig.stages = tempStages.map((s, i) => s.trim() || `Tahap ${i + 1}`);
 
-            // Jika workspace baru belum terdaftar di indeks, daftarkan sekarang
-            if (!workspaces.some(w => w.id === activeWorkspaceId)) {
-                workspaces.push({
-                    id: activeWorkspaceId,
-                    className: boardConfig.className,
-                    name: boardConfig.title
-                });
-            }
-
             isInitialSetup = false;
             applyTheme(boardConfig.theme);
-            saveToStorage();
             updateBoardUI();
             updateStats();
             renderTaskTable();
             closeModal('settingsModal');
-            showToast(`Ruang kelas ${boardConfig.className} siap digunakan!`, 'success');
+            await saveToFirestore();
+            showToast(`Ruang kelas ${boardConfig.className} tersimpan ke Cloud!`, 'success');
         }
 
         function updateStats() {
@@ -1972,7 +2209,7 @@
             }).join('');
         }
 
-        function handleAddTask(e) {
+        async function handleAddTask(e) {
             e.preventDefault();
 
             const nameInput = document.getElementById('inputStudentName');
@@ -1994,9 +2231,9 @@
                 createdAt: Date.now()
             });
 
-            saveToStorage();
             updateStats();
             renderTaskTable();
+            await saveToFirestore();
 
             nameInput.value = '';
             titleInput.value = '';
@@ -2016,7 +2253,7 @@
             openModal('editStudentModal');
         }
 
-        function saveStudentEdit(e) {
+        async function saveStudentEdit(e) {
             e.preventDefault();
             const taskId = document.getElementById('editStudentId').value;
             const task = tasksList.find(t => t.id === taskId);
@@ -2032,13 +2269,13 @@
             task.taskTitle = newTitle;
             task.taskDescription = newDesc;
 
-            saveToStorage();
             renderTaskTable();
             closeModal('editStudentModal');
+            await saveToFirestore();
             showToast('Data siswa & deskripsi tugas diperbarui!', 'success');
         }
 
-        function toggleStage(taskId, stageIndex) {
+        async function toggleStage(taskId, stageIndex) {
             const task = tasksList.find(t => t.id === taskId);
             if (!task) return;
 
@@ -2046,29 +2283,20 @@
             updatedStages[stageIndex] = !updatedStages[stageIndex];
             task.completedStages = updatedStages;
 
-            saveToStorage();
             updateStats();
             renderTaskTable();
-        }
-
-        function updateTeacherNote(taskId, newNote) {
-            const task = tasksList.find(t => t.id === taskId);
-            if (!task) return;
-
-            task.teacherNote = newNote.trim();
-            saveToStorage();
-            showToast('Catatan guru tersimpan.', 'success');
+            await saveToFirestore();
         }
 
         function confirmDeleteTask(taskId, studentName) {
             document.getElementById('deleteStudentNameText').textContent = `Hapus data tugas milik "${studentName}"? Tindakan ini tidak bisa dibatalkan.`;
             const confirmBtn = document.getElementById('confirmDeleteBtn');
-            confirmBtn.onclick = () => {
+            confirmBtn.onclick = async () => {
                 tasksList = tasksList.filter(t => t.id !== taskId);
-                saveToStorage();
                 updateStats();
                 renderTaskTable();
                 closeModal('deleteConfirmModal');
+                await saveToFirestore();
                 showToast('Data siswa berhasil dihapus.', 'info');
             };
             openModal('deleteConfirmModal');
@@ -2403,6 +2631,37 @@
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#039;');
         }
+
+        // Expose functions to global window for inline HTML handlers
+        Object.assign(window, {
+            switchAuthMode,
+            handleAuthSubmit,
+            handleLogout,
+            switchWorkspace,
+            createNewWorkspace,
+            deleteCurrentWorkspace,
+            openBoardSettingsModal,
+            handleClassDropdownChange,
+            selectTempTheme,
+            applyPresetStages,
+            addStageField,
+            removeStageField,
+            updateTempStageName,
+            saveBoardSettings,
+            renderTaskTable,
+            handleAddTask,
+            openEditStudentModal,
+            saveStudentEdit,
+            toggleStage,
+            confirmDeleteTask,
+            openShareModal,
+            exportToPDF,
+            exportToImage,
+            copyWhatsAppSummary,
+            setFilterStatus,
+            openModal,
+            closeModal
+        });
 
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
